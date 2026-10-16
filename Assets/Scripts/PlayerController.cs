@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Ground Check")]
     [SerializeField] private Transform groundCheck;
-    [SerializeField] private float groundCheckRadius = 0.2f;
+    [SerializeField] private Vector2 groundCheckSize = new Vector2(0.2f, 0.2f);
     [SerializeField] private LayerMask groundLayer;
 
     [Header("Combat Settings")]
@@ -154,7 +154,7 @@ public class PlayerController : MonoBehaviour
     private bool IsGrounded()
     {
         if (groundCheck == null) return false;
-        return Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer) != null;
+        return Physics2D.OverlapBox(groundCheck.position, groundCheckSize, 0f, groundLayer) != null;
     }
 
     private void OnDrawGizmosSelected()
@@ -162,7 +162,7 @@ public class PlayerController : MonoBehaviour
         if (groundCheck != null)
         {
             Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
+            Gizmos.DrawWireCube(groundCheck.position, groundCheckSize);
         }
 
         Gizmos.color = Color.red;

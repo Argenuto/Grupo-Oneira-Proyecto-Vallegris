@@ -1,7 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI; // Added for the UI Image
+using UnityEngine.UI; 
 using TMPro;
 using UnityEngine.Localization;
 using UnityEngine.InputSystem;
@@ -34,6 +35,8 @@ public class DialogueManager : MonoBehaviour
     private bool isTyping = false;
     private Coroutine typingCoroutine;
     private bool canReceiveInput = false;
+
+    private Action onDialogueEndCallback;
 
     private HashSet<int> wavyCharacterIndices = new HashSet<int>();
     private HashSet<int> shakyCharacterIndices = new HashSet<int>();
@@ -74,16 +77,14 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
-    public void StartDialogue(DialogueObject dialogueObj)
+    public void StartDialogue(DialogueObject dialogueObj, Action onEnd = null)
     {
-        if (dialogueObj == null || dialogueObj.lines == null || dialogueObj.lines.Length == 0)
-        {
-            Debug.LogWarning("Tried to play a DialogueObject, but it has no lines!");
-            return;
-        }
+        if (dialogueObj == null || dialogueObj.lines == null || dialogueObj.lines.Length == 0) return;
 
         currentDialogue = dialogueObj;
         currentLineIndex = 0;
+        
+        onDialogueEndCallback = onEnd; 
         
         speakerNameText.text = "";
         dialogueText.text = "";
@@ -95,7 +96,7 @@ public class DialogueManager : MonoBehaviour
 
         DisplayLine();
     }
-
+    
     private IEnumerator EnableInputNextFrame()
     {
         yield return new WaitForEndOfFrame();
@@ -119,6 +120,7 @@ public class DialogueManager : MonoBehaviour
         if (currentLine.portrait != null)
         {
             portraitImage.sprite = currentLine.portrait;
+            portraitImage.preserveAspect = true;
             portraitImage.gameObject.SetActive(true);
         }
         else
@@ -262,5 +264,8 @@ public class DialogueManager : MonoBehaviour
     {
         dialoguePanel.SetActive(false);
         currentDialogue = null;
+
+        onDialogueEndCallback?.Invoke();
+        onDialogueEndCallback = null;
     }
 }

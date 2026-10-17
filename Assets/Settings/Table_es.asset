@@ -19,11 +19,19 @@ MonoBehaviour:
     m_Items: []
   m_TableData:
   - m_Id: 2664474185728
-    m_Localized: Tenemos dialogo, %(&(YAAY)&)%
+    m_Localized: "Esta es una estatua de un soldado ca\xEDdo....."
     m_Metadata:
       m_Items: []
   - m_Id: 37552670720000
-    m_Localized: bueno chao
+    m_Localized: "Su espada podr\xEDa servirme de algo."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 44303574974464
+    m_Localized: "Prometo que la devolver\xE9..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 197539514630144
+    m_Localized: "Espada de un h\xE9roe ca\xEDdo. Te servir\xE1 para defenderte, por ahora."
     m_Metadata:
       m_Items: []
   references:

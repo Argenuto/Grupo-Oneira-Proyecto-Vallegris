@@ -20,7 +20,15 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 37552670720000
+    m_Key: statue01_02
+    m_Metadata:
+      m_Items: []
+  - m_Id: 44303574974464
     m_Key: statue02
+    m_Metadata:
+      m_Items: []
+  - m_Id: 197539514630144
+    m_Key: sword_text
     m_Metadata:
       m_Items: []
   m_Metadata:

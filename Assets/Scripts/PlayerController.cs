@@ -85,7 +85,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (DialogueManager.Instance != null && DialogueManager.Instance.IsDialogueActive)
+        if ((DialogueManager.Instance != null && DialogueManager.Instance.IsDialogueActive) || (ItemObtainedManager.Instance != null && ItemObtainedManager.Instance.IsActive))
     {
         rb.linearVelocity = Vector2.zero;     
         return; 
@@ -131,7 +131,7 @@ public class PlayerController : MonoBehaviour
     private void OnMove(InputValue value)
     {
 
-        if (DialogueManager.Instance != null && DialogueManager.Instance.IsDialogueActive)
+        if ((DialogueManager.Instance != null && DialogueManager.Instance.IsDialogueActive) || (ItemObtainedManager.Instance != null && ItemObtainedManager.Instance.IsActive))
         {
             moveInput = Vector2.zero;
             Debug.Log(moveInput);
@@ -148,8 +148,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnJump(InputValue value)
     {
-        if (DialogueManager.Instance != null && DialogueManager.Instance.IsDialogueActive)
-        {
+        if ((DialogueManager.Instance != null && DialogueManager.Instance.IsDialogueActive) || (ItemObtainedManager.Instance != null && ItemObtainedManager.Instance.IsActive))        {
             return;
         }
 
@@ -162,7 +161,7 @@ public class PlayerController : MonoBehaviour
     private void OnAttack(InputValue value)
     {
 
-        if (DialogueManager.Instance != null && DialogueManager.Instance.IsDialogueActive)
+        if ((DialogueManager.Instance != null && DialogueManager.Instance.IsDialogueActive) || (ItemObtainedManager.Instance != null && ItemObtainedManager.Instance.IsActive))
         {
             return;
         }

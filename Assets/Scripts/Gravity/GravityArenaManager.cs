@@ -5,9 +5,6 @@ using UnityEngine.Events;
 
 /// <summary>
 /// Gestiona el encuentro de combate en gravedad invertida.
-/// Activa la inversión física del jugador y el giro suave de la cámara,
-/// hace APARECER a los fantasmas cerca del nuevo suelo (el techo),
-/// bloquea las salidas y cuenta las bajas requeridas para restaurar el orden.
 /// </summary>
 public class GravityArenaManager : MonoBehaviour
 {
@@ -16,20 +13,19 @@ public class GravityArenaManager : MonoBehaviour
     public enum ArenaState { Inactive, Active, Completed }
 
     [Header("Condición de Victoria")]
-    [Tooltip("Cantidad de enemigos que deben ser derrotados (0 = total de fantasmas activados)")]
+    [Tooltip("Cantidad de enemigos a derrotar (0 = todos los de la lista)")]
     [SerializeField] private int requiredKills = 2;
 
     [Header("Aparición de Fantasmas (Cerca del Techo)")]
-    [Tooltip("Fantasmas colocados cerca del techo en la escena. Inician apagados y APARECEN al dispararse la antigravedad.")]
+    [Tooltip("Fantasmas colocados en la escena. Inician ocultos y APARECEN al activarse el trigger.")]
     [SerializeField] private List<GameObject> ghostObjectsToActivate = new List<GameObject>();
 
-    [Tooltip("Opcional: Prefab de fantasma a instanciar si prefieres spawn dinámico")]
+    [Tooltip("Prefab opcional para spawn dinámico")]
     [SerializeField] private GameObject ghostPrefab;
-    [Tooltip("Puntos de spawn situados cerca del techo donde aparecerán los fantasmas")]
+    [Tooltip("Puntos de spawn cerca del techo")]
     [SerializeField] private Transform[] ceilingSpawnPoints;
 
     [Header("Barreras y Confinamiento")]
-    [Tooltip("Puertas o barreras que se encienden durante el combate y se apagan al ganar")]
     [SerializeField] private GameObject[] barrierObjects;
 
     [Header("Referencias (Se auto-detectan si están vacías)")]
@@ -38,7 +34,7 @@ public class GravityArenaManager : MonoBehaviour
 
     [Header("Eventos")]
     public UnityEvent onArenaStarted;
-    public UnityEvent<int, int> onKillCountChanged; // (killsActuales, killsRequeridas)
+    public UnityEvent<int, int> onKillCountChanged;
     public UnityEvent onArenaCompleted;
 
     public ArenaState State { get; private set; } = ArenaState.Inactive;
@@ -55,38 +51,39 @@ public class GravityArenaManager : MonoBehaviour
             return;
         }
         Instance = this;
-
-        FindReferences();
     }
 
     private void Start()
     {
+        FindReferences();
         SetBarriersActive(false);
 
-        // Asegurar que los fantasmas inicien ocultos/desactivados antes del trigger
+        // Ocultar fantasmas al inicio
         foreach (var ghost in ghostObjectsToActivate)
         {
             if (ghost != null)
                 ghost.SetActive(false);
         }
 
-        // Si hay un jugador con PlayerHealth, escuchar su muerte para reiniciar limpiamente la sala
+        // Escuchar la muerte del jugador
         if (player != null)
         {
             playerHealth = player.GetComponent<PlayerHealth>();
             if (playerHealth != null)
-            {
                 playerHealth.onDeath.AddListener(OnPlayerDied);
-            }
+            else
+                Debug.LogWarning("[GravityArenaManager] No se encontró PlayerHealth en el jugador.");
+        }
+        else
+        {
+            Debug.LogWarning("[GravityArenaManager] No se encontró referencia al PlayerController.");
         }
     }
 
     private void OnDestroy()
     {
         if (playerHealth != null)
-        {
             playerHealth.onDeath.RemoveListener(OnPlayerDied);
-        }
     }
 
     private void FindReferences()
@@ -99,125 +96,185 @@ public class GravityArenaManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Inicia el desafío gravitatorio (llamado por el Trigger de la sala).
+    /// Inicia el desafío gravitatorio (llamado por el Trigger).
     /// </summary>
     public void StartArena()
     {
-        if (State != ArenaState.Inactive) return;
+        if (State != ArenaState.Inactive)
+        {
+            Debug.Log($"[GravityArenaManager] StartArena() ignorado, estado actual: {State}");
+            return;
+        }
 
+        Debug.Log("[GravityArenaManager] ¡Arena INICIADA!");
         State = ArenaState.Active;
         CurrentKills = 0;
 
-        // 1. Activar barreras de contención
         SetBarriersActive(true);
 
-        // 2. Invertir gravedad del jugador y rotar la cámara suavemente a 180°
-        if (player == null) FindReferences();
-        if (player != null) player.SetGravityInverted(true);
+        // Resolver referencias si faltan
+        FindReferences();
 
-        if (cameraController == null) FindReferences();
-        if (cameraController != null) cameraController.SetInverted(true);
-
-        // 3. Hacer APARECER a los fantasmas cerca del techo (el nuevo suelo)
-        int totalEnemies = 0;
-
-        // A) Activar fantasmas pre-colocados
-        foreach (var ghost in ghostObjectsToActivate)
+        if (player != null)
         {
-            if (ghost != null)
-            {
-                ghost.SetActive(true);
-                totalEnemies++;
-
-                EnemyHealth health = ghost.GetComponent<EnemyHealth>();
-                if (health != null)
-                {
-                    health.onDeath.AddListener(() => RegisterKill(health));
-                }
-            }
+            player.SetGravityInverted(true);
+            Debug.Log("[GravityArenaManager] Gravedad invertida en el jugador.");
+        }
+        else
+        {
+            Debug.LogError("[GravityArenaManager] ¡player es NULL! No se puede invertir la gravedad.");
         }
 
-        // B) Instanciar fantasmas por prefab si se configuraron puntos de spawn
-        if (ghostPrefab != null && ceilingSpawnPoints != null)
+        if (cameraController != null)
         {
-            foreach (var spawnPoint in ceilingSpawnPoints)
-            {
-                if (spawnPoint != null)
-                {
-                    GameObject newGhost = Instantiate(ghostPrefab, spawnPoint.position, spawnPoint.rotation);
-                    spawnedGhostInstances.Add(newGhost);
-                    totalEnemies++;
-
-                    EnemyHealth health = newGhost.GetComponent<EnemyHealth>();
-                    if (health != null)
-                    {
-                        health.onDeath.AddListener(() => RegisterKill(health));
-                    }
-                }
-            }
+            cameraController.SetInverted(true);
+            Debug.Log("[GravityArenaManager] Cámara comenzando rotación a 180°.");
+        }
+        else
+        {
+            Debug.LogError("[GravityArenaManager] ¡cameraController es NULL!");
         }
 
-        // Si requiredKills es 0 o mayor a los enemigos disponibles, ajustar al total real
+        // Activar y suscribir fantasmas
+        int totalEnemies = ActivateGhostsAndSubscribe();
+
+        // Ajustar requiredKills al total real si es necesario
         if (requiredKills <= 0 || requiredKills > totalEnemies)
-        {
             requiredKills = Mathf.Max(1, totalEnemies);
-        }
+
+        Debug.Log($"[GravityArenaManager] Fantasmas activados: {totalEnemies}. Bajas requeridas: {requiredKills}");
 
         onArenaStarted?.Invoke();
         onKillCountChanged?.Invoke(CurrentKills, requiredKills);
     }
 
-    /// <summary>
-    /// Registra la muerte de un enemigo en la arena.
-    /// </summary>
-    public void RegisterKill(EnemyHealth enemy = null)
+    private int ActivateGhostsAndSubscribe()
     {
-        if (State != ArenaState.Active) return;
+        int total = 0;
 
-        CurrentKills++;
-        onKillCountChanged?.Invoke(CurrentKills, requiredKills);
-
-        if (CurrentKills >= requiredKills)
+        // A) Fantasmas pre-colocados en la escena
+        foreach (var ghost in ghostObjectsToActivate)
         {
-            CompleteArena();
+            if (ghost == null) continue;
+
+            ghost.SetActive(true);
+            total++;
+
+            // Captura local para evitar problemas de closure en el bucle
+            EnemyHealth capturedHealth = ghost.GetComponent<EnemyHealth>();
+            if (capturedHealth != null)
+            {
+                // RemoveListener primero para evitar duplicados si la arena se reinicia
+                capturedHealth.onDeath.RemoveAllListeners();
+                capturedHealth.onDeath.AddListener(() =>
+                {
+                    Debug.Log($"[GravityArenaManager] Fantasma eliminado: {capturedHealth.gameObject.name}");
+                    RegisterKill();
+                });
+            }
+            else
+            {
+                Debug.LogWarning($"[GravityArenaManager] {ghost.name} no tiene EnemyHealth. No contará como baja.");
+            }
         }
+
+        // B) Spawn dinámico por prefab
+        if (ghostPrefab != null && ceilingSpawnPoints != null)
+        {
+            foreach (var sp in ceilingSpawnPoints)
+            {
+                if (sp == null) continue;
+
+                GameObject newGhost = Instantiate(ghostPrefab, sp.position, sp.rotation);
+                spawnedGhostInstances.Add(newGhost);
+                total++;
+
+                EnemyHealth capturedHealth = newGhost.GetComponent<EnemyHealth>();
+                if (capturedHealth != null)
+                {
+                    capturedHealth.onDeath.AddListener(() =>
+                    {
+                        Debug.Log($"[GravityArenaManager] Fantasma (instancia) eliminado.");
+                        RegisterKill();
+                    });
+                }
+            }
+        }
+
+        return total;
     }
 
     /// <summary>
-    /// Concluye el desafío y restaura el mundo a la normalidad.
+    /// Registra una baja. Se llama desde el listener de onDeath de cada fantasma.
+    /// </summary>
+    public void RegisterKill()
+    {
+        if (State != ArenaState.Active)
+        {
+            Debug.Log($"[GravityArenaManager] RegisterKill() ignorado, estado: {State}");
+            return;
+        }
+
+        CurrentKills++;
+        Debug.Log($"[GravityArenaManager] Baja registrada: {CurrentKills}/{requiredKills}");
+        onKillCountChanged?.Invoke(CurrentKills, requiredKills);
+
+        if (CurrentKills >= requiredKills)
+            CompleteArena();
+    }
+
+    /// <summary>
+    /// Concluye el desafío y restaura la normalidad.
     /// </summary>
     public void CompleteArena()
     {
-        if (State != ArenaState.Active) return;
+        if (State != ArenaState.Active)
+        {
+            Debug.Log($"[GravityArenaManager] CompleteArena() ignorado, estado: {State}");
+            return;
+        }
+
+        Debug.Log("[GravityArenaManager] ¡Arena COMPLETADA! Restaurando gravedad y cámara...");
         State = ArenaState.Completed;
 
-        // Restaurar gravedad del jugador
+        FindReferences();
+
         if (player != null)
         {
             player.SetGravityInverted(false);
+            Debug.Log("[GravityArenaManager] Gravedad restaurada al jugador.");
+        }
+        else
+        {
+            Debug.LogError("[GravityArenaManager] ¡player es NULL en CompleteArena! No se pudo restaurar la gravedad.");
         }
 
-        // Regresar la cámara a 0°
         if (cameraController != null)
         {
             cameraController.SetInverted(false);
+            Debug.Log("[GravityArenaManager] Cámara restaurando a 0°.");
+        }
+        else
+        {
+            Debug.LogError("[GravityArenaManager] ¡cameraController es NULL en CompleteArena!");
         }
 
-        // Liberar salidas
         SetBarriersActive(false);
-
         onArenaCompleted?.Invoke();
     }
 
     /// <summary>
-    /// Reinicia la sala si el jugador es derrotado antes de completar el reto.
+    /// Reinicia la sala si el jugador muere antes de completar el reto.
     /// </summary>
     public void ResetArena()
     {
         if (State == ArenaState.Completed) return;
 
+        Debug.Log("[GravityArenaManager] Arena REINICIADA por muerte del jugador.");
         State = ArenaState.Inactive;
         CurrentKills = 0;
+
+        FindReferences();
 
         if (player != null)
             player.SetGravityInverted(false);
@@ -225,11 +282,13 @@ public class GravityArenaManager : MonoBehaviour
         if (cameraController != null)
             cameraController.SetInverted(false, instant: true);
 
-        // Desactivar fantasmas de nuevo
+        // Desactivar fantasmas pre-colocados
         foreach (var ghost in ghostObjectsToActivate)
         {
             if (ghost != null)
+            {
                 ghost.SetActive(false);
+            }
         }
 
         // Destruir instancias dinámicas
@@ -246,18 +305,14 @@ public class GravityArenaManager : MonoBehaviour
     private void OnPlayerDied()
     {
         if (State == ArenaState.Active)
-        {
             ResetArena();
-        }
     }
 
     private void SetBarriersActive(bool active)
     {
         if (barrierObjects == null) return;
-        foreach (var barrier in barrierObjects)
-        {
-            if (barrier != null)
-                barrier.SetActive(active);
-        }
+        foreach (var b in barrierObjects)
+            if (b != null)
+                b.SetActive(active);
     }
 }

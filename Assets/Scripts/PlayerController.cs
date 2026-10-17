@@ -38,6 +38,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
     private PlayerInput playerInput;
     private InputAction jumpAction;
+   [SerializeField]  private SpriteRenderer spriteRenderer;
 
     private Vector2 moveInput;
     private Vector2 facingDirection = Vector2.right;
@@ -55,10 +56,22 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         playerInput = GetComponent<PlayerInput>();
+      //  spriteRenderer = GetComponent<SpriteRenderer>();
 
         jumpAction = playerInput.actions["Jump"];
         baseGravityScale = Mathf.Abs(rb.gravityScale);
         baseScaleY = Mathf.Abs(transform.localScale.y);
+    }
+
+    /// <summary>
+    /// Aplica el volteo horizontal del sprite usando flipX.
+    /// Funciona correctamente tanto en gravedad normal como invertida (rotación Z = 180°).
+    /// </summary>
+    private void UpdateFlip()
+    {
+        if (spriteRenderer == null) return;
+        // facingDirection.x < 0 → mirando a la izquierda → flipX = true
+        spriteRenderer.flipX = facingDirection.x < 0f;
     }
 
     private void Update()
@@ -145,6 +158,9 @@ public class PlayerController : MonoBehaviour
         {
             facingDirection = horizontalInput > 0 ? Vector2.right : Vector2.left;
         }
+
+        // Aplicar flip visual con la nueva orientación
+        UpdateFlip();
     }
 
 
@@ -177,6 +193,7 @@ public class PlayerController : MonoBehaviour
         if (Mathf.Abs(effectiveInputX) > 0.1f)
         {
             facingDirection = effectiveInputX > 0 ? Vector2.right : Vector2.left;
+            UpdateFlip();
         }
     }
 

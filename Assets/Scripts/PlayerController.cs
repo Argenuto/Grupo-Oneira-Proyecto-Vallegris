@@ -24,8 +24,8 @@ public class PlayerController : MonoBehaviour
 
     [Header("Combat Settings")]
     [SerializeField] private float attackCooldown = 0.4f;
-    [SerializeField] private float attackDistance = 1f; 
-    [SerializeField] private float attackRange = 0.5f;  
+    [SerializeField] private float attackDistance = 1f;
+    [SerializeField] private float attackRange = 0.5f;
     [SerializeField] private LayerMask enemyLayers;
 
     private Rigidbody2D rb;
@@ -33,14 +33,16 @@ public class PlayerController : MonoBehaviour
     private InputAction jumpAction;
 
     private Vector2 moveInput;
-    private Vector2 facingDirection = Vector2.right; 
-    
+    private Vector2 facingDirection = Vector2.right;
+
     private float coyoteTimeCounter;
     private float jumpBufferCounter;
     private float nextAttackTime;
-    
+
     private bool isJumping;
     private bool isHoldingJump;
+    private bool canInteract;
+    private Collider2D interactableObject;
 
     private void Awake()
     {
@@ -74,7 +76,7 @@ public class PlayerController : MonoBehaviour
         if (coyoteTimeCounter > 0f && jumpBufferCounter > 0f && !isJumping)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
-            
+
             jumpBufferCounter = 0f;
             coyoteTimeCounter = 0f;
             isJumping = true;
@@ -83,6 +85,11 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (DialogueManager.Instance != null && DialogueManager.Instance.IsDialogueActive)
+    {
+        rb.linearVelocity = Vector2.zero;     
+        return; 
+    }
         rb.linearVelocity = new Vector2(moveInput.x * moveSpeed, rb.linearVelocity.y);
 
         ApplyBetterJumpGravity();
@@ -109,9 +116,6 @@ public class PlayerController : MonoBehaviour
 
         Vector2 attackDirection = facingDirection;
 
-        
-        Debug.Log("Attacking SIDES!");
-
 
         Vector2 attackPosition = (Vector2)transform.position + (attackDirection * attackDistance);
 
@@ -119,14 +123,22 @@ public class PlayerController : MonoBehaviour
 
         foreach (Collider2D enemy in hitEnemies)
         {
-            Debug.Log("We hit " + enemy.name);
+            //Debug.Log("We hit " + enemy.name);
         }
     }
 
 
     private void OnMove(InputValue value)
     {
+
+        if (DialogueManager.Instance != null && DialogueManager.Instance.IsDialogueActive)
+        {
+            moveInput = Vector2.zero;
+            Debug.Log(moveInput);
+            return;
+        }
         moveInput = value.Get<Vector2>();
+
 
         if (Mathf.Abs(moveInput.x) > 0.1f)
         {
@@ -136,6 +148,11 @@ public class PlayerController : MonoBehaviour
 
     private void OnJump(InputValue value)
     {
+        if (DialogueManager.Instance != null && DialogueManager.Instance.IsDialogueActive)
+        {
+            return;
+        }
+
         if (value.isPressed)
         {
             jumpBufferCounter = jumpBufferTime;
@@ -144,9 +161,20 @@ public class PlayerController : MonoBehaviour
 
     private void OnAttack(InputValue value)
     {
+
+        if (DialogueManager.Instance != null && DialogueManager.Instance.IsDialogueActive)
+        {
+            return;
+        }
+
         if (value.isPressed && Time.time >= nextAttackTime)
         {
             PerformAttack();
+        }
+
+        if (canInteract && interactableObject != null)
+        {
+            interactableObject.GetComponent<DialogueTrigger>().Interact();
         }
     }
 
@@ -166,11 +194,28 @@ public class PlayerController : MonoBehaviour
         }
 
         Gizmos.color = Color.red;
-        
+
         Vector2 drawDirection = facingDirection;
-        
-        
+
+
         Vector2 drawPosition = (Vector2)transform.position + (drawDirection * attackDistance);
         Gizmos.DrawWireSphere(drawPosition, attackRange);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "Interactable")
+        {
+            canInteract = true;
+            interactableObject = collision;
+        }
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.tag == "Interactable")
+        {
+            canInteract = false;
+            interactableObject = null;
+        }
     }
 }

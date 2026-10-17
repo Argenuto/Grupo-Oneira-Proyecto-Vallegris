@@ -33,9 +33,12 @@ public class DialogueManager : MonoBehaviour
     private int currentLineIndex = 0;
     private bool isTyping = false;
     private Coroutine typingCoroutine;
+    private bool canReceiveInput = false;
 
     private HashSet<int> wavyCharacterIndices = new HashSet<int>();
     private HashSet<int> shakyCharacterIndices = new HashSet<int>();
+
+    public bool IsDialogueActive => dialoguePanel != null && dialoguePanel.activeSelf;
 
     private void Awake()
     {
@@ -54,6 +57,8 @@ public class DialogueManager : MonoBehaviour
 
     private void HandleInput()
     {
+        if (!canReceiveInput) return;
+
         if (dialoguePanel.activeSelf && advanceAction.WasPressedThisFrame())
         {
             if (isTyping)
@@ -71,17 +76,31 @@ public class DialogueManager : MonoBehaviour
 
     public void StartDialogue(DialogueObject dialogueObj)
     {
+        if (dialogueObj == null || dialogueObj.lines == null || dialogueObj.lines.Length == 0)
+        {
+            Debug.LogWarning("Tried to play a DialogueObject, but it has no lines!");
+            return;
+        }
+
         currentDialogue = dialogueObj;
         currentLineIndex = 0;
         
-        // Clear text immediately so old dialogue doesn't flash before panel opens
         speakerNameText.text = "";
         dialogueText.text = "";
         
         dialoguePanel.SetActive(true);
+
+        canReceiveInput = false;
+        StartCoroutine(EnableInputNextFrame());
+
         DisplayLine();
     }
 
+    private IEnumerator EnableInputNextFrame()
+    {
+        yield return new WaitForEndOfFrame();
+        canReceiveInput = true;
+    }
     private void DisplayLine()
     {
         if (typingCoroutine != null) StopCoroutine(typingCoroutine);
@@ -90,15 +109,13 @@ public class DialogueManager : MonoBehaviour
 
     private IEnumerator PrepareAndTypeLine()
     {
-        isTyping = true; 
+        isTyping = true;
 
-        // Clear text before async loading begins to prevent mid-conversation flashes
         speakerNameText.text = "";
         dialogueText.text = "";
 
         DialogueObject.DialogueLine currentLine = currentDialogue.lines[currentLineIndex];
 
-        // Handle Portrait
         if (currentLine.portrait != null)
         {
             portraitImage.sprite = currentLine.portrait;
@@ -111,14 +128,14 @@ public class DialogueManager : MonoBehaviour
 
         string rawSpeaker = "";
         string rawText = "";
-        
+
         bool isSpeakerLoaded = currentLine.speakerName.IsEmpty;
         bool isTextLoaded = currentLine.dialogueText.IsEmpty;
 
         if (!isSpeakerLoaded)
         {
             var speakerHandle = currentLine.speakerName.GetLocalizedStringAsync();
-            speakerHandle.Completed += (handle) => 
+            speakerHandle.Completed += (handle) =>
             {
                 if (handle.IsValid() && handle.Status == UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationStatus.Succeeded)
                     rawSpeaker = handle.Result;
@@ -129,24 +146,22 @@ public class DialogueManager : MonoBehaviour
         if (!isTextLoaded)
         {
             var textHandle = currentLine.dialogueText.GetLocalizedStringAsync();
-            textHandle.Completed += (handle) => 
+            textHandle.Completed += (handle) =>
             {
                 if (handle.IsValid() && handle.Status == UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationStatus.Succeeded)
                     rawText = handle.Result;
                 isTextLoaded = true;
             };
         }
-
         yield return new WaitUntil(() => isSpeakerLoaded && isTextLoaded);
-
         speakerNameText.text = rawSpeaker;
-        
+
         string parsedText = ParseTags(rawText);
         dialogueText.text = parsedText;
-        
+
         dialogueText.ForceMeshUpdate();
         dialogueText.maxVisibleCharacters = 0;
-        
+
         int totalCharacters = dialogueText.textInfo.characterCount;
 
         while (dialogueText.maxVisibleCharacters < totalCharacters)
@@ -163,7 +178,7 @@ public class DialogueManager : MonoBehaviour
         wavyCharacterIndices.Clear();
         shakyCharacterIndices.Clear();
         string cleanText = "";
-        
+
         bool isWavy = false;
         bool isShaky = false;
 
@@ -223,10 +238,10 @@ public class DialogueManager : MonoBehaviour
                 offset += new Vector3(randomShake.x, randomShake.y, 0);
             }
 
-            sourceVertices[vertexIndex + 0] += offset; 
-            sourceVertices[vertexIndex + 1] += offset; 
-            sourceVertices[vertexIndex + 2] += offset; 
-            sourceVertices[vertexIndex + 3] += offset; 
+            sourceVertices[vertexIndex + 0] += offset;
+            sourceVertices[vertexIndex + 1] += offset;
+            sourceVertices[vertexIndex + 2] += offset;
+            sourceVertices[vertexIndex + 3] += offset;
         }
 
         for (int i = 0; i < textInfo.meshInfo.Length; i++)

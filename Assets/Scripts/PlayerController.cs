@@ -27,6 +27,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float attackDistance = 1f;
     [SerializeField] private float attackRange = 0.5f;
     [SerializeField] private MeleeAttack meleeAttack;
+    [Header("Gravity Inversion Settings")]
+    [SerializeField] private bool invertHorizontalInputWithCamera = true;
+    public bool IsGravityInverted => isGravityInverted;
+    private bool isGravityInverted;
+    private float baseGravityScale;
+    private float baseScaleY;
+
     public bool CanMove { get; set; } = true;
     private Rigidbody2D rb;
     private PlayerInput playerInput;
@@ -50,6 +57,8 @@ public class PlayerController : MonoBehaviour
         playerInput = GetComponent<PlayerInput>();
 
         jumpAction = playerInput.actions["Jump"];
+        baseGravityScale = Mathf.Abs(rb.gravityScale);
+        baseScaleY = Mathf.Abs(transform.localScale.y);
     }
 
     private void Update()
@@ -57,8 +66,9 @@ public class PlayerController : MonoBehaviour
         isHoldingJump = jumpAction != null && jumpAction.IsPressed();
 
         bool grounded = IsGrounded();
+        float verticalVelocityRel = isGravityInverted ? -rb.linearVelocity.y : rb.linearVelocity.y;
 
-        if (grounded && rb.linearVelocity.y <= 0.01f)
+        if (grounded && verticalVelocityRel <= 0.01f)
         {
             coyoteTimeCounter = coyoteTime;
             isJumping = false;
@@ -75,7 +85,8 @@ public class PlayerController : MonoBehaviour
 
         if (coyoteTimeCounter > 0f && jumpBufferCounter > 0f && !isJumping)
         {
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+            float jumpDir = isGravityInverted ? -1f : 1f;
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce * jumpDir);
 
             jumpBufferCounter = 0f;
             coyoteTimeCounter = 0f;
@@ -86,22 +97,49 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         if (CanMove)
-            rb.linearVelocity = new Vector2(moveInput.x * moveSpeed, rb.linearVelocity.y);
+        {
+            float horizontalInput = (isGravityInverted && invertHorizontalInputWithCamera) ? -moveInput.x : moveInput.x;
+            rb.linearVelocity = new Vector2(horizontalInput * moveSpeed, rb.linearVelocity.y);
+        }
 
         ApplyBetterJumpGravity();
     }
 
     private void ApplyBetterJumpGravity()
     {
-        float gravityY = Mathf.Abs(Physics2D.gravity.y) * rb.gravityScale;
+        float gravityY = Mathf.Abs(Physics2D.gravity.y) * Mathf.Abs(rb.gravityScale);
+        Vector2 gravityDir = isGravityInverted ? Vector2.up : Vector2.down;
+        float velocityAlongGravity = Vector2.Dot(rb.linearVelocity, gravityDir);
 
-        if (rb.linearVelocity.y < 0f)
+        if (velocityAlongGravity > 0f)
         {
-            rb.linearVelocity += Vector2.down * gravityY * (fallMultiplier - 1f) * Time.fixedDeltaTime;
+            rb.linearVelocity += gravityDir * gravityY * (fallMultiplier - 1f) * Time.fixedDeltaTime;
         }
-        else if (rb.linearVelocity.y > 0f && !isHoldingJump)
+        else if (velocityAlongGravity < 0f && !isHoldingJump)
         {
-            rb.linearVelocity += Vector2.down * gravityY * (lowJumpMultiplier - 1f) * Time.fixedDeltaTime;
+            rb.linearVelocity += gravityDir * gravityY * (lowJumpMultiplier - 1f) * Time.fixedDeltaTime;
+        }
+    }
+
+    public void SetGravityInverted(bool inverted)
+    {
+        if (isGravityInverted == inverted) return;
+        isGravityInverted = inverted;
+
+        rb.gravityScale = inverted ? -baseGravityScale : baseGravityScale;
+
+        Vector3 scale = transform.localScale;
+        scale.y = inverted ? -baseScaleY : baseScaleY;
+        transform.localScale = scale;
+
+        isJumping = true;
+        coyoteTimeCounter = 0f;
+
+        // Actualizar dirección visual si hay input activo
+        float horizontalInput = (isGravityInverted && invertHorizontalInputWithCamera) ? -moveInput.x : moveInput.x;
+        if (Mathf.Abs(horizontalInput) > 0.1f)
+        {
+            facingDirection = horizontalInput > 0 ? Vector2.right : Vector2.left;
         }
     }
 
@@ -122,7 +160,6 @@ public class PlayerController : MonoBehaviour
 
     private void OnMove(InputValue value)
     {
-
         if (DialogueManager.Instance != null && DialogueManager.Instance.IsDialogueActive)
         {
             moveInput = Vector2.zero;
@@ -131,10 +168,11 @@ public class PlayerController : MonoBehaviour
         }
         moveInput = value.Get<Vector2>();
 
+        float effectiveInputX = (isGravityInverted && invertHorizontalInputWithCamera) ? -moveInput.x : moveInput.x;
 
-        if (Mathf.Abs(moveInput.x) > 0.1f)
+        if (Mathf.Abs(effectiveInputX) > 0.1f)
         {
-            facingDirection = moveInput.x > 0 ? Vector2.right : Vector2.left;
+            facingDirection = effectiveInputX > 0 ? Vector2.right : Vector2.left;
         }
     }
 

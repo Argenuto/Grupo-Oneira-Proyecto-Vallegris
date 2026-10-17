@@ -14,13 +14,13 @@ public class EnemyHealth : Health
     [SerializeField] private Behaviour[] behavioursToDisableOnDeath;
 
     [Header("Referencias (opcionales, se buscan solas)")]
-    [SerializeField] private SpriteRenderer spriteRenderer;
+    [SerializeField] protected SpriteRenderer spriteRenderer;
 
-    private Rigidbody2D rb;
-    private Collider2D[] colliders;
-    private Color originalColor = Color.white;
-    private Coroutine flashRoutine;
-    private Coroutine destroyRoutine;
+    protected Rigidbody2D rb;
+    protected Collider2D[] colliders;
+    protected Color originalColor = Color.white;
+    protected Coroutine flashRoutine;
+    protected Coroutine destroyRoutine;
 
     protected override void Awake()
     {
@@ -121,7 +121,7 @@ public class EnemyHealth : Health
             spriteRenderer.color = originalColor;
     }
 
-    private void SetBehavioursEnabled(bool enabled)
+    protected virtual void SetBehavioursEnabled(bool enabled)
     {
         if (behavioursToDisableOnDeath == null) return;
         foreach (var b in behavioursToDisableOnDeath)

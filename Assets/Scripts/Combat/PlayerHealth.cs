@@ -53,6 +53,7 @@ public class PlayerHealth:Health
         StopInvulnerability();
         playerController.enabled = true;
         playerController.CanMove = true;
+        playerController.SetGravityInverted(false);
     }
 
   

@@ -141,7 +141,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 701346016590202478, guid: aab24ef262be5a24db78733c6936bc18, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -10.9
+      value: -10.237
       objectReference: {fileID: 0}
     - target: {fileID: 701346016590202478, guid: aab24ef262be5a24db78733c6936bc18, type: 3}
       propertyPath: m_LocalPosition.z
@@ -174,6 +174,22 @@ PrefabInstance:
     - target: {fileID: 701346016590202478, guid: aab24ef262be5a24db78733c6936bc18, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1307452801374655785, guid: aab24ef262be5a24db78733c6936bc18, type: 3}
+      propertyPath: m_Size.y
+      value: 2.510354
+      objectReference: {fileID: 0}
+    - target: {fileID: 1307452801374655785, guid: aab24ef262be5a24db78733c6936bc18, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1307452801374655785, guid: aab24ef262be5a24db78733c6936bc18, type: 3}
+      propertyPath: m_Offset.y
+      value: 0.012945652
+      objectReference: {fileID: 0}
+    - target: {fileID: 1576513213964722034, guid: aab24ef262be5a24db78733c6936bc18, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.28
       objectReference: {fileID: 0}
     - target: {fileID: 2749294650835373804, guid: aab24ef262be5a24db78733c6936bc18, type: 3}
       propertyPath: m_Enabled
@@ -234,6 +250,7 @@ MonoBehaviour:
   targetLayers:
     serializedVersion: 2
     m_Bits: 64
+  animatorController: {fileID: 0}
 --- !u!114 &410512436
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -361,7 +378,7 @@ Camera:
   far clip plane: 1000
   field of view: 52.8
   orthographic: 1
-  orthographic size: 5.68
+  orthographic size: 5.62
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -386,7 +403,7 @@ Transform:
   m_GameObject: {fileID: 997796225}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -16.67, y: -10.9, z: -10}
+  m_LocalPosition: {x: -16.67, y: -10.224054, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -614,7 +631,7 @@ Transform:
   m_GameObject: {fileID: 1705719420}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.027, y: -1.265, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -669,7 +686,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
+  m_Sprite: {fileID: 8918206793365494871, guid: d97785fec7c34ac4587d60c7aaf25bfd, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -794,7 +811,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.9339623, g: 0.43614274, b: 0.43614274, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -814,7 +831,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -8.3041, y: -12.00828, z: 0}
-  m_LocalScale: {x: 19.058588, y: 1, z: 1}
+  m_LocalScale: {x: 40, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -845,7 +862,7 @@ Transform:
   m_GameObject: {fileID: 1881524701}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: -0.1839119, w: 0.9829428}
-  m_LocalPosition: {x: 1.012, y: -0.137, z: 0}
+  m_LocalPosition: {x: 1.055, y: 0.851, z: 0}
   m_LocalScale: {x: 1, y: 0.1375, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -901,7 +918,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.5754717, g: 0.18729976, b: 0.18729976, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -923,6 +940,14 @@ PrefabInstance:
       propertyPath: BoundingShape2D
       value: 
       objectReference: {fileID: 410512438}
+    - target: {fileID: 2970954967433306574, guid: 40a5c6875221a114b872c035f92ebd55, type: 3}
+      propertyPath: SlowingDistance
+      value: 3.63
+      objectReference: {fileID: 0}
+    - target: {fileID: 4171826097691732606, guid: 40a5c6875221a114b872c035f92ebd55, type: 3}
+      propertyPath: Lens.OrthographicSize
+      value: 5.62
+      objectReference: {fileID: 0}
     - target: {fileID: 4171826097691732606, guid: 40a5c6875221a114b872c035f92ebd55, type: 3}
       propertyPath: Target.TrackingTarget
       value: 
@@ -933,7 +958,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4261140998227865558, guid: 40a5c6875221a114b872c035f92ebd55, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -10.9
+      value: -10.237
       objectReference: {fileID: 0}
     - target: {fileID: 4261140998227865558, guid: 40a5c6875221a114b872c035f92ebd55, type: 3}
       propertyPath: m_LocalPosition.z

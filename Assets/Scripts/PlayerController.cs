@@ -104,6 +104,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        bool grounded = IsGrounded();
         if ((DialogueManager.Instance != null && DialogueManager.Instance.IsDialogueActive) || (ItemObtainedManager.Instance != null && ItemObtainedManager.Instance.IsActive))
         {
             rb.linearVelocity = Vector2.zero;
@@ -119,6 +120,9 @@ public class PlayerController : MonoBehaviour
                 sprite.flipX = true;
         }
             animator.SetInteger("yVelocity", (int)Math.Floor(rb.linearVelocityY * 100f));
+            if (grounded)
+                animator.SetInteger("yVelocity", 0);
+
         if (rb.linearVelocity.x != 0)
             animator.SetBool("isWalking", true);
         else

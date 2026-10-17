@@ -11,13 +11,15 @@ public interface IDamageable
     void ResetHealth();   // vuelve a vida máxima y revive
 }
 
-public readonly struct DamageInfo
+[System.Serializable]
+public struct DamageInfo
 {
-    public readonly float amount;
-    public readonly GameObject source;
-    public readonly Vector2 hitPoint;
-    public readonly Vector2 knockbackDirection; // normalizada
-    public readonly float knockbackForce;
+    public float amount;
+    public GameObject source;
+    public Vector2 hitPoint;
+    public Vector2 knockbackDirection; // normalizada
+    public float knockbackForce;
+
 
     public DamageInfo(float amount, GameObject source, Vector2 hitPoint,
                       Vector2 knockbackDirection, float knockbackForce) {    this.amount = amount;

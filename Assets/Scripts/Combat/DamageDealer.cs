@@ -6,7 +6,7 @@ public abstract class DamageDealer : MonoBehaviour
     [SerializeField] protected float knockbackForce = 6f;
     [SerializeField] protected LayerMask targetLayers;
 
-    protected bool TryDealDamage(Collider2D target, Vector2 hitPoint)
+    protected virtual bool TryDealDamage(Collider2D target, Vector2 hitPoint)
     {
         if (!target.TryGetComponent(out IDamageable damageable)) return false;
         if (damageable.IsDead) return false;

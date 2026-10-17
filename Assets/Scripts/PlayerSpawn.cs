@@ -13,7 +13,6 @@ public class PlayerSpawn : MonoBehaviour
             {
                 player.transform.position = transform.position;
                 
-                // Optional: Re-enable movement if you disabled it
                 player.GetComponent<PlayerController>().enabled = true;
             }
 

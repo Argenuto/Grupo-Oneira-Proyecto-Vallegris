@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour
     private InputAction jumpAction;
 
     private Vector2 moveInput;
-    private Vector2 facingDirection = Vector2.right; // Defaults to facing right
+    private Vector2 facingDirection = Vector2.right; 
     
     private float coyoteTimeCounter;
     private float jumpBufferCounter;

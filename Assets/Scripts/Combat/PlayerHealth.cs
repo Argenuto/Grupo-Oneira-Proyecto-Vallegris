@@ -4,15 +4,17 @@ using System.Collections;
 [RequireComponent(typeof(PlayerController))]
 public class PlayerHealth:Health
 {
+    // Variables
     [SerializeField] private float invulnerabilityDuration = 1f;
     [SerializeField] private float blinkInterval = 0.1f;
     [SerializeField] private SpriteRenderer[] renderers;
-
+    [SerializeField] private float knockbackStunTime = 0.2f;
     private PlayerController playerController;
     private Rigidbody2D body;
     private Coroutine invulnerabilityCoroutine;
     private bool isInvulnerable;
 
+    // Fases de Unity
     protected override void Awake()
     {
         base.Awake();
@@ -22,6 +24,7 @@ public class PlayerHealth:Health
             renderers = GetComponentsInChildren<SpriteRenderer>(true);
     }
 
+    // Métodos
     protected override bool CanTakeDamage(DamageInfo damageInfo)
     {
         return !isInvulnerable;
@@ -32,7 +35,9 @@ public class PlayerHealth:Health
         if (invulnerabilityDuration > 0f && invulnerabilityCoroutine == null)
             invulnerabilityCoroutine = StartCoroutine(InvulnerabilityRoutine());
 
+        body.linearVelocity = Vector2.zero;
         body.AddForce(info.knockbackDirection * info.knockbackForce, ForceMode2D.Impulse);
+        StartCoroutine(KnockbackStun());
     }
 
     protected override void OnDeath()
@@ -47,6 +52,37 @@ public class PlayerHealth:Health
         base.HandleReset();
         StopInvulnerability();
         playerController.enabled = true;
+        playerController.CanMove = true;
+    }
+
+  
+    private void StopInvulnerability()
+    {
+        if (invulnerabilityCoroutine != null)
+        {
+            StopCoroutine(invulnerabilityCoroutine);
+            invulnerabilityCoroutine = null;
+        }
+
+        isInvulnerable = false;
+        SetRenderersVisible(true);
+    }
+
+    private void SetRenderersVisible(bool visible)
+    {
+        foreach (SpriteRenderer spriteRenderer in renderers)
+        {
+            if (spriteRenderer != null)
+                spriteRenderer.enabled = visible;
+        }
+    }
+
+    // Corutinas
+    private IEnumerator KnockbackStun()
+    {
+        playerController.CanMove = false;
+        yield return new WaitForSeconds(knockbackStunTime);
+        playerController.CanMove = true;
     }
 
     private IEnumerator InvulnerabilityRoutine()
@@ -68,26 +104,5 @@ public class PlayerHealth:Health
         SetRenderersVisible(true);
         isInvulnerable = false;
         invulnerabilityCoroutine = null;
-    }
-
-    private void StopInvulnerability()
-    {
-        if (invulnerabilityCoroutine != null)
-        {
-            StopCoroutine(invulnerabilityCoroutine);
-            invulnerabilityCoroutine = null;
-        }
-
-        isInvulnerable = false;
-        SetRenderersVisible(true);
-    }
-
-    private void SetRenderersVisible(bool visible)
-    {
-        foreach (SpriteRenderer spriteRenderer in renderers)
-        {
-            if (spriteRenderer != null)
-                spriteRenderer.enabled = visible;
-        }
     }
 }

@@ -26,8 +26,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float attackCooldown = 0.4f;
     [SerializeField] private float attackDistance = 1f;
     [SerializeField] private float attackRange = 0.5f;
-    [SerializeField] private LayerMask enemyLayers;
-
+    [SerializeField] private MeleeAttack meleeAttack;
+    public bool CanMove { get; set; } = true;
     private Rigidbody2D rb;
     private PlayerInput playerInput;
     private InputAction jumpAction;
@@ -85,12 +85,8 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (DialogueManager.Instance != null && DialogueManager.Instance.IsDialogueActive)
-    {
-        rb.linearVelocity = Vector2.zero;     
-        return; 
-    }
-        rb.linearVelocity = new Vector2(moveInput.x * moveSpeed, rb.linearVelocity.y);
+        if (CanMove)
+            rb.linearVelocity = new Vector2(moveInput.x * moveSpeed, rb.linearVelocity.y);
 
         ApplyBetterJumpGravity();
     }
@@ -116,15 +112,11 @@ public class PlayerController : MonoBehaviour
 
         Vector2 attackDirection = facingDirection;
 
-
         Vector2 attackPosition = (Vector2)transform.position + (attackDirection * attackDistance);
 
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPosition, attackRange, enemyLayers);
-
-        foreach (Collider2D enemy in hitEnemies)
-        {
-            //Debug.Log("We hit " + enemy.name);
-        }
+  
+            meleeAttack.Perform(attackPosition, attackRange);
+        
     }
 
 

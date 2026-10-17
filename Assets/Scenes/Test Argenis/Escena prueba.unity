@@ -128,6 +128,14 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 627648512181229282, guid: aab24ef262be5a24db78733c6936bc18, type: 3}
+      propertyPath: sprite
+      value: 
+      objectReference: {fileID: 1705719422}
+    - target: {fileID: 627648512181229282, guid: aab24ef262be5a24db78733c6936bc18, type: 3}
+      propertyPath: animator
+      value: 
+      objectReference: {fileID: 410512442}
+    - target: {fileID: 627648512181229282, guid: aab24ef262be5a24db78733c6936bc18, type: 3}
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
@@ -141,7 +149,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 701346016590202478, guid: aab24ef262be5a24db78733c6936bc18, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -10.237
+      value: -9.39
       objectReference: {fileID: 0}
     - target: {fileID: 701346016590202478, guid: aab24ef262be5a24db78733c6936bc18, type: 3}
       propertyPath: m_LocalPosition.z
@@ -403,7 +411,7 @@ Transform:
   m_GameObject: {fileID: 997796225}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -16.67, y: -10.224054, z: -10}
+  m_LocalPosition: {x: -16.67, y: -9.367671, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -506,7 +514,7 @@ MonoBehaviour:
   knockbackForce: 6
   targetLayers:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 0
   hitCooldown: 0.5
 --- !u!114 &1081863429
 MonoBehaviour:
@@ -631,7 +639,7 @@ Transform:
   m_GameObject: {fileID: 1705719420}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.027, y: -1.265, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -686,7 +694,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 8918206793365494871, guid: d97785fec7c34ac4587d60c7aaf25bfd, type: 3}
+  m_Sprite: {fileID: -1747268165361487346, guid: cfcbe310ba953aa45af60034cdbee889, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -958,7 +966,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4261140998227865558, guid: 40a5c6875221a114b872c035f92ebd55, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -10.237
+      value: -9.39
       objectReference: {fileID: 0}
     - target: {fileID: 4261140998227865558, guid: 40a5c6875221a114b872c035f92ebd55, type: 3}
       propertyPath: m_LocalPosition.z

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,6 +9,11 @@ public class PlayerController : MonoBehaviour
     [Header("Movement Settings")]
     [SerializeField] private float moveSpeed = 8f;
     [SerializeField] private float jumpForce = 16f;
+
+    [Header("Animation Settings")]
+    [SerializeField] private Animator animator;
+    [SerializeField] private SpriteRenderer sprite;
+
 
     [Header("Jump Physics Tuning")]
     [SerializeField] private float fallMultiplier = 2.5f;
@@ -34,6 +40,7 @@ public class PlayerController : MonoBehaviour
     private float baseGravityScale;
     private float baseScaleY;
 
+
     public bool CanMove { get; set; } = true;
     private Rigidbody2D rb;
     private PlayerInput playerInput;
@@ -55,6 +62,7 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         playerInput = GetComponent<PlayerInput>();
+        animator = GetComponent<Animator>();
 
         jumpAction = playerInput.actions["Jump"];
         baseGravityScale = Mathf.Abs(rb.gravityScale);
@@ -105,8 +113,16 @@ public class PlayerController : MonoBehaviour
         {
             float horizontalInput = (isGravityInverted && invertHorizontalInputWithCamera) ? -moveInput.x : moveInput.x;
             rb.linearVelocity = new Vector2(horizontalInput * moveSpeed, rb.linearVelocity.y);
+            if (facingDirection.x > 0)
+                sprite.flipX = false;
+            else if (facingDirection.x < 0)
+                sprite.flipX = true;
         }
-
+            animator.SetInteger("yVelocity", (int)Math.Floor(rb.linearVelocityY * 100f));
+        if (rb.linearVelocity.x != 0)
+            animator.SetBool("isWalking", true);
+        else
+            animator.SetBool("isWalking", false);
         ApplyBetterJumpGravity();
     }
 

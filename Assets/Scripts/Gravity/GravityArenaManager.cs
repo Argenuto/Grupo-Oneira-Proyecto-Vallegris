@@ -6,7 +6,8 @@ using UnityEngine.Events;
 /// <summary>
 /// Gestiona el encuentro de combate en gravedad invertida.
 /// Activa la inversión física del jugador y el giro suave de la cámara,
-/// bloquea las salidas y cuenta las bajas de enemigos requeridas para restaurar el orden.
+/// hace APARECER a los fantasmas cerca del nuevo suelo (el techo),
+/// bloquea las salidas y cuenta las bajas requeridas para restaurar el orden.
 /// </summary>
 public class GravityArenaManager : MonoBehaviour
 {
@@ -15,12 +16,17 @@ public class GravityArenaManager : MonoBehaviour
     public enum ArenaState { Inactive, Active, Completed }
 
     [Header("Condición de Victoria")]
-    [Tooltip("Cantidad de enemigos que deben ser derrotados para volver a la gravedad normal")]
-    [SerializeField] private int requiredKills = 3;
+    [Tooltip("Cantidad de enemigos que deben ser derrotados (0 = total de fantasmas activados)")]
+    [SerializeField] private int requiredKills = 2;
 
-    [Header("Enemigos del Encuentro (Opcional)")]
-    [Tooltip("Si se asignan, se monitorea su muerte directamente")]
-    [SerializeField] private List<EnemyHealth> arenaEnemies = new List<EnemyHealth>();
+    [Header("Aparición de Fantasmas (Cerca del Techo)")]
+    [Tooltip("Fantasmas colocados cerca del techo en la escena. Inician apagados y APARECEN al dispararse la antigravedad.")]
+    [SerializeField] private List<GameObject> ghostObjectsToActivate = new List<GameObject>();
+
+    [Tooltip("Opcional: Prefab de fantasma a instanciar si prefieres spawn dinámico")]
+    [SerializeField] private GameObject ghostPrefab;
+    [Tooltip("Puntos de spawn situados cerca del techo donde aparecerán los fantasmas")]
+    [SerializeField] private Transform[] ceilingSpawnPoints;
 
     [Header("Barreras y Confinamiento")]
     [Tooltip("Puertas o barreras que se encienden durante el combate y se apagan al ganar")]
@@ -39,6 +45,7 @@ public class GravityArenaManager : MonoBehaviour
     public int CurrentKills { get; private set; } = 0;
 
     private PlayerHealth playerHealth;
+    private List<GameObject> spawnedGhostInstances = new List<GameObject>();
 
     private void Awake()
     {
@@ -55,6 +62,13 @@ public class GravityArenaManager : MonoBehaviour
     private void Start()
     {
         SetBarriersActive(false);
+
+        // Asegurar que los fantasmas inicien ocultos/desactivados antes del trigger
+        foreach (var ghost in ghostObjectsToActivate)
+        {
+            if (ghost != null)
+                ghost.SetActive(false);
+        }
 
         // Si hay un jugador con PlayerHealth, escuchar su muerte para reiniciar limpiamente la sala
         if (player != null)
@@ -94,23 +108,59 @@ public class GravityArenaManager : MonoBehaviour
         State = ArenaState.Active;
         CurrentKills = 0;
 
-        // Activar barreras de contención
+        // 1. Activar barreras de contención
         SetBarriersActive(true);
 
-        // Invertir jugador y cámara
+        // 2. Invertir gravedad del jugador y rotar la cámara suavemente a 180°
         if (player == null) FindReferences();
         if (player != null) player.SetGravityInverted(true);
 
         if (cameraController == null) FindReferences();
         if (cameraController != null) cameraController.SetInverted(true);
 
-        // Suscribirse a enemigos asignados
-        foreach (var enemy in arenaEnemies)
+        // 3. Hacer APARECER a los fantasmas cerca del techo (el nuevo suelo)
+        int totalEnemies = 0;
+
+        // A) Activar fantasmas pre-colocados
+        foreach (var ghost in ghostObjectsToActivate)
         {
-            if (enemy != null)
+            if (ghost != null)
             {
-                enemy.onDeath.AddListener(() => RegisterKill(enemy));
+                ghost.SetActive(true);
+                totalEnemies++;
+
+                EnemyHealth health = ghost.GetComponent<EnemyHealth>();
+                if (health != null)
+                {
+                    health.onDeath.AddListener(() => RegisterKill(health));
+                }
             }
+        }
+
+        // B) Instanciar fantasmas por prefab si se configuraron puntos de spawn
+        if (ghostPrefab != null && ceilingSpawnPoints != null)
+        {
+            foreach (var spawnPoint in ceilingSpawnPoints)
+            {
+                if (spawnPoint != null)
+                {
+                    GameObject newGhost = Instantiate(ghostPrefab, spawnPoint.position, spawnPoint.rotation);
+                    spawnedGhostInstances.Add(newGhost);
+                    totalEnemies++;
+
+                    EnemyHealth health = newGhost.GetComponent<EnemyHealth>();
+                    if (health != null)
+                    {
+                        health.onDeath.AddListener(() => RegisterKill(health));
+                    }
+                }
+            }
+        }
+
+        // Si requiredKills es 0 o mayor a los enemigos disponibles, ajustar al total real
+        if (requiredKills <= 0 || requiredKills > totalEnemies)
+        {
+            requiredKills = Mathf.Max(1, totalEnemies);
         }
 
         onArenaStarted?.Invoke();
@@ -175,6 +225,21 @@ public class GravityArenaManager : MonoBehaviour
         if (cameraController != null)
             cameraController.SetInverted(false, instant: true);
 
+        // Desactivar fantasmas de nuevo
+        foreach (var ghost in ghostObjectsToActivate)
+        {
+            if (ghost != null)
+                ghost.SetActive(false);
+        }
+
+        // Destruir instancias dinámicas
+        foreach (var ghost in spawnedGhostInstances)
+        {
+            if (ghost != null)
+                Destroy(ghost);
+        }
+        spawnedGhostInstances.Clear();
+
         SetBarriersActive(false);
     }
 
@@ -196,4 +261,3 @@ public class GravityArenaManager : MonoBehaviour
         }
     }
 }
-

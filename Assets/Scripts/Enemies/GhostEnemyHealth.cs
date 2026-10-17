@@ -3,10 +3,16 @@ using UnityEngine;
 
 /// <summary>
 /// Salud especializada para enemigos de tipo Fantasma.
-/// Su muerte consiste en desvanecerse (fade out de opacidad y elevación sutil) hasta desaparecer.
+/// Incluye aparición etérea (fade-in) al activarse y desvanecimiento (fade-out) hasta desaparecer al morir.
 /// </summary>
 public class GhostEnemyHealth : EnemyHealth
 {
+    [Header("Efecto de Aparición")]
+    [Tooltip("Si es verdadero, el fantasma aparece materializándose (fade-in) al activarse")]
+    [SerializeField] private bool fadeInOnSpawn = true;
+    [Tooltip("Tiempo en segundos que toma materializarse")]
+    [SerializeField] private float appearDuration = 0.6f;
+
     [Header("Efecto de Desaparición")]
     [Tooltip("Tiempo en segundos que toma desvanecerse antes de destruirse")]
     [SerializeField] private float disappearDuration = 0.75f;
@@ -14,12 +20,57 @@ public class GhostEnemyHealth : EnemyHealth
     [Tooltip("Distancia que asciende mientras se desvanece")]
     [SerializeField] private float floatUpDistance = 0.6f;
 
+    private Coroutine appearRoutine;
+
+    protected override void Awake()
+    {
+        base.Awake();
+    }
+
+    private void OnEnable()
+    {
+        if (fadeInOnSpawn)
+        {
+            if (appearRoutine != null) StopCoroutine(appearRoutine);
+            appearRoutine = StartCoroutine(AppearRoutine());
+        }
+    }
+
+    private IEnumerator AppearRoutine()
+    {
+        if (spriteRenderer == null) yield break;
+
+        Color targetColor = originalColor;
+        Color transparentColor = originalColor;
+        transparentColor.a = 0f;
+
+        spriteRenderer.color = transparentColor;
+        float elapsed = 0f;
+
+        while (elapsed < appearDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / appearDuration);
+            spriteRenderer.color = Color.Lerp(transparentColor, targetColor, t);
+            yield return null;
+        }
+
+        spriteRenderer.color = targetColor;
+        appearRoutine = null;
+    }
+
     protected override void OnDeath()
     {
         if (flashRoutine != null)
         {
             StopCoroutine(flashRoutine);
             flashRoutine = null;
+        }
+
+        if (appearRoutine != null)
+        {
+            StopCoroutine(appearRoutine);
+            appearRoutine = null;
         }
 
         // Apagar scripts de IA y movimiento
@@ -83,4 +134,3 @@ public class GhostEnemyHealth : EnemyHealth
         }
     }
 }
-

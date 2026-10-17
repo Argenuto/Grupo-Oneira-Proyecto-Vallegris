@@ -128,8 +128,12 @@ public class PlayerController : MonoBehaviour
 
         rb.gravityScale = inverted ? -baseGravityScale : baseGravityScale;
 
+        // Rotar el personaje 180° en Z para que los pies queden orientados hacia el techo (el nuevo suelo)
+        transform.localRotation = Quaternion.Euler(0f, 0f, inverted ? 180f : 0f);
+
+        // Mantener la escala positiva en Y para evitar invertir la física del collider
         Vector3 scale = transform.localScale;
-        scale.y = inverted ? -baseScaleY : baseScaleY;
+        scale.y = baseScaleY;
         transform.localScale = scale;
 
         isJumping = true;

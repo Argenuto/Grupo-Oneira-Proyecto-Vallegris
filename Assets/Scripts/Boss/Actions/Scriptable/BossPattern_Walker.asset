@@ -1,0 +1,90 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e5bbf74e2f3181488845c59c2addf7b, type: 3}
+  m_Name: BossPattern_Walker
+  m_EditorClassIdentifier: Assembly-CSharp::BossPattern
+  loopMode: 1
+  delayBetweenLoops: 0.5
+  actions:
+  - rid: 1802105471718916188
+  - rid: 1802105471718916189
+  - rid: 1802105471718916190
+  - rid: 1802105471718916191
+  references:
+    version: 2
+    RefIds:
+    - rid: 1802105471718916188
+      type: {class: PatrolAction, ns: , asm: Assembly-CSharp}
+      data:
+        enabled: 1
+        telegraphDuration: 0
+        telegraphColor: {r: 1, g: 0.85, b: 0.2, a: 1}
+        onStart:
+          m_PersistentCalls:
+            m_Calls: []
+        onEnd:
+          m_PersistentCalls:
+            m_Calls: []
+        passes: 2
+        speed: 5
+        pauseAtEdges: 0.3
+        damageOnContact: 1
+    - rid: 1802105471718916189
+      type: {class: WaitAction, ns: , asm: Assembly-CSharp}
+      data:
+        enabled: 1
+        telegraphDuration: 0
+        telegraphColor: {r: 1, g: 0.85, b: 0.2, a: 1}
+        onStart:
+          m_PersistentCalls:
+            m_Calls: []
+        onEnd:
+          m_PersistentCalls:
+            m_Calls: []
+        duration: 0.5
+    - rid: 1802105471718916190
+      type: {class: ProjectileBurstAction, ns: , asm: Assembly-CSharp}
+      data:
+        enabled: 1
+        telegraphDuration: 0
+        telegraphColor: {r: 1, g: 0.85, b: 0.2, a: 1}
+        onStart:
+          m_PersistentCalls:
+            m_Calls: []
+        onEnd:
+          m_PersistentCalls:
+            m_Calls: []
+        projectilePrefab: {fileID: 7380293237107069630, guid: 08cd4a890ab3658418084283d4f79829, type: 3}
+        count: 5
+        spreadAngle: 50
+        aim: 0
+        fixedAngle: 0
+        projectileSpeed: 8
+        intervalBetweenShots: 0
+        damageOverride: 0
+        blind:
+          applyBlind: 1
+          duration: 3
+          intensity: 1
+    - rid: 1802105471718916191
+      type: {class: WaitAction, ns: , asm: Assembly-CSharp}
+      data:
+        enabled: 1
+        telegraphDuration: 0
+        telegraphColor: {r: 1, g: 0.85, b: 0.2, a: 1}
+        onStart:
+          m_PersistentCalls:
+            m_Calls: []
+        onEnd:
+          m_PersistentCalls:
+            m_Calls: []
+        duration: 1

@@ -10,6 +10,10 @@ public class PlayerHealth : Health
     [SerializeField] private SpriteRenderer[] renderers;
     [SerializeField] private float knockbackStunTime = 0.2f;
 
+    [Header("Audio")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip hurtSFX;
+
     [Header("Save Settings")]
     [SerializeField] private string healthPrefsKey = "PlayerCurrentHealth";
 
@@ -77,7 +81,7 @@ public class PlayerHealth : Health
     {
         SaveHealth(); // Save immediately upon taking damage
         RestartRegeneration(); // Interrupt regen and restart the safe-time delay
-
+        PlaySFX(hurtSFX);
         if (invulnerabilityDuration > 0f && invulnerabilityCoroutine == null)
             invulnerabilityCoroutine = StartCoroutine(InvulnerabilityRoutine());
 
@@ -105,7 +109,7 @@ public class PlayerHealth : Health
         playerController.enabled = false;
         body.linearVelocity = Vector2.zero;
     }
-    
+
     protected override void HandleReset()
     {
         // This hook runs after base.ResetHealth() has restored CurrentHealth to MaxHealth
@@ -202,6 +206,16 @@ public class PlayerHealth : Health
             yield return new WaitForSeconds(regenInterval);
         }
 
+     
         regenCoroutine = null;
+    }
+
+    private void PlaySFX(AudioClip clip)
+    {
+        if (clip != null && audioSource != null)
+        {
+            audioSource.pitch = UnityEngine.Random.Range(0.9f, 1.1f);
+            audioSource.PlayOneShot(clip);
+        }
     }
 }

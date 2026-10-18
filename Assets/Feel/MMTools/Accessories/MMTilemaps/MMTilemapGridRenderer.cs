@@ -7,8 +7,6 @@ namespace MoreMountains.Tools
 {
 	public class MMTilemapGridRenderer 
 	{
-		#if MM_PHYSICS2D
-		
 		/// <summary>
 		/// Renders the specified grid on the specified tilemap, with optional slow mode (only works at runtime)
 		/// </summary>
@@ -186,7 +184,5 @@ namespace MoreMountains.Tools
 			tilemap.ClearAllTiles();
 			tilemap.RefreshAllTiles();
 		}
-
-		#endif
 	}    
 }

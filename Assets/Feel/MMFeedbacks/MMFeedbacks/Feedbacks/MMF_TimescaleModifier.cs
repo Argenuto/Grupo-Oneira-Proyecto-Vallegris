@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using MoreMountains.Tools;
 using UnityEngine;
 using UnityEngine.Scripting.APIUpdating;
-using UnityEngine.Serialization;
 
 namespace MoreMountains.Feedbacks
 {
@@ -13,7 +12,6 @@ namespace MoreMountains.Feedbacks
 	[AddComponentMenu("")]
 	[FeedbackHelp("This feedback triggers a MMTimeScaleEvent, which, if you have a MMTimeManager object in your scene, will be caught and used to modify the timescale according to the specified settings. These settings are the new timescale (0.5 will be twice slower than normal, 2 twice faster, etc), the duration of the timescale modification, and the optional speed at which to transition between normal and altered time scale.")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
-	[System.Serializable]
 	[FeedbackPath("Time/Timescale Modifier")]
 	public class MMF_TimescaleModifier : MMF_Feedback
 	{
@@ -38,10 +36,8 @@ namespace MoreMountains.Feedbacks
 		[MMFInspectorGroup("Timescale Modifier", true, 63)]
 		/// the selected mode
 		[Tooltip("the selected mode : shake : changes the timescale for a certain duration" +
-		         "\n- shake : sets the timescale to a new value for the specified TimeScaleDuration then reverts it back to what it was before" +
-		         "\n- change : sets the timescale to a new value, forever (until you change it again)" +
-		         "\n- reset : resets the timescale to its NormalTimescale value, defined in the MMTimeManager" +
-		         "\n- unfreeze : sets the timescale back to its previous value, before the last change")]
+		         "- change : sets the timescale to a new value, forever (until you change it again)" +
+		         "- reset : resets the timescale to its previous value")]
 		public Modes Mode = Modes.Shake;
 
 		/// the new timescale to apply
@@ -54,9 +50,6 @@ namespace MoreMountains.Feedbacks
 		/// whether to reset the timescale on Stop or not
 		[Tooltip("whether to reset the timescale on Stop or not")]
 		public bool ResetTimescaleOnStop = false;
-		/// whether to unfreeze the timescale on Stop or not - if you set this to true, ResetTimescaleOnStop will be ignored
-		[Tooltip("whether to unfreeze the timescale on Stop or not - if you set this to true, ResetTimescaleOnStop will be ignored")]
-		public bool UnfreezeTimescaleOnStop = false;
 		
 		[MMFInspectorGroup("Interpolation", true, 63)]
 		/// whether or not we should lerp the timescale
@@ -77,41 +70,21 @@ namespace MoreMountains.Feedbacks
 		[Tooltip("in Duration mode, the duration of the timescale interpolation, in unscaled time seconds")]
 		[MMFEnumCondition("TimescaleLerpMode", (int)MMTimeScaleLerpModes.Duration)]
 		public float TimescaleLerpDuration = 1f;
-		/// whether or not we should lerp the timescale as it goes back to normal afterwards when using Unfreeze mode
-		[FormerlySerializedAs("TimeScaleLerpOnReset")]
-		[Tooltip("whether or not we should lerp the timescale as it goes back to normal afterwards when using Unfreeze mode")]
+		/// whether or not we should lerp the timescale as it goes back to normal afterwards
+		[Tooltip("whether or not we should lerp the timescale as it goes back to normal afterwards")]
 		[MMFEnumCondition("TimescaleLerpMode", (int)MMTimeScaleLerpModes.Duration)]
-		public bool TimeScaleLerpOnUnfreeze = false;
-		/// in Duration mode, the curve to use to lerp the timescale when unfreezing if TimeScaleLerpOnUnfreeze is true
-		[FormerlySerializedAs("TimescaleLerpCurveOnReset")] 
-		[Tooltip("in Duration mode, the curve to use to lerp the timescale when unfreezing if TimeScaleLerpOnUnfreeze is true")]
-		public MMTweenType TimescaleLerpCurveOnUnfreeze = new MMTweenType( new AnimationCurve(new Keyframe(0, 0), new Keyframe(1, 1)), 
+		public bool TimeScaleLerpOnReset = false;
+		/// in Duration mode, the curve to use to lerp the timescale
+		[Tooltip("in Duration mode, the curve to use to lerp the timescale")]
+		public MMTweenType TimescaleLerpCurveOnReset = new MMTweenType( new AnimationCurve(new Keyframe(0, 0), new Keyframe(1, 1)), 
 			enumConditionPropertyName:"TimescaleLerpMode", enumConditionValues:(int)MMTimeScaleLerpModes.Duration);
-		/// in Duration mode, the duration of the timescale interpolation, in unscaled time seconds when unfreezing if TimeScaleLerpOnUnfreeze is true
-		[FormerlySerializedAs("TimescaleLerpDurationOnReset")]
-		[Tooltip("in Duration mode, the duration of the timescale interpolation, in unscaled time seconds when unfreezing if TimeScaleLerpOnUnfreeze is true")]
+		/// in Duration mode, the duration of the timescale interpolation, in unscaled time seconds
+		[Tooltip("in Duration mode, the duration of the timescale interpolation, in unscaled time seconds")]
 		[MMFEnumCondition("TimescaleLerpMode", (int)MMTimeScaleLerpModes.Duration)]
-		public float TimescaleLerpDurationOnUnfreeze = 1f;
+		public float TimescaleLerpDurationOnReset = 1f;
 
 		/// the duration of this feedback is the duration of the time modification
-		public override float FeedbackDuration {
-			get
-			{
-				float totalDuration = (Mode == Modes.Shake) ? TimeScaleDuration : 0f;
-				if (TimescaleLerpMode == MMTimeScaleLerpModes.Duration)
-				{
-					totalDuration += TimeScaleLerp ? TimescaleLerpDuration : 0f;
-					if (Mode == Modes.Shake)
-					{
-						totalDuration += TimeScaleLerpOnUnfreeze ? TimescaleLerpDurationOnUnfreeze : 0f;
-					}
-				}
-				return ApplyTimeMultiplier(totalDuration);
-			}
-			set
-			{
-				TimeScaleDuration = value;
-			} }
+		public override float FeedbackDuration { get { return ApplyTimeMultiplier(TimeScaleDuration); } set { TimeScaleDuration = value; } }
 
 		/// <summary>
 		/// On Play, triggers a time scale event
@@ -127,10 +100,10 @@ namespace MoreMountains.Feedbacks
 			switch (Mode)
 			{
 				case Modes.Shake:
-					MMTimeScaleEvent.Trigger(MMTimeScaleMethods.For, TimeScale, TimeScaleDuration, TimeScaleLerp, TimeScaleLerpSpeed, false, TimescaleLerpMode, TimescaleLerpCurve, TimescaleLerpDuration, TimeScaleLerpOnUnfreeze, TimescaleLerpCurveOnUnfreeze, TimescaleLerpDurationOnUnfreeze);
+					MMTimeScaleEvent.Trigger(MMTimeScaleMethods.For, TimeScale, FeedbackDuration, TimeScaleLerp, TimeScaleLerpSpeed, false, TimescaleLerpMode, TimescaleLerpCurve, TimescaleLerpDuration, TimeScaleLerpOnReset, TimescaleLerpCurveOnReset, TimescaleLerpDurationOnReset);
 					break;
 				case Modes.Change:
-					MMTimeScaleEvent.Trigger(MMTimeScaleMethods.For, TimeScale, 0f, TimeScaleLerp, TimeScaleLerpSpeed, true, TimescaleLerpMode, TimescaleLerpCurve, TimescaleLerpDuration, TimeScaleLerpOnUnfreeze, TimescaleLerpCurveOnUnfreeze, TimescaleLerpDurationOnUnfreeze);
+					MMTimeScaleEvent.Trigger(MMTimeScaleMethods.For, TimeScale, 0f, TimeScaleLerp, TimeScaleLerpSpeed, true, TimescaleLerpMode, TimescaleLerpCurve, TimescaleLerpDuration, TimeScaleLerpOnReset, TimescaleLerpCurveOnReset, TimescaleLerpDurationOnReset);
 					break;
 				case Modes.Reset:
 					MMTimeScaleEvent.Trigger(MMTimeScaleMethods.Reset, TimeScale, 0f, false, 0f, true);
@@ -148,20 +121,11 @@ namespace MoreMountains.Feedbacks
 		/// <param name="feedbacksIntensity"></param>
 		protected override void CustomStopFeedback(Vector3 position, float feedbacksIntensity = 1.0f)
 		{
-			if (!Active || !FeedbackTypeAuthorized || (!ResetTimescaleOnStop && !UnfreezeTimescaleOnStop))
+			if (!Active || !FeedbackTypeAuthorized || !ResetTimescaleOnStop)
 			{
 				return;
 			}
-			if (UnfreezeTimescaleOnStop)
-			{
-				MMTimeScaleEvent.Trigger(MMTimeScaleMethods.Unfreeze, TimeScale, 0f, false, 0f, true);
-				return;
-			}
-			if (ResetTimescaleOnStop)
-			{
-				MMTimeScaleEvent.Trigger(MMTimeScaleMethods.Reset, TimeScale, 0f, false, 0f, true);
-				return;
-			}
+			MMTimeScaleEvent.Trigger(MMTimeScaleMethods.Reset, TimeScale, 0f, false, 0f, true);
 		}
 		
 		/// <summary>
@@ -197,13 +161,13 @@ namespace MoreMountains.Feedbacks
 			if (string.IsNullOrEmpty(TimescaleLerpCurve.EnumConditionPropertyName))
 			{
 				TimescaleLerpCurve.EnumConditionPropertyName = "TimescaleLerpMode";
-				TimescaleLerpCurveOnUnfreeze.EnumConditionPropertyName = "TimescaleLerpMode";
+				TimescaleLerpCurveOnReset.EnumConditionPropertyName = "TimescaleLerpMode";
 				TimescaleLerpCurve.EnumConditions = new bool[32];
 			}
 			if (TimescaleLerpCurve.EnumConditions[(int)MMTimeScaleLerpModes.Duration] == false)
 			{
 				TimescaleLerpCurve.EnumConditions[(int)MMTimeScaleLerpModes.Duration] = true;
-				TimescaleLerpCurveOnUnfreeze.EnumConditions[(int)MMTimeScaleLerpModes.Duration] = true;
+				TimescaleLerpCurveOnReset.EnumConditions[(int)MMTimeScaleLerpModes.Duration] = true;
 			}
 		}
 	}

@@ -12,7 +12,6 @@ namespace MoreMountains.FeedbacksForThirdParty
 	/// </summary>
 	[AddComponentMenu("")]
 	[FeedbackHelp("This feedback will let you set the visibility of an element on a target UI Document")]
-	[System.Serializable]
 	[FeedbackPath("UI Toolkit/UITK Visible")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.UIToolkit")]
 	public class MMF_UIToolkitVisible : MMF_UIToolkitBoolBase

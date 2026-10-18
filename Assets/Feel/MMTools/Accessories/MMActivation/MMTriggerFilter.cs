@@ -18,8 +18,6 @@ namespace MoreMountains.Tools
 
 		// Trigger 2D ------------------------------------------------------------------------------------
 
-		#if MM_PHYSICS2D
-		
 		protected abstract void OnTriggerEnter2D_(Collider2D collider);
 		void OnTriggerEnter2D (Collider2D collider)
 		{
@@ -47,7 +45,6 @@ namespace MoreMountains.Tools
 			}
 		}
 
-		#endif
 
 		// Trigger  ------------------------------------------------------------------------------------
 

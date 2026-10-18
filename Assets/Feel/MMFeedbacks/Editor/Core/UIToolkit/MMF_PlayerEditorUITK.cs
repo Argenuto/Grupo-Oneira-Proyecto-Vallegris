@@ -94,7 +94,6 @@ namespace MoreMountains.Feedbacks
 		protected const string _replaceAllUndoText = "Replace all feedbacks";
 		protected const string _addUndoText = "Add new feedback";
 		protected const string _removeUndoText = "Remove feedback";
-		protected const string _reorderUndoText = "Reorder feedback";
 		protected const string _pasteAllAsNewText = "Paste all feedbacks as new";
 
 		protected const string _inactiveMessage =
@@ -182,10 +181,6 @@ namespace MoreMountains.Feedbacks
 		protected const string _playCountPropertyName = "PlayCount";
 		protected const string _labelPropertyName = "Label";
 		protected const string _infiniteLoopPropertyName = "InfiniteLoop";
-		
-		protected const string _channelModePropertyName = "MMF_ChannelMode";
-		protected const string _channelPropertyName = "MMF_Channel";
-		protected const string _mmChannelDefinitionPropertyName = "MMF_ChannelDefinition";
 
 		// class names
 		public const string _foldoutClassName = "mm-foldout";
@@ -372,9 +367,7 @@ namespace MoreMountains.Feedbacks
 
 		protected virtual void OnFeedbackListReorder()
 		{
-			Undo.RecordObject(target, _reorderUndoText);
 			RedrawFeedbacksList();
-			SavePlayerChanges();
 		}
 
 		protected virtual void OnUndoRedo()
@@ -409,7 +402,7 @@ namespace MoreMountains.Feedbacks
 			DrawFeedbacksList(_root);
 			DrawBottomBar(_root);
 			DrawDebugControls(_root);
-			SavePlayerChanges();
+			serializedObject.ApplyModifiedProperties();
 			return _root;
 		}
 
@@ -711,15 +704,15 @@ namespace MoreMountains.Feedbacks
 
 			void BuildPlaySettingsFoldout()
 			{
-				MMUIToolkit.CreateAndBindPropertyField(_canPlayPropertyName, serializedObject, settingsPlaySettingsFoldout);
-				MMUIToolkit.CreateAndBindPropertyField(_canPlayWhileAlreadyPlayingPropertyName, serializedObject, settingsPlaySettingsFoldout);
-				MMUIToolkit.CreateAndBindPropertyField(_performanceModePropertyName, serializedObject, settingsPlaySettingsFoldout);
-				MMUIToolkit.CreateAndBindPropertyField(_stopFeedbacksOnDisablePropertyName, serializedObject, settingsPlaySettingsFoldout);
+				MMUIToolkit.CreateAndBindPropertyField(_canPlayPropertyName, serializedObject,
+					settingsPlaySettingsFoldout);
+				MMUIToolkit.CreateAndBindPropertyField(_canPlayWhileAlreadyPlayingPropertyName, serializedObject,
+					settingsPlaySettingsFoldout);
+				MMUIToolkit.CreateAndBindPropertyField(_performanceModePropertyName, serializedObject,
+					settingsPlaySettingsFoldout);
+				MMUIToolkit.CreateAndBindPropertyField(_stopFeedbacksOnDisablePropertyName, serializedObject,
+					settingsPlaySettingsFoldout);
 				MMUIToolkit.CreateAndBindPropertyField(_restoreInitialValuesOnDisablePropertyName, serializedObject, settingsPlaySettingsFoldout);
-				
-				MMUIToolkit.CreateAndBindPropertyField(_channelModePropertyName, serializedObject, settingsPlaySettingsFoldout);
-				MMUIToolkit.CreateAndBindPropertyField(_channelPropertyName, serializedObject, settingsPlaySettingsFoldout);
-				MMUIToolkit.CreateAndBindPropertyField(_mmChannelDefinitionPropertyName, serializedObject, settingsPlaySettingsFoldout);
 
 				if (Application.isPlaying)
 				{
@@ -1395,7 +1388,8 @@ namespace MoreMountains.Feedbacks
 			Undo.RecordObject(target, _addUndoText);
 			int newFeedbackIndex = feedbackIndex - 1;
 			AddFeedback(_typesAndNames[newFeedbackIndex].FeedbackType);
-			SavePlayerChanges();
+			serializedObject.ApplyModifiedProperties();
+			PrefabUtility.RecordPrefabInstancePropertyModifications(TargetMmfPlayer);
 			if (addNewFeedbackPopupField != null)
 			{
 				addNewFeedbackPopupField.SetValueWithoutNotify(_typeDisplays[0]);
@@ -1705,26 +1699,20 @@ namespace MoreMountains.Feedbacks
 		{
 			Undo.RecordObject(target, _removeUndoText);
 			(target as MMF_Player).RemoveFeedback(id);
-			SavePlayerChanges();
+			serializedObject.ApplyModifiedProperties();
 			RedrawFeedbacksList();
-			SavePlayerChanges();
+			PrefabUtility.RecordPrefabInstancePropertyModifications(TargetMmfPlayer);
 		}
 
 		protected virtual void ResetContextMenuFeedback(int id)
 		{
 			Undo.RecordObject(target, _resetUndoText);
+
 			Type feedbackType = (target as MMF_Player).FeedbacksList[id].GetType();
 			MMF_Feedback newFeedback = (target as MMF_Player).AddFeedback(feedbackType, false);
 			(target as MMF_Player).FeedbacksList[id] = newFeedback;
 			serializedObject.ApplyModifiedProperties();
 			RedrawFeedbacksList();
-			SavePlayerChanges();
-		}
-
-		protected virtual void SavePlayerChanges()
-		{
-			serializedObject.ApplyModifiedProperties();
-			EditorUtility.SetDirty(TargetMmfPlayer);
 			PrefabUtility.RecordPrefabInstancePropertyModifications(TargetMmfPlayer);
 		}
 
@@ -1807,7 +1795,8 @@ namespace MoreMountains.Feedbacks
 			serializedObject.Update();
 			Undo.RecordObject(target, _pasteUndoText);
 			MMF_PlayerCopy.PasteAll(this);
-			SavePlayerChanges();
+			serializedObject.ApplyModifiedProperties();
+			PrefabUtility.RecordPrefabInstancePropertyModifications(TargetMmfPlayer);
 			RedrawBottomBar();
 			RedrawFeedbacksList();
 		}
@@ -1820,7 +1809,8 @@ namespace MoreMountains.Feedbacks
 			serializedObject.Update();
 			Undo.RecordObject(target, _pasteAllAsNewText);
 			MMF_PlayerCopy.PasteAll(this);
-			SavePlayerChanges();
+			serializedObject.ApplyModifiedProperties();
+			PrefabUtility.RecordPrefabInstancePropertyModifications(TargetMmfPlayer);
 			RedrawBottomBar();
 			RedrawFeedbacksList();
 		}
@@ -1831,7 +1821,8 @@ namespace MoreMountains.Feedbacks
 			Undo.RecordObject(target, _replaceAllUndoText);
 			TargetMmfPlayer.FeedbacksList.Clear();
 			MMF_PlayerCopy.PasteAll(this);
-			SavePlayerChanges();
+			serializedObject.ApplyModifiedProperties();
+			PrefabUtility.RecordPrefabInstancePropertyModifications(TargetMmfPlayer);
 			RedrawBottomBar();
 			RedrawFeedbacksList();
 		}

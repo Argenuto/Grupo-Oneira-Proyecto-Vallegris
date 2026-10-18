@@ -130,18 +130,14 @@ namespace MoreMountains.Tools
 			mmGizmo._sphereCollider = mmGizmo.gameObject.GetComponent<SphereCollider>();
 			mmGizmo._boxCollider = mmGizmo.gameObject.GetComponent<BoxCollider>();
 			mmGizmo._meshCollider = mmGizmo.gameObject.GetComponent<MeshCollider>();
-			#if MM_PHYSICS2D
 			mmGizmo._circleCollider2D = mmGizmo.gameObject.GetComponent<CircleCollider2D>();
 			mmGizmo._boxCollider2D = mmGizmo.gameObject.GetComponent<BoxCollider2D>();
-			#endif
 
 			mmGizmo._sphereColliderNotNull = (mmGizmo._sphereCollider != null);
 			mmGizmo._boxColliderNotNull = (mmGizmo._boxCollider != null);
 			mmGizmo._meshColliderNotNull = (mmGizmo._meshCollider != null);
-			#if MM_PHYSICS2D
 			mmGizmo._circleCollider2DNotNull = (mmGizmo._circleCollider2D != null);
 			mmGizmo._boxCollider2DNotNull = (mmGizmo._boxCollider2D != null);
-			#endif
 
 			mmGizmo._vector3Zero = Vector3.zero;
 			mmGizmo._textureRect = new Rect(0f, 0f, mmGizmo.TextureSize.x, mmGizmo.TextureSize.y);
@@ -186,11 +182,9 @@ namespace MoreMountains.Tools
 					Gizmos.DrawWireCube(ComputeGizmoPosition(mmGizmo, mmGizmo._boxCollider.center), mmGizmo._boxCollider.size);
 				}
 			}
-			
-			#if MM_PHYSICS2D
+
 			if (mmGizmo._circleCollider2DNotNull)
 			{
-				
 				if (mmGizmo.ColliderRenderType == MMGizmo.ColliderRenderTypes.Full)
 				{
 					Gizmos.DrawSphere((Vector3)ComputeGizmoPosition(mmGizmo, mmGizmo._circleCollider2D.offset), mmGizmo._circleCollider2D.radius);
@@ -216,7 +210,6 @@ namespace MoreMountains.Tools
 					Gizmos.DrawWireCube(ComputeGizmoPosition(mmGizmo, mmGizmo._boxCollider2D.offset), gizmoSize);
 				}
 			}
-			#endif
 
 			if (mmGizmo._meshColliderNotNull)
 			{

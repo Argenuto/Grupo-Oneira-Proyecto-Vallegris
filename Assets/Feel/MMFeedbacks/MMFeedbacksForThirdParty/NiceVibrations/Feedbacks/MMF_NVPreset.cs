@@ -11,7 +11,6 @@ namespace MoreMountains.FeedbacksForThirdParty
 	/// Use this feedback to play a preset haptic, limited but super simple predifined haptic patterns
 	/// </summary>
 	[AddComponentMenu("")]
-	[System.Serializable]
 	#if MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
 	[FeedbackPath("Haptics/Haptic Preset")]
 	#endif    

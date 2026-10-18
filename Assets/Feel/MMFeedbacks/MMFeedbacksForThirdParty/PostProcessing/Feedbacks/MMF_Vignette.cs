@@ -13,7 +13,6 @@ namespace MoreMountains.FeedbacksForThirdParty
 	/// with Vignette active, and a MMVignetteShaker component.
 	/// </summary>
 	[AddComponentMenu("")]
-	[System.Serializable]
 	#if MM_POSTPROCESSING
 	[FeedbackPath("PostProcess/Vignette")]
 	#endif

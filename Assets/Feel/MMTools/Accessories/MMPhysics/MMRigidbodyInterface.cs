@@ -10,7 +10,6 @@ namespace MoreMountains.Tools
 	[AddComponentMenu("More Mountains/Tools/Rigidbody Interface/MM Rigidbody Interface")]
 	public class MMRigidbodyInterface : MonoBehaviour 
 	{	
-		#if MM_PHYSICS2D
 		/// <summary>
 		/// Returns the rigidbody's position
 		/// </summary>
@@ -313,6 +312,5 @@ namespace MoreMountains.Tools
 				}
 			}
 		}
-		#endif
 	}
 }

@@ -13,7 +13,6 @@ namespace MoreMountains.FeedbacksForThirdParty
 	/// with Lens Distortion active, and a MMLensDistortionShaker_URP component.
 	/// </summary>
 	[AddComponentMenu("")]
-	[System.Serializable]
 	#if MM_URP
 	[FeedbackPath("PostProcess/Lens Distortion URP")]
 	#endif

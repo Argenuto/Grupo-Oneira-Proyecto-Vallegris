@@ -13,7 +13,6 @@ namespace MoreMountains.FeedbacksForThirdParty
 	/// with Vignette active, and a MMVignetteShaker_HDRP component.
 	/// </summary>
 	[AddComponentMenu("")]
-	[System.Serializable]
 	#if MM_HDRP
 	[FeedbackPath("PostProcess/Vignette HDRP")]
 	#endif

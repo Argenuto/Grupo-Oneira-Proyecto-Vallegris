@@ -12,7 +12,6 @@ namespace MoreMountains.Feedbacks
 	/// This feedback lets you tweak the softness of a TMP text over time
 	/// </summary>
 	[AddComponentMenu("")]
-	[System.Serializable]
 	[FeedbackHelp("This feedback lets you tweak the softness of a TMP text over time.")]
 	#if MM_UGUI2
 	[FeedbackPath("TextMesh Pro/TMP Softness")]

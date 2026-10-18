@@ -12,7 +12,6 @@ namespace MoreMountains.FeedbacksForThirdParty
 	/// with HDRP Chromatic Aberration active, and a MMChromaticAberrationShaker_HDRP component.
 	/// </summary>
 	[AddComponentMenu("")]
-	[System.Serializable]
 	#if MM_HDRP
 	[FeedbackPath("PostProcess/Chromatic Aberration HDRP")]
 	#endif

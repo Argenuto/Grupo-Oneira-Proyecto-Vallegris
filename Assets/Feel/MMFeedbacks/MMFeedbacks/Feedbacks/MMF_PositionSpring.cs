@@ -1,6 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using MoreMountains.Tools;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.Scripting.APIUpdating;
 using Random = UnityEngine.Random;
 
@@ -11,7 +14,6 @@ namespace MoreMountains.Feedbacks
 	/// </summary>
 	[AddComponentMenu("")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
-	[System.Serializable]
 	[FeedbackPath("Transform/Position Spring")]
 	[FeedbackHelp("This feedback will let you animate the position of the target object over time, with a spring effect.")]
 	public class MMF_PositionSpring : MMF_Feedback

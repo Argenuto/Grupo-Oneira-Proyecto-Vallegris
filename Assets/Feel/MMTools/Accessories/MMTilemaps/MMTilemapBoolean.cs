@@ -6,8 +6,6 @@ namespace MoreMountains.Tools
 	[AddComponentMenu("More Mountains/Tools/Tilemaps/MM Tilemap Boolean")]
 	public class MMTilemapBoolean : MonoBehaviour
 	{
-		#if MM_PHYSICS2D
-		
 		public Tilemap TilemapToClean;
 
 		[MMInspectorButton("BooleanClean")]
@@ -42,7 +40,5 @@ namespace MoreMountains.Tools
 			// we clear our tilemap and resize it
 			_tilemap.RefreshAllTiles();            
 		}
-
-		#endif
 	}
 }

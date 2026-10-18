@@ -11,7 +11,6 @@ namespace MoreMountains.Feedbacks
 	/// </summary>
 	[AddComponentMenu("")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
-	[System.Serializable]
 	[FeedbackPath("Audio/Audio Filter Reverb")]
 	[FeedbackHelp(
 		"This feedback lets you control a low pass audio filter over time. You'll need a MMAudioFilterReverbShaker on your filter.")]

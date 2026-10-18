@@ -11,7 +11,6 @@ namespace MoreMountains.Feedbacks
 	/// </summary>
 	[AddComponentMenu("")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
-	[System.Serializable]
 	[FeedbackPath("Audio/AudioSource Pitch")]
 	[FeedbackHelp("This feedback lets you control the pitch of a target AudioSource over time.")]
 	public class MMF_AudioSourcePitch : MMF_Feedback

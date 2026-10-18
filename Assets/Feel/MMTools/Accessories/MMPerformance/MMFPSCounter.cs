@@ -82,8 +82,8 @@ namespace MoreMountains.Tools
 		protected virtual void Update()
 		{
 			_framesDrawnInTheInterval++;
-			_framesAccumulated = _framesAccumulated + Time.timeScale/Time.unscaledDeltaTime;
-			_timeLeft = _timeLeft - Time.unscaledDeltaTime;
+			_framesAccumulated = _framesAccumulated + Time.timeScale/Time.deltaTime;
+			_timeLeft = _timeLeft - Time.deltaTime;
 
 			if( _timeLeft <= 0.0 )
 			{

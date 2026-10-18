@@ -7,7 +7,6 @@ using UnityEngine;
 
 namespace MoreMountains.Tools
 {
-	#if MM_PHYSICS2D
 	/// <summary>
 	/// 2D Implementation of the CinemachineZone abstract class
 	/// </summary>
@@ -180,6 +179,5 @@ namespace MoreMountains.Tools
 			}
 		}
 		#endif
-	}   
-	#endif
+	}    
 }

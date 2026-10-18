@@ -11,7 +11,6 @@ namespace MoreMountains.FeedbacksForThirdParty
 	/// </summary>
 	[AddComponentMenu("")]
 	[FeedbackHelp("This feedback will let you rotate an element on a target UI Document")]
-	[System.Serializable]
 	[FeedbackPath("UI Toolkit/UITK Rotate")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.UIToolkit")]
 	public class MMF_UIToolkitRotate : MMF_UIToolkitFloatBase

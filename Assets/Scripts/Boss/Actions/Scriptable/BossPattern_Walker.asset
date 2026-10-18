@@ -71,6 +71,8 @@ MonoBehaviour:
         projectileSpeed: 15
         intervalBetweenShots: 0
         damageOverride: 0
+        chargeClip: {fileID: 8300000, guid: 8fd56436582289841af65bd1f8f49b6d, type: 3}
+        throwBall: {fileID: 8300000, guid: ca2d85a34cf371f488e5df01cb0f4ddc, type: 3}
         blind:
           applyBlind: 1
           duration: 6

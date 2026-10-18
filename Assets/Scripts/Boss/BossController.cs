@@ -11,12 +11,15 @@ public class BossController : MonoBehaviour
     [ListDrawerSettings(ShowIndexLabels = true, DraggableItems = true)]
     [InfoBox("Ordena de mayor a menor % de vida. La primera debe empezar en 100.")]
     public List<BossPhase> phases = new List<BossPhase>();
+ 
 
     [TabGroup("Boss", "Referencias"), Required] public BossArena arena;
     [TabGroup("Boss", "Referencias")] public Transform projectileSpawn;
     [TabGroup("Boss", "Referencias")] public ContactDamage contactDamage;
     [TabGroup("Boss", "Referencias")] public SpriteRenderer sprite;
     [TabGroup("Boss", "Referencias")] public Animator animator;
+    [TabGroup("Boss", "Referencias")] public AudioSource audioSource;
+
 
     [TabGroup("Boss", "Opciones")] public bool autoStart = true;
 
@@ -57,7 +60,8 @@ public class BossController : MonoBehaviour
             sprite = sprite,
             animator = animator,
             arena = arena,
-            contact = contactDamage
+            contact = contactDamage,
+            audioSource = audioSource
         };
 
         if (health != null)
@@ -197,5 +201,14 @@ public class BossController : MonoBehaviour
     public void setDeathAnimation()
     {
         animator.SetBool("dead", true);
+    }
+
+    public void PlaySFX(AudioClip clip)
+    {
+        if (clip != null && audioSource != null)
+        {
+            audioSource.pitch = UnityEngine.Random.Range(0.9f, 1.1f);
+            audioSource.PlayOneShot(clip);
+        }
     }
 }

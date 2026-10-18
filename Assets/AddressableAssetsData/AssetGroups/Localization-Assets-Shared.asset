@@ -15,6 +15,11 @@ MonoBehaviour:
   m_GroupName: Localization-Assets-Shared
   m_GUID: 56e3ad86720f3f7458eca47a1e860c72
   m_SerializeEntries:
+  - m_GUID: 5c6daef0e433ee8488d1d332c7dd0f1e
+    m_Address: Assets/Settings/UI Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6ca0f712d8ff1214887e15a9323e1fc7
     m_Address: Assets/Settings/speakers Shared Data.asset
     m_ReadOnly: 1

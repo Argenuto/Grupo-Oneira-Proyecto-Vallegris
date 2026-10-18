@@ -6,10 +6,12 @@ public class PortalCutscene : MonoBehaviour
 {
     private static readonly int IdleHash = Animator.StringToHash("idle");
     [Header("Cutscene Assets")]
+    public AudioSource portalSource;
     public AudioSource currentMusic;
     public AudioSource newMusic;
     public GameObject portalPrefab;
     public Transform portalSpawnPoint;
+    public AudioClip portalSound;
     
     [Header("Transition Settings")]
     public string sceneToLoad;
@@ -31,7 +33,7 @@ public class PortalCutscene : MonoBehaviour
     {
         // 1. Stop Player Input and Movement
         // 1. Stop Player Input, Movement, and Animation
-        player.GetComponent<PlayerController>().enabled = false; 
+        player.GetComponent<PlayerController>().enabled = false;
         Rigidbody2D rb = player.GetComponent<Rigidbody2D>();
         rb.linearVelocity = Vector2.zero; 
 
@@ -55,6 +57,8 @@ public class PortalCutscene : MonoBehaviour
 
         // 4. Portal appears
         GameObject portal = Instantiate(portalPrefab, portalSpawnPoint.position, portalSpawnPoint.rotation);
+        portalSource.PlayOneShot(portalSound);
+
         yield return new WaitForSeconds(2f); // Dramatic pause
 
         // 5. Draw character into the portal

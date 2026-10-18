@@ -210,6 +210,18 @@ PrefabInstance:
       propertyPath: m_Offset.y
       value: 0.012945652
       objectReference: {fileID: 0}
+    - target: {fileID: 1307452801374655785, guid: aab24ef262be5a24db78733c6936bc18, type: 3}
+      propertyPath: m_SpriteTilingProperty.pivot.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1307452801374655785, guid: aab24ef262be5a24db78733c6936bc18, type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.x
+      value: 1.68
+      objectReference: {fileID: 0}
+    - target: {fileID: 1307452801374655785, guid: aab24ef262be5a24db78733c6936bc18, type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.y
+      value: 2.48
+      objectReference: {fileID: 0}
     - target: {fileID: 1576513213964722034, guid: aab24ef262be5a24db78733c6936bc18, type: 3}
       propertyPath: m_LocalPosition.y
       value: -1.441
@@ -253,6 +265,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6758374822794143779, guid: aab24ef262be5a24db78733c6936bc18, type: 3}
       insertIndex: -1
       addedObject: {fileID: 410512442}
+    - targetCorrespondingSourceObject: {fileID: 6758374822794143779, guid: aab24ef262be5a24db78733c6936bc18, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 410512447}
   m_SourcePrefab: {fileID: 100100000, guid: aab24ef262be5a24db78733c6936bc18, type: 3}
 --- !u!1 &410512434 stripped
 GameObject:
@@ -352,6 +367,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc271a431c536834c9093c82417c0386, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
+--- !u!114 &410512447
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 410512434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea23f6877fcaf074fbbb52ac722c3e98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerStatusEffects
+  onBlindStart:
+    m_PersistentCalls:
+      m_Calls: []
+  onBlindEnd:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &744065602
 GameObject:
   m_ObjectHideFlags: 0
@@ -371,7 +404,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &744065603
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -896,7 +929,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1050377498
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1054,7 +1087,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1376724145
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1323,8 +1356,8 @@ Transform:
   m_GameObject: {fileID: 1647156014}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.3041, y: 4, z: 0}
-  m_LocalScale: {x: 40, y: 1, z: 1}
+  m_LocalPosition: {x: -8.3041, y: 5.08, z: 0}
+  m_LocalScale: {x: 60, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -1554,8 +1587,8 @@ Transform:
   m_GameObject: {fileID: 1726721043}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.3041, y: -3, z: 0}
-  m_LocalScale: {x: 40, y: 1, z: 1}
+  m_LocalPosition: {x: -8.3041, y: -5.95, z: 0}
+  m_LocalScale: {x: 60, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}

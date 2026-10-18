@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
+
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(PlayerInput))]
@@ -10,6 +12,8 @@ public class PlayerController : MonoBehaviour
     [Header("Movement Settings")]
     [SerializeField] private float moveSpeed = 8f;
     [SerializeField] private float jumpForce = 16f;
+
+    [SerializeField] private string sceneToLoad;
 
     [Header("Interaction Settings")]
     [SerializeField] private SpriteRenderer interactPromptSprite;
@@ -80,12 +84,15 @@ public class PlayerController : MonoBehaviour
     private Collider2D interactableObject;
     private Coroutine promptFadeCoroutine;
 
+    private int velocityConverted;
+
     // Climb State Variables
     private bool isTouchingWall;
     private bool isClimbing;
 
     private void Awake()
     {
+        StartCoroutine(FadeManager.Instance.FadeToClear());
         rb = GetComponent<Rigidbody2D>();
         playerInput = GetComponent<PlayerInput>();
         animator = GetComponent<Animator>();
@@ -241,7 +248,12 @@ public class PlayerController : MonoBehaviour
                     sprite.flipX = true;*/
             }
 
-            animator.SetInteger("yVelocity", (int)Math.Floor(rb.linearVelocity.y * 100f));
+            if (isGravityInverted)
+                velocityConverted = (int)Math.Floor(rb.linearVelocity.y * -100f);
+            else
+                velocityConverted = (int)Math.Floor(rb.linearVelocity.y * 100f);
+
+            animator.SetInteger("yVelocity", velocityConverted);
             if (grounded)
                 animator.SetInteger("yVelocity", 0);
 
@@ -468,5 +480,14 @@ public class PlayerController : MonoBehaviour
     public void setAttackFalse()
     {
         animator.SetBool("isAttacking", false);
+    }
+
+    public IEnumerator DieScene()
+    {
+
+        yield return StartCoroutine(FadeManager.Instance.FadeToBlack());
+
+        SceneManager.LoadScene(sceneToLoad);
+
     }
 }

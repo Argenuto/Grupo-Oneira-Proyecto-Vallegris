@@ -11,7 +11,7 @@ public abstract class Health : MonoBehaviour, IDamageable
     public UnityEvent onDeath = new();
     public UnityEvent onRevive = new();
     
-     public float CurrentHealth { get; private set; }
+     public float CurrentHealth { get; protected set; }
      public float MaxHealth => maxHealth;
       
      public bool IsDead { get ; private set; }

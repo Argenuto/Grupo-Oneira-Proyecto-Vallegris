@@ -14,7 +14,7 @@ public class GravityArenaManager : MonoBehaviour
 
     [Header("Condición de Victoria")]
     [Tooltip("Cantidad de enemigos a derrotar (0 = todos los de la lista)")]
-    [SerializeField] private int requiredKills = 2;
+    [SerializeField] private int requiredKills = 4;
 
     [Header("Aparición de Fantasmas (Cerca del Techo)")]
     [Tooltip("Fantasmas colocados en la escena. Inician ocultos y APARECEN al activarse el trigger.")]

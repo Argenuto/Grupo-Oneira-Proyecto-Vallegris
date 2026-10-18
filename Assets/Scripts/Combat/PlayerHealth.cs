@@ -4,28 +4,65 @@ using System.Collections;
 [RequireComponent(typeof(PlayerController))]
 public class PlayerHealth : Health
 {
-    // Variables
+    [Header("Invulnerability & Feedback")]
     [SerializeField] private float invulnerabilityDuration = 1f;
     [SerializeField] private float blinkInterval = 0.1f;
     [SerializeField] private SpriteRenderer[] renderers;
     [SerializeField] private float knockbackStunTime = 0.2f;
 
+    [Header("Save Settings")]
+    [SerializeField] private string healthPrefsKey = "PlayerCurrentHealth";
+
+    [Header("Regeneration")]
+    [SerializeField] private float regenDelayAfterDamage = 5f; // Time before regen starts
+    [SerializeField] private float regenInterval = 1f;         // Time between each heal tick
+    [SerializeField] private float regenAmount = 1f;           // Amount to heal per tick
+
     private Animator animator;
     private PlayerController playerController;
     private Rigidbody2D body;
+    
     private Coroutine invulnerabilityCoroutine;
+    private Coroutine regenCoroutine;
     private bool isInvulnerable;
-
 
     // Fases de Unity
     protected override void Awake()
     {
-        base.Awake();
+        base.Awake(); // This sets CurrentHealth = MaxHealth initially
         animator = GetComponent<Animator>();
         playerController = GetComponent<PlayerController>();
         body = GetComponent<Rigidbody2D>();
+        
         if (renderers == null || renderers.Length == 0)
             renderers = GetComponentsInChildren<SpriteRenderer>(true);
+    }
+
+    protected virtual void Start()
+    {
+        // Load health from PlayerPrefs if it exists
+        if (PlayerPrefs.HasKey(healthPrefsKey))
+        {
+            CurrentHealth = PlayerPrefs.GetFloat(healthPrefsKey);
+            
+            // Sync the UI/events with the loaded health
+            onHealthChanged.Invoke(CurrentHealth, MaxHealth);
+            
+            // If loaded health is 0, trigger death immediately
+            if (CurrentHealth <= 0f && !IsDead)
+            {
+                Die();
+            }
+        }
+
+        RestartRegeneration();
+    }
+
+    // Save Helper
+    private void SaveHealth()
+    {
+        PlayerPrefs.SetFloat(healthPrefsKey, CurrentHealth);
+        PlayerPrefs.Save();
     }
 
     // Métodos
@@ -36,6 +73,9 @@ public class PlayerHealth : Health
 
     protected override void HandleDamaged(DamageInfo info)
     {
+        SaveHealth(); // Save immediately upon taking damage
+        RestartRegeneration(); // Interrupt regen and restart the safe-time delay
+
         if (invulnerabilityDuration > 0f && invulnerabilityCoroutine == null)
             invulnerabilityCoroutine = StartCoroutine(InvulnerabilityRoutine());
 
@@ -48,6 +88,15 @@ public class PlayerHealth : Health
 
     protected override void OnDeath()
     {
+        SaveHealth(); // Save 0 health
+
+        if (regenCoroutine != null)
+        {
+            StopCoroutine(regenCoroutine);
+            regenCoroutine = null;
+        }
+
+        animator.SetTrigger("dead");
         StopInvulnerability();
         playerController.enabled = false;
         body.linearVelocity = Vector2.zero;
@@ -55,13 +104,17 @@ public class PlayerHealth : Health
 
     protected override void HandleReset()
     {
-        base.HandleReset();
+        // This hook runs after base.ResetHealth() has restored CurrentHealth to MaxHealth
+        SaveHealth(); 
+        
+        StopHurt();
         StopInvulnerability();
+        RestartRegeneration();
+        
         playerController.enabled = true;
         playerController.CanMove = true;
         playerController.SetGravityInverted(false);
     }
-
 
     private void StopInvulnerability()
     {
@@ -70,7 +123,7 @@ public class PlayerHealth : Health
             StopCoroutine(invulnerabilityCoroutine);
             invulnerabilityCoroutine = null;
         }
-
+        StopHurt();
         isInvulnerable = false;
         SetRenderersVisible(true);
     }
@@ -82,6 +135,11 @@ public class PlayerHealth : Health
             if (spriteRenderer != null)
                 spriteRenderer.enabled = visible;
         }
+    }
+
+    public void StopHurt()
+    {
+        animator.SetBool("isHurt", false);
     }
 
     // Corutinas
@@ -113,8 +171,31 @@ public class PlayerHealth : Health
         invulnerabilityCoroutine = null;
     }
 
-    public void StopHurt()
+    // Regeneration logic
+    private void RestartRegeneration()
     {
-        animator.SetBool("isHurt", false);
+        if (regenCoroutine != null)
+            StopCoroutine(regenCoroutine);
+
+        if (!IsDead && CurrentHealth < MaxHealth) 
+        {
+            regenCoroutine = StartCoroutine(RegenerationRoutine());
+        }
+    }
+
+    private IEnumerator RegenerationRoutine()
+    {
+        // 1. Wait for the designated safe time after taking damage
+        yield return new WaitForSeconds(regenDelayAfterDamage);
+
+        // 2. Loop and heal periodically using your base class method
+        while (!IsDead && CurrentHealth < MaxHealth)
+        {
+            Heal(regenAmount); // Triggers your onHeal and onHealthChanged events automatically
+            SaveHealth();
+            yield return new WaitForSeconds(regenInterval);
+        }
+
+        regenCoroutine = null;
     }
 }

@@ -43,16 +43,18 @@ public class PlayerHealth : Health
         // Load health from PlayerPrefs if it exists
         if (PlayerPrefs.HasKey(healthPrefsKey))
         {
-            CurrentHealth = PlayerPrefs.GetFloat(healthPrefsKey);
+            float savedHealth = PlayerPrefs.GetFloat(healthPrefsKey);
             
-            // Sync the UI/events with the loaded health
-            onHealthChanged.Invoke(CurrentHealth, MaxHealth);
-            
-            // If loaded health is 0, trigger death immediately
-            if (CurrentHealth <= 0f && !IsDead)
+            // If the saved health is 0 or less, the player died in the last session.
+            // We should respawn them with full health instead of instantly killing them.
+            if (savedHealth <= 0f)
             {
-                Die();
+                savedHealth = MaxHealth;
             }
+
+            CurrentHealth = savedHealth;
+            onHealthChanged.Invoke(CurrentHealth, MaxHealth);
+            SaveHealth(); // Update the save file with the fixed health
         }
 
         RestartRegeneration();
@@ -88,7 +90,9 @@ public class PlayerHealth : Health
 
     protected override void OnDeath()
     {
-        SaveHealth(); // Save 0 health
+        // Delete the saved health so we don't spawn with 0 health next time
+        PlayerPrefs.DeleteKey(healthPrefsKey); 
+        PlayerPrefs.Save();
 
         if (regenCoroutine != null)
         {
@@ -101,7 +105,7 @@ public class PlayerHealth : Health
         playerController.enabled = false;
         body.linearVelocity = Vector2.zero;
     }
-
+    
     protected override void HandleReset()
     {
         // This hook runs after base.ResetHealth() has restored CurrentHealth to MaxHealth
@@ -148,6 +152,8 @@ public class PlayerHealth : Health
         playerController.CanMove = false;
         yield return new WaitForSeconds(knockbackStunTime);
         playerController.CanMove = true;
+
+        StopHurt();
     }
 
     private IEnumerator InvulnerabilityRoutine()

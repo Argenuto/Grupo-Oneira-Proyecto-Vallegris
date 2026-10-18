@@ -43,6 +43,22 @@ MonoBehaviour:
     m_Key: statue_forest3
     m_Metadata:
       m_Items: []
+  - m_Id: 522667238703104
+    m_Key: ladder
+    m_Metadata:
+      m_Items: []
+  - m_Id: 527828824702976
+    m_Key: skill
+    m_Metadata:
+      m_Items: []
+  - m_Id: 530613150498816
+    m_Key: ending01
+    m_Metadata:
+      m_Items: []
+  - m_Id: 530702812135424
+    m_Key: ending02
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

@@ -24,4 +24,10 @@ public class RoomTransition : MonoBehaviour
 
         SceneManager.LoadScene(sceneToLoad);
     }
+
+    public void triggerTransition(GameObject player)
+    {
+         TransitionManager.targetConnectionId = connectionId;
+            StartCoroutine(TransitionRoutine(player.gameObject));
+    }
 }

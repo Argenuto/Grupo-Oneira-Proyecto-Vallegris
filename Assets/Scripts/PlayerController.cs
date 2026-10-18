@@ -49,6 +49,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float comboWindow = 1.5f;
     [SerializeField] private float attackBufferTime = 0.2f;
 
+    [Header("Destroy Interaction Settings")]
+    [SerializeField] private float destroyDelayBeforeFade = 0.5f; // Time for the animation to play
+    [SerializeField] private float objectFadeDuration = 1f;       // How long the fade out takes
+    [SerializeField] private string interactAnimationName = "interact"; // Name of the animation state
+
     private float attackBufferCounter;
     private float lastAttackTime = 0f;
     private bool isSecondAttack = false;
@@ -81,6 +86,7 @@ public class PlayerController : MonoBehaviour
     private bool isJumping;
     private bool isHoldingJump;
     private bool canInteract;
+    private bool canDestroy;
     private Collider2D interactableObject;
     private Coroutine promptFadeCoroutine;
 
@@ -340,7 +346,7 @@ public class PlayerController : MonoBehaviour
 
         meleeAttack.Perform(attackPosition, attackRange);
     }
-
+[UnityEngine.Scripting.Preserve]
     private void OnMove(InputValue value)
     {
         if ((DialogueManager.Instance != null && DialogueManager.Instance.IsDialogueActive) ||
@@ -360,7 +366,7 @@ public class PlayerController : MonoBehaviour
             UpdateFlip();
         }
     }
-
+[UnityEngine.Scripting.Preserve]
     private void OnJump(InputValue value)
     {
         if ((DialogueManager.Instance != null && DialogueManager.Instance.IsDialogueActive) ||
@@ -374,7 +380,7 @@ public class PlayerController : MonoBehaviour
             jumpBufferCounter = jumpBufferTime;
         }
     }
-
+[UnityEngine.Scripting.Preserve]
     private void OnAttack(InputValue value)
     {
         if ((DialogueManager.Instance != null && DialogueManager.Instance.IsDialogueActive) ||
@@ -391,6 +397,30 @@ public class PlayerController : MonoBehaviour
         if (canInteract && interactableObject != null && !isClimbing)
         {
             interactableObject.GetComponent<DialogueTrigger>().Interact();
+        }
+    }
+    [UnityEngine.Scripting.Preserve]
+    private void OnAstral(InputValue value)
+    {
+        Debug.Log("ggbeo");
+        if (value.isPressed && GameManager.Instance != null && GameManager.Instance.isDestroyUnlocked)
+        {
+                    Debug.Log("wpbozo");
+
+            if (canDestroy && interactableObject != null && !isClimbing)
+            {
+                                    Debug.Log("wtfbrotha");
+
+                // 1. Play the player animation
+                animator.Play(interactAnimationName, -1, 0f);
+
+                // 2. Start the coroutine to fade and disable the object
+                StartCoroutine(FadeAndDisableObject(interactableObject.gameObject));
+
+                // Clear the reference so the player can't spam the interaction
+                canDestroy = false;
+                interactableObject = null;
+            }
         }
     }
 
@@ -435,6 +465,10 @@ public class PlayerController : MonoBehaviour
 
             if (promptFadeCoroutine != null) StopCoroutine(promptFadeCoroutine);
             promptFadeCoroutine = StartCoroutine(FadePrompt(1f));
+        } else if (collision.CompareTag("Destroyable"))
+        {
+            canDestroy = true;
+            interactableObject = collision;
         }
     }
 
@@ -447,6 +481,12 @@ public class PlayerController : MonoBehaviour
 
             if (promptFadeCoroutine != null) StopCoroutine(promptFadeCoroutine);
             promptFadeCoroutine = StartCoroutine(FadePrompt(0f));
+        } else if (collision.CompareTag("Destroyable"))
+        {
+                    Debug.Log("lol bro");
+
+            canDestroy = false;
+            interactableObject = null;
         }
     }
 
@@ -489,5 +529,32 @@ public class PlayerController : MonoBehaviour
 
         SceneManager.LoadScene(sceneToLoad);
 
+    }
+
+    private IEnumerator FadeAndDisableObject(GameObject targetObject)
+    {
+        // Wait for the player's animation to reach the right moment
+        yield return new WaitForSeconds(destroyDelayBeforeFade);
+
+        // Try to get the SpriteRenderer of the object we are destroying
+        SpriteRenderer targetSprite = targetObject.GetComponent<SpriteRenderer>();
+
+        if (targetSprite != null)
+        {
+            Color startColor = targetSprite.color;
+            float time = 0f;
+
+            // Fade out over the specified duration
+            while (time < objectFadeDuration)
+            {
+                time += Time.deltaTime;
+                float newAlpha = Mathf.Lerp(1f, 0f, time / objectFadeDuration);
+                targetSprite.color = new Color(startColor.r, startColor.g, startColor.b, newAlpha);
+                yield return null;
+            }
+        }
+
+        // Disable the object entirely once the fade is complete
+        targetObject.SetActive(false);
     }
 }

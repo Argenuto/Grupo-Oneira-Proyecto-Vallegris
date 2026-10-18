@@ -46,6 +46,22 @@ MonoBehaviour:
     m_Localized: "Tu guardia termina aqu\xED. La m\xEDa apenas comienza."
     m_Metadata:
       m_Items: []
+  - m_Id: 522667238703104
+    m_Localized: Estas parecen ser las escaleras del antiguo pozo...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 527828824702976
+    m_Localized: "Obtuviste la Percepci\xF3n Astral, ahora podr\xE1s encontrar nuevos caminos. \xDAsala con E o X."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 530613150498816
+    m_Localized: "Estoy segura de que esa sombra entr\xF3 por aqu\xED..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 530702812135424
+    m_Localized: "%(Tengo que atraparla)%, solo as\xED podr\xE9 liberar a mi pueblo."
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

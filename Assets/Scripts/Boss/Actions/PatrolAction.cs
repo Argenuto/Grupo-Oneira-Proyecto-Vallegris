@@ -17,6 +17,8 @@ public class PatrolAction : BossAction
 
     protected override IEnumerator Run(BossContext ctx)
     {
+        ctx.animator.SetBool("Walking", true);
+
         ctx.SetContactDamage(damageOnContact);
 
         if (ctx.arena == null)

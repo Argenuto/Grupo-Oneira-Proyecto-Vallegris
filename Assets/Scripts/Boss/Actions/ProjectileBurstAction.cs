@@ -26,9 +26,13 @@ public class ProjectileBurstAction : BossAction
     {
         if (projectilePrefab == null || ctx == null || ctx.boss == null)
             yield break;
-
+            
+        ctx.animator.SetTrigger("charging attack");
         Vector2 origin = ctx.boss.ProjectileSpawn.position;
         float baseAngle = ResolveBaseAngle(ctx, origin);
+        ctx.FaceDirection(ctx.player.position.x - origin.x);
+        yield return new WaitForSeconds(0.8f);
+
 
         for (int i = 0; i < count; i++)
         {

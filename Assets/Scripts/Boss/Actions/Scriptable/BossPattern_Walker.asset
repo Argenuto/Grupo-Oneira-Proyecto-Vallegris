@@ -35,7 +35,7 @@ MonoBehaviour:
           m_PersistentCalls:
             m_Calls: []
         passes: 2
-        speed: 5
+        speed: 10
         pauseAtEdges: 0.3
         damageOnContact: 1
     - rid: 1802105471718916189
@@ -64,16 +64,16 @@ MonoBehaviour:
           m_PersistentCalls:
             m_Calls: []
         projectilePrefab: {fileID: 7380293237107069630, guid: 08cd4a890ab3658418084283d4f79829, type: 3}
-        count: 5
+        count: 3
         spreadAngle: 50
         aim: 0
         fixedAngle: 0
-        projectileSpeed: 8
+        projectileSpeed: 15
         intervalBetweenShots: 0
         damageOverride: 0
         blind:
           applyBlind: 1
-          duration: 3
+          duration: 6
           intensity: 1
     - rid: 1802105471718916191
       type: {class: WaitAction, ns: , asm: Assembly-CSharp}

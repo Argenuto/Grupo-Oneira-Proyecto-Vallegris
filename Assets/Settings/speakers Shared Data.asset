@@ -23,6 +23,10 @@ MonoBehaviour:
     m_Key: statue
     m_Metadata:
       m_Items: []
+  - m_Id: 585971629899776
+    m_Key: boss
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

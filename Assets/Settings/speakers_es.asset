@@ -26,6 +26,10 @@ MonoBehaviour:
     m_Localized: Estatua del soldado
     m_Metadata:
       m_Items: []
+  - m_Id: 585971629899776
+    m_Localized: El Ciego
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

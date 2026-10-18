@@ -13,7 +13,6 @@ namespace MoreMountains.FeedbacksForThirdParty
 	/// with Color Grading active, and a MMColorGradingShaker component.
 	/// </summary>
 	[AddComponentMenu("")]
-	[System.Serializable]
 	#if MM_POSTPROCESSING
 	[FeedbackPath("PostProcess/Color Grading")]
 	#endif

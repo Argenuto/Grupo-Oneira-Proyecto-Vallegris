@@ -13,7 +13,6 @@ namespace MoreMountains.FeedbacksForThirdParty
 	/// This feedback will let you apply basic controls to a target VisualEffect
 	/// </summary>
 	[AddComponentMenu("")]
-	[System.Serializable]
 	[FeedbackHelp("This feedback will let you apply basic controls to a target VisualEffect")]
 	#if MM_VISUALEFFECTGRAPH
 	[FeedbackPath("Particles/VisualEffect")]

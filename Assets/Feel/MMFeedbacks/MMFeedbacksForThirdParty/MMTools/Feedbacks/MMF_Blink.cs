@@ -11,7 +11,6 @@ namespace MoreMountains.Feedbacks
 	/// </summary>
 	[AddComponentMenu("")]
 	[FeedbackHelp("This feedback lets you trigger a blink on an MMBlink object.")]
-	[System.Serializable]
 	[FeedbackPath("Renderer/MMBlink")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.MMTools")]
 	public class MMF_Blink : MMF_Feedback

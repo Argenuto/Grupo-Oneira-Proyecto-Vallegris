@@ -13,7 +13,6 @@ namespace MoreMountains.Feedbacks
 	[AddComponentMenu("")]
 	[FeedbackHelp("A feedback used to quickly animate a sprite renderer or an image using a list of sprites, looping or not, at a specified frame rate, with an optional random offset.")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
-	[System.Serializable]
 	[FeedbackPath("Animation/Sprite Sheet Animation")]
 	public class MMF_SpriteSheetAnimation : MMF_Feedback 
 	{
@@ -69,7 +68,7 @@ namespace MoreMountains.Feedbacks
 			}
 			if (AnimationSprites.Count > 0)
 			{
-				return (float) AnimationSprites.Count / FrameRate;
+				return AnimationSprites.Count / FrameRate;
 			}
 			else
 			{
@@ -192,7 +191,7 @@ namespace MoreMountains.Feedbacks
 				{
 					yield break;
 				}
-				yield return WaitFor(delay);
+				yield return MMCoroutine.WaitFor(delay);
 			}
 		}
 

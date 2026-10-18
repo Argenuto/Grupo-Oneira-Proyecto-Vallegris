@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using MoreMountains.Tools;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -202,8 +201,10 @@ namespace MoreMountains.Feedbacks
 				Debug.LogWarning("The " + gameObject.name + " ObjectPooler doesn't have any GameObjectToPool defined.", gameObject);
 				return null;
 			}
-			
-			GameObject newGameObject = (GameObject)MMGameObjectExtensions.MMInstantiateDisabled(GameObjectToPool);
+			bool objectWasActive = GameObjectToPool.gameObject.activeSelf;
+			GameObjectToPool.gameObject.SetActive(false);
+			GameObject newGameObject = (GameObject)Instantiate(GameObjectToPool);
+			GameObjectToPool.gameObject.SetActive(objectWasActive);
 			SceneManager.MoveGameObjectToScene(newGameObject, this.gameObject.scene);
 			if (NestWaitingPool)
 			{

@@ -13,7 +13,6 @@ namespace MoreMountains.FeedbacksForThirdParty
 	/// with Exposure active, and a MMExposureShaker_HDRP component.
 	/// </summary>
 	[AddComponentMenu("")]
-	[System.Serializable]
 	#if MM_HDRP
 	[FeedbackPath("PostProcess/Exposure HDRP")]
 	#endif

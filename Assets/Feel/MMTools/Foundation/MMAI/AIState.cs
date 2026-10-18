@@ -133,7 +133,6 @@ namespace MoreMountains.Tools
 				{
 					if (Transitions[i].Decision.Decide())
 					{
-						Transitions[i].LastDecisionEvaluation = true;
 						if (!string.IsNullOrEmpty(Transitions[i].TrueState))
 						{
 							_brain.TransitionToState(Transitions[i].TrueState);
@@ -142,7 +141,6 @@ namespace MoreMountains.Tools
 					}
 					else
 					{
-						Transitions[i].LastDecisionEvaluation = false;
 						if (!string.IsNullOrEmpty(Transitions[i].FalseState))
 						{
 							_brain.TransitionToState(Transitions[i].FalseState);

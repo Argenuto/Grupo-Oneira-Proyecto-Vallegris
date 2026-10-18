@@ -122,7 +122,6 @@ namespace MoreMountains.Tools
 			}
 		}
 
-		#if MM_PHYSICS2D
 		/// <summary>
 		/// On trigger enter 2D, we start our countdown if needed
 		/// </summary>
@@ -146,7 +145,6 @@ namespace MoreMountains.Tools
 				StartChangeState();
 			}
 		}
-		#endif
 
 		/// <summary>
 		/// Returns true if the target matches our settings, false otherwise

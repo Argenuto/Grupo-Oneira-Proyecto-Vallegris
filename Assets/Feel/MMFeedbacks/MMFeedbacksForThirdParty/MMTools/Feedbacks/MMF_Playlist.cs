@@ -13,7 +13,6 @@ namespace MoreMountains.Feedbacks
 	[AddComponentMenu("")]
 	[FeedbackHelp("This feedback will let you pilot a MMPlaylist")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.MMTools")]
-	[System.Serializable]
 	[FeedbackPath("Audio/MMPlaylist")]
 	public class MMF_Playlist : MMF_Feedback
 	{

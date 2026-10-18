@@ -13,7 +13,6 @@ namespace MoreMountains.FeedbacksForThirdParty
 	/// with MotionBlur active, and a MMMotionBlurShaker_URP component.
 	/// </summary>
 	[AddComponentMenu("")]
-	[System.Serializable]
 	#if MM_URP
 	[FeedbackPath("PostProcess/Motion Blur URP")]
 	#endif

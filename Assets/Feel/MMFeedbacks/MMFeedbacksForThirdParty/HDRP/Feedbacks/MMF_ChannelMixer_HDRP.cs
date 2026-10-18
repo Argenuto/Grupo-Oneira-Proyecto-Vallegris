@@ -13,7 +13,6 @@ namespace MoreMountains.FeedbacksForThirdParty
 	/// with Channel Mixer active, and a MMChannelMixerShaker_HDRP component.	
 	/// </summary>	
 	[AddComponentMenu("")]	
-	[System.Serializable]
 	#if MM_HDRP
 	[FeedbackPath("PostProcess/Channel Mixer HDRP")]
 	#endif

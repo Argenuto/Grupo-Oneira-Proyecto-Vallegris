@@ -9,7 +9,6 @@ using UnityEngine.Scripting.APIUpdating;
 
 namespace MoreMountains.FeedbacksForThirdParty
 {
-	[System.Serializable]
 	[AddComponentMenu("")]
 	#if MM_CINEMACHINE || MM_CINEMACHINE3
 	[FeedbackPath("Camera/Cinemachine Impulse Source")]

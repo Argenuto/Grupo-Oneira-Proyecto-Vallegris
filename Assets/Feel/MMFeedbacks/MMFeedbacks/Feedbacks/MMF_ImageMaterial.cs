@@ -11,7 +11,6 @@ namespace MoreMountains.Feedbacks
 	[AddComponentMenu("")]
 	[FeedbackHelp("This feedback will let you change the material on a target UI Image")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
-	[System.Serializable]
 	[FeedbackPath("UI/Image Material")]
 	public class MMF_ImageMaterial : MMF_Feedback
 	{

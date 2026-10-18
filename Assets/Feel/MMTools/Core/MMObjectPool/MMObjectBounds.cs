@@ -38,12 +38,10 @@ namespace MoreMountains.Tools
 			{
 				BoundsBasedOn = WaysToDetermineBounds.Collider;
 			}
-			#if MM_PHYSICS2D
 			if (GetComponent<Collider2D>()!=null)
 			{
 				BoundsBasedOn = WaysToDetermineBounds.Collider2D;
 			}
-			#endif
 		}
 
 		/// <summary>
@@ -69,7 +67,6 @@ namespace MoreMountains.Tools
 				return GetComponent<Collider>().bounds;				
 			}
 
-			#if MM_PHYSICS2D
 			if (BoundsBasedOn==WaysToDetermineBounds.Collider2D)
 			{
 				if (GetComponent<Collider2D>()==null)
@@ -78,7 +75,6 @@ namespace MoreMountains.Tools
 				}
 				return GetComponent<Collider2D>().bounds;				
 			}
-			#endif
 
 			return new Bounds(Vector3.zero,Vector3.zero);
 		}

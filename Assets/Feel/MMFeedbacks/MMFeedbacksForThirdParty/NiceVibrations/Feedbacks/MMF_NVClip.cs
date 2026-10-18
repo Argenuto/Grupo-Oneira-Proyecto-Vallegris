@@ -19,7 +19,6 @@ namespace MoreMountains.FeedbacksForThirdParty
 	/// Add this feedback to play a .haptic clip, optionally randomizing its level and frequency
 	/// </summary>
 	[AddComponentMenu("")]
-	[System.Serializable]
 	#if MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
 	[FeedbackPath("Haptics/Haptic Clip")]
 	#endif
@@ -144,8 +143,8 @@ namespace MoreMountains.FeedbacksForThirdParty
 			{
 				return;
 			}
-			HapticSettings.SetGamepad();
 			HapticController.Load(Clip);
+			HapticSettings.SetGamepad();
 			HapticController.fallbackPreset = FallbackPreset;
 			HapticController.Loop(Loop);
 			HapticController.Seek(SeekTime);

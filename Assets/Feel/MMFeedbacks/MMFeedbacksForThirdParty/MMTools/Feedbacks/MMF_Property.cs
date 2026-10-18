@@ -15,7 +15,6 @@ namespace MoreMountains.Feedbacks
 	              "It also works on scriptable objects. Drag an object, select a property, and setup your feedback " +
 	              "to update that property over time.")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.MMTools")]
-	[System.Serializable]
 	[FeedbackPath("GameObject/Property")]
 	public class MMF_Property : MMF_Feedback
 	{

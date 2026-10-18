@@ -11,7 +11,6 @@ namespace MoreMountains.FeedbacksForThirdParty
 	/// Use this feedback to play an Emphasis haptics, short haptic bursts whose amplitude and frequency can be controlled in real time, also called Transients in CoreHaptics/iOS
 	/// </summary>
 	[AddComponentMenu("")]
-	[System.Serializable]
 	#if MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
 	[FeedbackPath("Haptics/Haptic Emphasis")]
 	#endif 

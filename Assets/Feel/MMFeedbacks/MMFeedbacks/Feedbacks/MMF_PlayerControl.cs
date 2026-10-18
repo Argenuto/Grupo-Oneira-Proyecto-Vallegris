@@ -11,7 +11,6 @@ namespace MoreMountains.Feedbacks
 	[AddComponentMenu("")]
 	[FeedbackHelp("This feedback allows you to control one or more target MMF Players")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
-	[System.Serializable]
 	[FeedbackPath("Feedbacks/MMF Player Control")]
 	public class MMF_PlayerControl : MMF_Feedback
 	{

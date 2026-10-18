@@ -76,8 +76,6 @@ namespace MoreMountains.Tools
 		protected Vector3 _innerRectTransformTopRight;
 		protected Vector3 _innerRectTransformBottomRight;
 		protected Vector3 _springVelocity;
-		protected Plane _canvasPlane;
-		protected bool _canvasPlaneInitialized = false;
 
 		/// <summary>
 		/// On Start, we instantiate our joystick's image if there's one
@@ -182,36 +180,15 @@ namespace MoreMountains.Tools
 		{
 			base.OnPointerDown(data);
 			
-			if (ParentCanvasRenderMode == RenderMode.ScreenSpaceCamera && TargetCamera != null)
-			{
-				_canvasPlane = new Plane(-TargetCamera.transform.forward, this.transform.position);
-				_canvasPlaneInitialized = true;
-			}
+			_newPosition = ConvertToWorld(data.position);
+			_newPosition.z = this.transform.position.z;
 			
-			Vector3 pointerWorldPos = ConvertToWorld(data.position);
-			
-			if (_canvasPlaneInitialized)
-			{
-				Ray ray = TargetCamera.ScreenPointToRay(data.position);
-				float enter;
-				if (_canvasPlane.Raycast(ray, out enter))
-				{
-					pointerWorldPos = ray.GetPoint(enter);
-				}
-			}
-			else
-			{
-				pointerWorldPos.z = this.transform.position.z;
-			}
-			
-			_newPosition = pointerWorldPos;
+			// we define a new neutral position
 			
 			_backgroundPositionTarget = _newPosition;
 			ConstrainBackground();
 			SetNeutralPosition(BackgroundCanvasGroup.transform.position);
 			_knobTransform.position = _newPosition;
-			
-			_initialZPosition = _newPosition.z;
 			
 			ComputeJoystickValue();
 		}
@@ -222,29 +199,13 @@ namespace MoreMountains.Tools
 		/// <param name="eventData"></param>
 		public override void OnDrag(PointerEventData eventData)
 		{
-			OnDragEvent.Invoke();
+			base.OnDrag(eventData);
 
-			Vector3 pointerWorldPos = ConvertToWorld(eventData.position);
-			
-			if (ParentCanvasRenderMode == RenderMode.ScreenSpaceCamera && TargetCamera != null)
-			{
-				Plane canvasPlane = new Plane(-TargetCamera.transform.forward, BackgroundCanvasGroup.transform.position);
-				Ray ray = TargetCamera.ScreenPointToRay(eventData.position);
-				float enter;
-				if (canvasPlane.Raycast(ray, out enter))
-				{
-					pointerWorldPos = ray.GetPoint(enter);
-				}
-			}
-			
-			_knobTransform.position = pointerWorldPos;
-
-			float distance = Vector3.Distance(_knobTransform.position, BackgroundCanvasGroup.transform.position);
-			
+			float distance = Vector2.Distance(_knobTransform.position, BackgroundCanvasGroup.transform.position); 
 			if (distance >= ComputedMaxRange)
 			{
-				Vector3 direction = (_knobTransform.position - BackgroundCanvasGroup.transform.position).normalized;
-				_backgroundPositionTarget = BackgroundCanvasGroup.transform.position + direction * (distance - ComputedMaxRange);
+				_backgroundPositionTarget = BackgroundCanvasGroup.transform.position +
+				                            (_knobTransform.position - BackgroundCanvasGroup.transform.position).normalized * (distance - ComputedMaxRange);
 			}
 
 			ConstrainBackground();
@@ -256,20 +217,18 @@ namespace MoreMountains.Tools
 		/// </summary>
 		protected virtual void ComputeJoystickValue()
 		{
-			Vector3 worldDelta = _knobTransform.position - BackgroundCanvasGroup.transform.position;
-			
-			Vector3 localDelta = TransformToLocalSpace(worldDelta);
-			float distance = worldDelta.magnitude;
-			
+			float distance = Vector2.Distance(_knobTransform.position, BackgroundCanvasGroup.transform.position);
 			if (distance <= ComputedMaxRange)
 			{
-				RawValue.x = EvaluateInputValue(localDelta.x);
-				RawValue.y = EvaluateInputValue(localDelta.y);	
+				RawValue.x = EvaluateInputValue(_knobTransform.position.x - BackgroundCanvasGroup.transform.position.x);
+				RawValue.y = EvaluateInputValue(_knobTransform.position.y - BackgroundCanvasGroup.transform.position.y);	
 			}
 			else
 			{
-				RawValue.x = Mathf.InverseLerp(0, distance, Mathf.Abs(localDelta.x)) * Mathf.Sign(localDelta.x);
-				RawValue.y = Mathf.InverseLerp(0, distance, Mathf.Abs(localDelta.y)) * Mathf.Sign(localDelta.y);
+				float vectorPosition = _knobTransform.position.x - BackgroundCanvasGroup.transform.position.x;
+				RawValue.x = Mathf.InverseLerp(0, distance, Mathf.Abs(vectorPosition)) * Mathf.Sign(vectorPosition);
+				vectorPosition = _knobTransform.position.y - BackgroundCanvasGroup.transform.position.y;
+				RawValue.y = Mathf.InverseLerp(0, distance, Mathf.Abs(vectorPosition)) * Mathf.Sign(vectorPosition);
 			}
 		}
 
@@ -331,16 +290,16 @@ namespace MoreMountains.Tools
 			{
 				if (KnobCanvasGroup != null)
 				{
-					Handles.DrawWireDisc(KnobCanvasGroup.transform.position, this.transform.forward, ComputedMaxRange);	
+					Handles.DrawWireDisc(KnobCanvasGroup.transform.position, Vector3.forward, ComputedMaxRange);	
 				}
 				else
 				{
-					Handles.DrawWireDisc(this.transform.position, this.transform.forward, ComputedMaxRange);	
+					Handles.DrawWireDisc(this.transform.position, Vector3.forward, ComputedMaxRange);	
 				}
 			}
 			else
 			{
-				Handles.DrawWireDisc(_backgroundRectTransform.position, this.transform.forward, ComputedMaxRange);
+				Handles.DrawWireDisc(_backgroundRectTransform.position, Vector3.forward, ComputedMaxRange);
 			}
 			
 			// Draws corners

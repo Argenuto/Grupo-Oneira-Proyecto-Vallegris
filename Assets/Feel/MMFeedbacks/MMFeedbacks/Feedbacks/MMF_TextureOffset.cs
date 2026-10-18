@@ -11,7 +11,6 @@ namespace MoreMountains.Feedbacks
 	[AddComponentMenu("")]
 	[FeedbackHelp("This feedback will let you control the texture offset of a target material over time.")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
-	[System.Serializable]
 	[FeedbackPath("Renderer/Texture Offset")]
 	public class MMF_TextureOffset : MMF_Feedback
 	{

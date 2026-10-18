@@ -11,7 +11,6 @@ namespace MoreMountains.Feedbacks
 	[AddComponentMenu("")]
 	[FeedbackHelp("This feedback will allow you to play the specified state on the target Animator, either in normalized or fixed time.")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
-	[System.Serializable]
 	[FeedbackPath("Animation/Animator Play State")]
 	public class MMF_AnimatorPlayState : MMF_Feedback 
 	{

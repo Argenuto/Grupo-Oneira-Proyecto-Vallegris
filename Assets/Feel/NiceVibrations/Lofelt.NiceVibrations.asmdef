@@ -1,6 +1,5 @@
 {
     "name": "Lofelt.NiceVibrations",
-    "rootNamespace": "",
     "references": [
         "GUID:75469ad4d38634e559750d17036d5f7c"
     ],
@@ -16,11 +15,6 @@
             "name": "com.unity.inputsystem",
             "expression": "1.0",
             "define": "NICE_VIBRATIONS_INPUTSYSTEM_INSTALLED"
-        },
-        {
-            "name": "com.unity.modules.physics2d",
-            "expression": "1.0.0",
-            "define": "MM_PHYSICS2D"
         }
     ],
     "noEngineReferences": false

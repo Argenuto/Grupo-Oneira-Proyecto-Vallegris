@@ -776,7 +776,6 @@ namespace MoreMountains.Tools
 			protected virtual void OnMMPlaylistVolumeMultiplierEvent(int channel, float newVolumeMultiplier, bool applyVolumeMultiplierInstantly = false)
 			{
 				if (channel != Channel) { return; }
-				if (CurrentSongIndex < 0) { return; }
 				VolumeMultiplier = newVolumeMultiplier;
 				if (applyVolumeMultiplierInstantly)
 				{
@@ -787,7 +786,6 @@ namespace MoreMountains.Tools
 			protected virtual void OnMMPlaylistPitchMultiplierEvent(int channel, float newPitchMultiplier, bool applyPitchMultiplierInstantly = false)
 			{
 				if (channel != Channel) { return; }
-				if (CurrentSongIndex < 0) { return; }
 				PitchMultiplier = newPitchMultiplier;
 				if (applyPitchMultiplierInstantly)
 				{

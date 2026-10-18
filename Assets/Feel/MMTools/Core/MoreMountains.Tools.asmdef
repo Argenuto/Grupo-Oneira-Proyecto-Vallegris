@@ -71,11 +71,6 @@
             "name": "com.unity.ugui",
             "expression": "1.0.0",
             "define": "MM_UI"
-        },
-        {
-            "name": "com.unity.modules.physics2d",
-            "expression": "1.0.0",
-            "define": "MM_PHYSICS2D"
         }
     ],
     "noEngineReferences": false

@@ -11,7 +11,6 @@ namespace MoreMountains.Feedbacks
 	[AddComponentMenu("")]
 	[FeedbackHelp("This feedback will let you apply forces and torques (relative or not) to a Rigidbody.")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
-	[System.Serializable]
 	[FeedbackPath("GameObject/Rigidbody")]
 	public class MMF_Rigidbody : MMF_Feedback
 	{
@@ -50,9 +49,6 @@ namespace MoreMountains.Feedbacks
 		/// if this is true, the velocity of the rigidbody will be reset before applying the new force
 		[Tooltip("if this is true, the velocity of the rigidbody will be reset before applying the new force")]
 		public bool ResetVelocityOnPlay = false;
-		/// if this is true, the angular velocity of the rigidbody will be reset before applying the new force
-		[Tooltip("if this is true, the angular velocity of the rigidbody will be reset before applying the new force")]
-		public bool ResetAngularVelocityOnPlay = false;
 		/// if this is true, the magnitude of the min/max force will be applied in the target transform's forward direction
 		[Tooltip("if this is true, the magnitude of the min/max force will be applied in the target transform's forward direction")] 
 		public bool ForwardForce = false;
@@ -99,11 +95,6 @@ namespace MoreMountains.Feedbacks
 			if(ResetVelocityOnPlay)
 			{
 				rb.linearVelocity = Vector3.zero;
-			}
-
-			if (ResetAngularVelocityOnPlay)
-			{
-				rb.angularVelocity = Vector3.zero;
 			}
 
 			if (ForwardForce)

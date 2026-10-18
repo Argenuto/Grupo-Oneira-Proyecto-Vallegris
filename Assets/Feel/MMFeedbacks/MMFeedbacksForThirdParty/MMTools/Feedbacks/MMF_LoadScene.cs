@@ -13,7 +13,6 @@ namespace MoreMountains.Feedbacks
 	[AddComponentMenu("")]
 	[FeedbackHelp("This feedback will request the load of a new scene, using the method of your choice")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.MMTools")]
-	[System.Serializable]
 	[FeedbackPath("Scene/Load Scene")]
 	public class MMF_LoadScene : MMF_Feedback
 	{

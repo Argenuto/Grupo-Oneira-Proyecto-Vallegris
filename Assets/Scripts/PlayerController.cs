@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Animation Settings")]
     [SerializeField] private Animator animator;
-    [SerializeField] private SpriteRenderer sprite;
+    //[SerializeField] private SpriteRenderer sprite;
 
     [Header("Jump Physics Tuning")]
     [SerializeField] private float fallMultiplier = 2.5f;
@@ -218,10 +218,10 @@ public class PlayerController : MonoBehaviour
                 float horizontalInput = (isGravityInverted && invertHorizontalInputWithCamera) ? -moveInput.x : moveInput.x;
                 rb.linearVelocity = new Vector2(horizontalInput * moveSpeed, rb.linearVelocity.y);
 
-                if (facingDirection.x > 0)
+                /*if (facingDirection.x > 0)
                     sprite.flipX = false;
                 else if (facingDirection.x < 0)
-                    sprite.flipX = true;
+                    sprite.flipX = true;*/
             }
 
             animator.SetInteger("yVelocity", (int)Math.Floor(rb.linearVelocity.y * 100f));

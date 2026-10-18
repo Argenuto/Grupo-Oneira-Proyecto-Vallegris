@@ -1,0 +1,444 @@
+fileFormatVersion: 2
+guid: ac8515471a12df6479fc0ea094d3fbb2
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -3657705343067661570
+    second: Idle-Ve a Val-Ataque 1 y 2-Herido_0
+  - first:
+      213: 7555165599060759511
+    second: Idle-Ve a Val-Ataque 1 y 2-Herido_1
+  - first:
+      213: -6728325290967658981
+    second: Idle-Ve a Val-Ataque 1 y 2-Herido_2
+  - first:
+      213: 6142110274088081714
+    second: Idle-Ve a Val-Ataque 1 y 2-Herido_3
+  - first:
+      213: -8287108754603386278
+    second: Idle-Ve a Val-Ataque 1 y 2-Herido_4
+  - first:
+      213: -4131511423515609284
+    second: Idle-Ve a Val-Ataque 1 y 2-Herido_5
+  - first:
+      213: -5334855308694178434
+    second: Idle-Ve a Val-Ataque 1 y 2-Herido_6
+  - first:
+      213: 3760846466605759334
+    second: Idle-Ve a Val-Ataque 1 y 2-Herido_7
+  - first:
+      213: 6594178598591398125
+    second: Idle-Ve a Val-Ataque 1 y 2-Herido_8
+  - first:
+      213: -5210094077506874104
+    second: Idle-Ve a Val-Ataque 1 y 2-Herido_9
+  - first:
+      213: -7604267037685887311
+    second: Idle-Ve a Val-Ataque 1 y 2-Herido_10
+  - first:
+      213: -6193642945820136639
+    second: Idle-Ve a Val-Ataque 1 y 2-Herido_11
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 1000
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationMethod: 0
+  spriteTessellationDetail: -1
+  spriteGeometrySubdivision: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Idle-Ve a Val-Ataque 1 y 2-Herido_0
+      rect:
+        serializedVersion: 2
+        x: 653
+        y: 3108
+        width: 1293
+        height: 1267
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: efa576dae583d3dc0800000000000000
+      internalID: -3657705343067661570
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Idle-Ve a Val-Ataque 1 y 2-Herido_1
+      rect:
+        serializedVersion: 2
+        x: 2153
+        y: 3108
+        width: 1357
+        height: 1209
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d39447551759d860800000000000000
+      internalID: 7555165599060759511
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Idle-Ve a Val-Ataque 1 y 2-Herido_2
+      rect:
+        serializedVersion: 2
+        x: 3841
+        y: 3108
+        width: 1293
+        height: 1267
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b1e889acbcf20a2a0800000000000000
+      internalID: -6728325290967658981
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Idle-Ve a Val-Ataque 1 y 2-Herido_3
+      rect:
+        serializedVersion: 2
+        x: 5340
+        y: 3108
+        width: 1358
+        height: 1209
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2391c4280c82d3550800000000000000
+      internalID: 6142110274088081714
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Idle-Ve a Val-Ataque 1 y 2-Herido_4
+      rect:
+        serializedVersion: 2
+        x: 653
+        y: 1618
+        width: 1293
+        height: 1267
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a5ad5d2ae764efc80800000000000000
+      internalID: -8287108754603386278
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Idle-Ve a Val-Ataque 1 y 2-Herido_5
+      rect:
+        serializedVersion: 2
+        x: 2153
+        y: 1618
+        width: 1357
+        height: 1209
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c3732efff3ce9a6c0800000000000000
+      internalID: -4131511423515609284
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Idle-Ve a Val-Ataque 1 y 2-Herido_6
+      rect:
+        serializedVersion: 2
+        x: 3841
+        y: 1618
+        width: 1293
+        height: 1267
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e753d2dac59c6f5b0800000000000000
+      internalID: -5334855308694178434
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Idle-Ve a Val-Ataque 1 y 2-Herido_7
+      rect:
+        serializedVersion: 2
+        x: 5340
+        y: 1618
+        width: 1358
+        height: 1209
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 66bb1d08fe5313430800000000000000
+      internalID: 3760846466605759334
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Idle-Ve a Val-Ataque 1 y 2-Herido_8
+      rect:
+        serializedVersion: 2
+        x: 772
+        y: 236
+        width: 1317
+        height: 1215
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: de0068a7f7a338b50800000000000000
+      internalID: 6594178598591398125
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Idle-Ve a Val-Ataque 1 y 2-Herido_9
+      rect:
+        serializedVersion: 2
+        x: 2269
+        y: 237
+        width: 1368
+        height: 1136
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 80516df6a0702b7b0800000000000000
+      internalID: -5210094077506874104
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Idle-Ve a Val-Ataque 1 y 2-Herido_10
+      rect:
+        serializedVersion: 2
+        x: 3922
+        y: 236
+        width: 1317
+        height: 1215
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1be45891b67387690800000000000000
+      internalID: -7604267037685887311
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Idle-Ve a Val-Ataque 1 y 2-Herido_11
+      rect:
+        serializedVersion: 2
+        x: 5418
+        y: 237
+        width: 1369
+        height: 1136
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 14b69cc5e82cb0aa0800000000000000
+      internalID: -6193642945820136639
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Idle-Ve a Val-Ataque 1 y 2-Herido_0: -3657705343067661570
+      Idle-Ve a Val-Ataque 1 y 2-Herido_1: 7555165599060759511
+      Idle-Ve a Val-Ataque 1 y 2-Herido_10: -7604267037685887311
+      Idle-Ve a Val-Ataque 1 y 2-Herido_11: -6193642945820136639
+      Idle-Ve a Val-Ataque 1 y 2-Herido_2: -6728325290967658981
+      Idle-Ve a Val-Ataque 1 y 2-Herido_3: 6142110274088081714
+      Idle-Ve a Val-Ataque 1 y 2-Herido_4: -8287108754603386278
+      Idle-Ve a Val-Ataque 1 y 2-Herido_5: -4131511423515609284
+      Idle-Ve a Val-Ataque 1 y 2-Herido_6: -5334855308694178434
+      Idle-Ve a Val-Ataque 1 y 2-Herido_7: 3760846466605759334
+      Idle-Ve a Val-Ataque 1 y 2-Herido_8: 6594178598591398125
+      Idle-Ve a Val-Ataque 1 y 2-Herido_9: -5210094077506874104
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

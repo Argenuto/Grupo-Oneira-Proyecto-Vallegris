@@ -547,7 +547,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -832.02, y: 18.435}
+  m_AnchoredPosition: {x: -824, y: -17}
   m_SizeDelta: {x: 232.7751, y: 252.5792}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &274395560
@@ -1275,7 +1275,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -832.02, y: -132.85}
+  m_AnchoredPosition: {x: -654, y: 43}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1147982250
@@ -1300,8 +1300,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Val
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 703f51da8f2927a46a1d9df2e5474b0d, type: 2}
-  m_sharedMaterial: {fileID: -4419582631901453823, guid: 80cbdf493c3728c448917ba7635ed344, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2a7256c776292e4438f86487ab91ca03, type: 2}
+  m_sharedMaterial: {fileID: -1095917084601482083, guid: 2a7256c776292e4438f86487ab91ca03, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1367,7 +1367,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 1
+  m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1147982251
@@ -1605,7 +1605,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.36279795}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -31, y: -56}
+  m_AnchoredPosition: {x: -31, y: -82}
   m_SizeDelta: {x: 200, y: 38.3925}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1377209493
@@ -1631,7 +1631,7 @@ MonoBehaviour:
   m_text: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry''s standard dummy text ever since 1966, when designers at Letraset and James Mosley '
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 703f51da8f2927a46a1d9df2e5474b0d, type: 2}
-  m_sharedMaterial: {fileID: -4419582631901453823, guid: 80cbdf493c3728c448917ba7635ed344, type: 2}
+  m_sharedMaterial: {fileID: 4477760836537657027, guid: 703f51da8f2927a46a1d9df2e5474b0d, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1655,8 +1655,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 49.2
-  m_fontSizeBase: 49.2
+  m_fontSize: 36.7
+  m_fontSizeBase: 36.7
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1697,7 +1697,7 @@ MonoBehaviour:
   m_margin: {x: -554.3109, y: -82.54283, z: -595.5862, w: -29.96222}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 1
+  m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1377209494

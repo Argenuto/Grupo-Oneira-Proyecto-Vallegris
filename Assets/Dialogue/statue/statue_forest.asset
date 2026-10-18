@@ -31,7 +31,7 @@ MonoBehaviour:
       m_FallbackState: 0
       m_WaitForCompletion: 0
       m_LocalVariables: []
-    portrait: {fileID: -8804664058437865340, guid: 369af0d25f3c4214ca6f61dbb5fd3e4a, type: 3}
+    portrait: {fileID: 1959710659338156615, guid: ef779f6ee9e87c046b7daeb84d39abbd, type: 3}
   - speakerName:
       m_TableReference:
         m_TableCollectionName: GUID:6ca0f712d8ff1214887e15a9323e1fc7
@@ -50,7 +50,7 @@ MonoBehaviour:
       m_FallbackState: 0
       m_WaitForCompletion: 0
       m_LocalVariables: []
-    portrait: {fileID: -8804664058437865340, guid: 369af0d25f3c4214ca6f61dbb5fd3e4a, type: 3}
+    portrait: {fileID: 1959710659338156615, guid: ef779f6ee9e87c046b7daeb84d39abbd, type: 3}
   references:
     version: 2
     RefIds: []

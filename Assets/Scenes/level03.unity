@@ -7462,6 +7462,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1224905242}
   - component: {fileID: 1224905241}
+  - component: {fileID: 1224905243}
   m_Layer: 0
   m_Name: og music 2
   m_TagString: Untagged
@@ -7480,7 +7481,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 0}
+  m_Resource: {fileID: 8300000, guid: 9b18fba5bda69d74c99b05e18ecf0d3b, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -7581,6 +7582,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1224905243
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1224905240}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2459e5f8fb0b37e46af94a0f7072811b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AudioFader
+  fadeDuration: 1.5
+  maxVolume: 0.522
+  fadeInOnStart: 1
 --- !u!1 &1225684482
 GameObject:
   m_ObjectHideFlags: 0

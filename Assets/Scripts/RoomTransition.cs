@@ -21,12 +21,15 @@ public class RoomTransition : MonoBehaviour
         player.GetComponent<PlayerController>().enabled = false;
 
         yield return StartCoroutine(FadeManager.Instance.FadeToBlack());
+         Scene scene = SceneManager.GetActiveScene();
 
+        if (scene.name == "MainMenu")
+            PlayerPrefs.DeleteAll();
         SceneManager.LoadScene(sceneToLoad);
     }
 
     public void triggerTransition(GameObject player)
-    {
+    {   
          TransitionManager.targetConnectionId = connectionId;
             StartCoroutine(TransitionRoutine(player.gameObject));
     }

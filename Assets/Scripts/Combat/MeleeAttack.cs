@@ -4,6 +4,10 @@ using UnityEngine;
 public class MeleeAttack : DamageDealer
 {
     [SerializeField] private Animator animatorController;
+
+    [Header("Audio")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip hitSFX;
     public void Perform(Vector2 position, float radius)
     {
         //animatorController.SetTrigger("attack");
@@ -25,8 +29,20 @@ public class MeleeAttack : DamageDealer
             
             Debug.Log("sasa");
         Debug.Log("holiwiris");
+
+        if (result) 
+        {
+            PlaySFX(hitSFX);
+        }
         return result;
     }
 
-   
+   private void PlaySFX(AudioClip clip)
+    {
+        if (clip != null && audioSource != null)
+        {
+            audioSource.pitch = UnityEngine.Random.Range(0.85f, 1.15f); // Slightly wider variation for impacts
+            audioSource.PlayOneShot(clip);
+        }
+    }
 }

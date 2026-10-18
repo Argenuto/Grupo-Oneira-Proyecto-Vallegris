@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0da1503d2963804d82317496059d081, type: 3}
+  m_Name: ladder
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueObject
+  lines:
+  - speakerName:
+      m_TableReference:
+        m_TableCollectionName: GUID:6ca0f712d8ff1214887e15a9323e1fc7
+      m_TableEntryReference:
+        m_KeyId: 9316175872
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
+    dialogueText:
+      m_TableReference:
+        m_TableCollectionName: GUID:9fa6c6f57ed4d3642974321781fbb65b
+      m_TableEntryReference:
+        m_KeyId: 522667238703104
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
+    portrait: {fileID: 1959710659338156615, guid: ef779f6ee9e87c046b7daeb84d39abbd, type: 3}
+  references:
+    version: 2
+    RefIds: []

@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
 
     [Header("Player Progress")]
     public bool isAttackUnlocked = false;
+    public bool isDestroyUnlocked = false;
 
     private void Awake()
     {
@@ -32,8 +33,17 @@ public class GameManager : MonoBehaviour
         Debug.Log("Attack Unlocked and Saved!");
     }
 
+    public void UnlockDestroy()
+    {
+        isDestroyUnlocked = true;
+
+        PlayerPrefs.SetInt("DestroyUnlocked", 1);
+        PlayerPrefs.Save();
+    }
+
     private void LoadProgress()
     {
         isAttackUnlocked = PlayerPrefs.GetInt("AttackUnlocked", 0) == 1;
+        isDestroyUnlocked = PlayerPrefs.GetInt("DestroyUnlocked", 0) == 1;
     }
 }

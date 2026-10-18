@@ -50,6 +50,12 @@ public class GhostEnemy : MonoBehaviour
         FindPlayer();
     }
 
+    private void OnEnable()
+    {
+        spawnPosition = transform.position;
+        FindPlayer();
+    }
+
     private void FindPlayer()
     {
         GameObject playerObj = GameObject.FindWithTag("Player");

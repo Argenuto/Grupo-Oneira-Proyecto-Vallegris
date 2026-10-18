@@ -19,7 +19,7 @@ public class GravityCameraController : MonoBehaviour
 
     [Header("Referencias (Opcionales, se auto-detectan si están vacías)")]
     [SerializeField] private CinemachineCamera cinemachineCamera;
-    [SerializeField] private Transform targetCameraTransform;
+    [SerializeField] private Camera standardCamera;
 
     public bool IsInverted { get; private set; }
     public bool IsRotating { get; private set; }
@@ -44,14 +44,8 @@ public class GravityCameraController : MonoBehaviour
         if (cinemachineCamera == null)
             cinemachineCamera = FindAnyObjectByType<CinemachineCamera>();
 
-        if (targetCameraTransform == null)
-        {
-            Camera mainCam = Camera.main;
-            if (mainCam != null)
-                targetCameraTransform = mainCam.transform;
-            else
-                targetCameraTransform = transform;
-        }
+        if (standardCamera == null)
+            standardCamera = Camera.main;
     }
 
     /// <summary>
@@ -106,18 +100,18 @@ public class GravityCameraController : MonoBehaviour
 
     private void ApplyAngle(float angle)
     {
-        // 1. Cinemachine 3 (Unity 6): Lens.Dutch controla el alabeo / inclinación en Z
+        // 1. Cinemachine 3 (Unity 6): Lens.Dutch controla el alabeo / inclinación en Z de la cámara virtual
         if (cinemachineCamera != null)
         {
             cinemachineCamera.Lens.Dutch = angle;
+            return;
         }
 
-        // 2. Transform directo (soporta cámaras normales o virtual cameras)
-        if (targetCameraTransform != null)
+        // 2. Si NO se usa Cinemachine, rotar la cámara estándar de Unity
+        if (standardCamera != null)
         {
-            Vector3 rot = targetCameraTransform.eulerAngles;
-            targetCameraTransform.eulerAngles = new Vector3(rot.x, rot.y, angle);
+            Vector3 rot = standardCamera.transform.eulerAngles;
+            standardCamera.transform.eulerAngles = new Vector3(rot.x, rot.y, angle);
         }
     }
 }
-

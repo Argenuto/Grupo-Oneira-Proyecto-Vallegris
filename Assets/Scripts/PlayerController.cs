@@ -51,6 +51,7 @@ public class PlayerController : MonoBehaviour
     private bool isGravityInverted;
     private float baseGravityScale;
     private float baseScaleY;
+    private float baseScaleX;
 
     public bool CanMove { get; set; } = true;
     private Rigidbody2D rb;
@@ -84,6 +85,18 @@ public class PlayerController : MonoBehaviour
         jumpAction = playerInput.actions["Jump"];
         baseGravityScale = Mathf.Abs(rb.gravityScale);
         baseScaleY = Mathf.Abs(transform.localScale.y);
+        baseScaleX = Mathf.Abs(transform.localScale.x);
+    }
+
+    /// <summary>
+    /// Aplica el volteo horizontal modificando la escala local del personaje.
+    /// </summary>
+    private void UpdateFlip()
+    {
+        Vector3 scale = transform.localScale;
+        bool flipHorizontally = (facingDirection.x < 0f) != isGravityInverted;
+        scale.x = flipHorizontally ? -baseScaleX : baseScaleX;
+        transform.localScale = scale;
     }
 
     private void Update()
@@ -250,8 +263,12 @@ public class PlayerController : MonoBehaviour
             rb.gravityScale = inverted ? -baseGravityScale : baseGravityScale;
         }
 
+        // Rotar el personaje 180° en Z para que los pies queden orientados hacia el techo (el nuevo suelo)
+        transform.localRotation = Quaternion.Euler(0f, 0f, inverted ? 180f : 0f);
+
+        // Mantener la escala positiva en Y para evitar invertir la física del collider
         Vector3 scale = transform.localScale;
-        scale.y = inverted ? -baseScaleY : baseScaleY;
+        scale.y = baseScaleY;
         transform.localScale = scale;
 
         isJumping = true;
@@ -262,6 +279,9 @@ public class PlayerController : MonoBehaviour
         {
             facingDirection = horizontalInput > 0 ? Vector2.right : Vector2.left;
         }
+
+        // Aplicar flip visual con la nueva orientación
+        UpdateFlip();
     }
 
     private void PerformAttack()
@@ -308,6 +328,7 @@ public class PlayerController : MonoBehaviour
         if (Mathf.Abs(effectiveInputX) > 0.1f && !isClimbing)
         {
             facingDirection = effectiveInputX > 0 ? Vector2.right : Vector2.left;
+            UpdateFlip();
         }
     }
 

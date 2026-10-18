@@ -62,6 +62,22 @@ MonoBehaviour:
     m_Localized: "%(Tengo que atraparla)%, solo as\xED podr\xE9 liberar a mi pueblo."
     m_Metadata:
       m_Items: []
+  - m_Id: 588870711853056
+    m_Localized: "T\xFA eres el que mantiene todo el conocimiento encerrado ac\xE1. \r\n"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 588948658798592
+    m_Localized: "Da nada sirven un mont\xF3n de libros sin nadie dispuesto a leerlos."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 608293854199808
+    m_Localized: "A diferencia de t\xED, no dejare que la ignorancia me absorba, usar\xE9 mi vista para conocer y para acabarte de ser necesario. "
+    m_Metadata:
+      m_Items: []
+  - m_Id: 608391791198208
+    m_Localized: Entonces %(ataca)%, Val.
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

@@ -193,4 +193,9 @@ public class BossController : MonoBehaviour
         if (health != null) health.Invulnerable = false;
         CurrentActionIndex = -1;
     }
+
+    public void setDeathAnimation()
+    {
+        animator.SetBool("dead", true);
+    }
 }

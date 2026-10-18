@@ -44,7 +44,7 @@ public class BossContext
     public void FaceDirection(float dir)
     {
         if (sprite != null && Mathf.Abs(dir) > 0.01f)
-            sprite.flipX = dir < 0f;
+            sprite.flipX = dir > 0f;
     }
 
     public void SetContactDamage(bool on)

@@ -59,6 +59,22 @@ MonoBehaviour:
     m_Key: ending02
     m_Metadata:
       m_Items: []
+  - m_Id: 588870711853056
+    m_Key: boss01
+    m_Metadata:
+      m_Items: []
+  - m_Id: 588948658798592
+    m_Key: boss02
+    m_Metadata:
+      m_Items: []
+  - m_Id: 608293854199808
+    m_Key: boss03
+    m_Metadata:
+      m_Items: []
+  - m_Id: 608391791198208
+    m_Key: boss04
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

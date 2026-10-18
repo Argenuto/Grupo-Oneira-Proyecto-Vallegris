@@ -30,6 +30,12 @@ public class PlayerController : MonoBehaviour
 
     [Header("Combat Settings")]
     [SerializeField] private float attackCooldown = 0.4f;
+    [SerializeField] private float comboWindow = 1.5f;
+
+    [SerializeField] private float attackBufferTime = 0.2f; // Tiempo que el juego "recuerda" que presionaste atacar
+    private float attackBufferCounter;
+    private float lastAttackTime = 0f;
+    private bool isSecondAttack = false;
     [SerializeField] private float attackDistance = 1f;
     [SerializeField] private float attackRange = 0.5f;
     [SerializeField] private MeleeAttack meleeAttack;
@@ -71,6 +77,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+
         isHoldingJump = jumpAction != null && jumpAction.IsPressed();
 
         bool grounded = IsGrounded();
@@ -89,6 +96,17 @@ public class PlayerController : MonoBehaviour
         if (jumpBufferCounter > 0f)
         {
             jumpBufferCounter -= Time.deltaTime;
+        }
+
+        if (attackBufferCounter > 0f)
+        {
+            attackBufferCounter -= Time.deltaTime;
+        }
+
+        if (attackBufferCounter > 0f && Time.time >= nextAttackTime)
+        {
+            PerformAttack();
+            attackBufferCounter = 0f;
         }
 
         if (coyoteTimeCounter > 0f && jumpBufferCounter > 0f && !isJumping)
@@ -119,9 +137,9 @@ public class PlayerController : MonoBehaviour
             else if (facingDirection.x < 0)
                 sprite.flipX = true;
         }
-            animator.SetInteger("yVelocity", (int)Math.Floor(rb.linearVelocityY * 100f));
-            if (grounded)
-                animator.SetInteger("yVelocity", 0);
+        animator.SetInteger("yVelocity", (int)Math.Floor(rb.linearVelocityY * 100f));
+        if (grounded)
+            animator.SetInteger("yVelocity", 0);
 
         if (rb.linearVelocity.x != 0)
             animator.SetBool("isWalking", true);
@@ -171,17 +189,36 @@ public class PlayerController : MonoBehaviour
 
     private void PerformAttack()
     {
+        // Tu lógica de cooldown
         nextAttackTime = Time.time + attackCooldown;
 
-        Vector2 attackDirection = facingDirection;
+        // 1. Si pasó demasiado tiempo desde el último ataque, reiniciamos el combo
+        if (Time.time - lastAttackTime > comboWindow)
+        {
+            isSecondAttack = false;
+        }
 
+        // 2. Alternar animaciones
+        if (!isSecondAttack)
+        {
+            animator.Play("attack", -1, 0f);
+            isSecondAttack = true; // El próximo será el ataque 2
+        }
+        else
+        {
+            animator.Play("attack2", -1, 0f);
+            isSecondAttack = false; // El próximo volverá a ser el ataque 1
+        }
+
+        // 3. Guardamos el tiempo actual para calcular la ventana del próximo combo
+        lastAttackTime = Time.time;
+
+        // Tu lógica original de posición y ejecución de daño
+        Vector2 attackDirection = facingDirection;
         Vector2 attackPosition = (Vector2)transform.position + (attackDirection * attackDistance);
 
-
         meleeAttack.Perform(attackPosition, attackRange);
-
     }
-
 
     private void OnMove(InputValue value)
     {
@@ -215,17 +252,18 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+
+
     private void OnAttack(InputValue value)
     {
-
         if ((DialogueManager.Instance != null && DialogueManager.Instance.IsDialogueActive) || (ItemObtainedManager.Instance != null && ItemObtainedManager.Instance.IsActive))
         {
             return;
         }
 
-        if (value.isPressed && Time.time >= nextAttackTime)
+        if (value.isPressed)
         {
-            PerformAttack();
+            attackBufferCounter = attackBufferTime;
         }
 
         if (canInteract && interactableObject != null)
@@ -274,4 +312,17 @@ public class PlayerController : MonoBehaviour
             interactableObject = null;
         }
     }
+    public void setAttackTrue()
+    {
+      
+        animator.SetBool("isAttacking", true);
+
+    }
+
+     public void setAttackFalse()
+    {
+        animator.SetBool("isAttacking", false);
+    }
+
+    
 }

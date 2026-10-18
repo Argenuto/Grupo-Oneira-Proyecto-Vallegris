@@ -6,6 +6,7 @@ public class MeleeAttack : DamageDealer
     [SerializeField] private Animator animatorController;
     public void Perform(Vector2 position, float radius)
     {
+        //animatorController.SetTrigger("attack");
         // Se deduplica por IDamageable (no por collider): un enemigo con varios
         // colliders recibe un solo golpe por ataque.
         var hitTargets = new HashSet<IDamageable>();
@@ -18,9 +19,14 @@ public class MeleeAttack : DamageDealer
 
     override protected bool TryDealDamage(Collider2D target, Vector2 hitPoint)
     {
+
         bool result = base.TryDealDamage(target, hitPoint);
-        if (result && animatorController != null)
-            animatorController.SetTrigger("AttackHit");
+        if (animatorController != null)
+            
+            Debug.Log("sasa");
+        Debug.Log("holiwiris");
         return result;
     }
+
+   
 }

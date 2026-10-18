@@ -31,6 +31,14 @@ MonoBehaviour:
     m_Key: sword_text
     m_Metadata:
       m_Items: []
+  - m_Id: 346382071840768
+    m_Key: statue_forest
+    m_Metadata:
+      m_Items: []
+  - m_Id: 346431963086848
+    m_Key: statue_forest2
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

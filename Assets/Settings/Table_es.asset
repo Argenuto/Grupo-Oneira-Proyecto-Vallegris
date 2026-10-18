@@ -34,6 +34,14 @@ MonoBehaviour:
     m_Localized: "Espada de un h\xE9roe ca\xEDdo. Te servir\xE1 para defenderte, por ahora."
     m_Metadata:
       m_Items: []
+  - m_Id: 346382071840768
+    m_Localized: "Aqu\xED va un chingo de lore"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 346431963086848
+    m_Localized: Pero aun no sabemos que va, %(XD)%
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

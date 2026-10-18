@@ -1,0 +1,418 @@
+fileFormatVersion: 2
+guid: 253f7bd5e87663440900ad2a9e8e97f8
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 3253847264083146377
+    second: Recurso 19bosquee (1)_0
+  - first:
+      213: -3931347704586765199
+    second: Recurso 19bosquee (1)_1
+  - first:
+      213: 198034545557516035
+    second: Recurso 19bosquee (1)_2
+  - first:
+      213: 1057303140126977269
+    second: Recurso 19bosquee (1)_3
+  - first:
+      213: -4995810568238830713
+    second: Recurso 19bosquee (1)_4
+  - first:
+      213: -8641580549467356878
+    second: Recurso 19bosquee (1)_5
+  - first:
+      213: -7893995968000815843
+    second: Recurso 19bosquee (1)_6
+  - first:
+      213: -7074333491980566822
+    second: Recurso 19bosquee (1)_7
+  - first:
+      213: -2785726645831115230
+    second: Recurso 19bosquee (1)_8
+  - first:
+      213: 5750821997586860678
+    second: Recurso 19bosquee (1)_9
+  - first:
+      213: -2097970227480177828
+    second: Recurso 19bosquee (1)_10
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 350
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationMethod: 0
+  spriteTessellationDetail: -1
+  spriteGeometrySubdivision: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Recurso 19bosquee (1)_0
+      rect:
+        serializedVersion: 2
+        x: 24003
+        y: 13913
+        width: 3085
+        height: 1493
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9867d09d8dcf72d20800000000000000
+      internalID: 3253847264083146377
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Recurso 19bosquee (1)_1
+      rect:
+        serializedVersion: 2
+        x: 14486
+        y: 11231
+        width: 3086
+        height: 1494
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 17cfe83871c0179c0800000000000000
+      internalID: -3931347704586765199
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Recurso 19bosquee (1)_2
+      rect:
+        serializedVersion: 2
+        x: 652
+        y: 9989
+        width: 2331
+        height: 1129
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 30f2635be5f8fb200800000000000000
+      internalID: 198034545557516035
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Recurso 19bosquee (1)_3
+      rect:
+        serializedVersion: 2
+        x: 20540
+        y: 9165
+        width: 3086
+        height: 1494
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5fc6c27aa9b4cae00800000000000000
+      internalID: 1057303140126977269
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Recurso 19bosquee (1)_4
+      rect:
+        serializedVersion: 2
+        x: 4344
+        y: 8035
+        width: 2331
+        height: 1129
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 78b6bf2d1c05baab0800000000000000
+      internalID: -4995810568238830713
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Recurso 19bosquee (1)_5
+      rect:
+        serializedVersion: 2
+        x: 21098
+        y: 7717
+        width: 2246
+        height: 1087
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 231c21b7640f21880800000000000000
+      internalID: -8641580549467356878
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Recurso 19bosquee (1)_6
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 3456
+        width: 3133
+        height: 1516
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d1d02f4cd74e27290800000000000000
+      internalID: -7893995968000815843
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Recurso 19bosquee (1)_7
+      rect:
+        serializedVersion: 2
+        x: 11495
+        y: 2670
+        width: 2361
+        height: 1763
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ade79d3ab2be2dd90800000000000000
+      internalID: -7074333491980566822
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Recurso 19bosquee (1)_8
+      rect:
+        serializedVersion: 2
+        x: 21270
+        y: 1852
+        width: 2317
+        height: 1803
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 22e55e1006c1759d0800000000000000
+      internalID: -2785726645831115230
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Recurso 19bosquee (1)_9
+      rect:
+        serializedVersion: 2
+        x: 1386
+        y: 2143
+        width: 1182
+        height: 907
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 68acaac33260fcf40800000000000000
+      internalID: 5750821997586860678
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Recurso 19bosquee (1)_10
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 3132
+        height: 1516
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c53d2b1913382e2e0800000000000000
+      internalID: -2097970227480177828
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Recurso 19bosquee (1)_0: 3253847264083146377
+      Recurso 19bosquee (1)_1: -3931347704586765199
+      Recurso 19bosquee (1)_10: -2097970227480177828
+      Recurso 19bosquee (1)_2: 198034545557516035
+      Recurso 19bosquee (1)_3: 1057303140126977269
+      Recurso 19bosquee (1)_4: -4995810568238830713
+      Recurso 19bosquee (1)_5: -8641580549467356878
+      Recurso 19bosquee (1)_6: -7893995968000815843
+      Recurso 19bosquee (1)_7: -7074333491980566822
+      Recurso 19bosquee (1)_8: -2785726645831115230
+      Recurso 19bosquee (1)_9: 5750821997586860678
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

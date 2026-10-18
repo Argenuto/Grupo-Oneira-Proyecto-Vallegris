@@ -26,12 +26,12 @@ MonoBehaviour:
       m_TableReference:
         m_TableCollectionName: GUID:9fa6c6f57ed4d3642974321781fbb65b
       m_TableEntryReference:
-        m_KeyId: 37552670720000
+        m_KeyId: 44303574974464
         m_Key: 
       m_FallbackState: 0
       m_WaitForCompletion: 0
       m_LocalVariables: []
-    portrait: {fileID: 0}
+    portrait: {fileID: 1959710659338156615, guid: ef779f6ee9e87c046b7daeb84d39abbd, type: 3}
   references:
     version: 2
     RefIds: []

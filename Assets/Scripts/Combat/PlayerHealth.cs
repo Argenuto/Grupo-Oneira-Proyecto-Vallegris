@@ -2,22 +2,26 @@ using UnityEngine;
 using System.Collections;
 
 [RequireComponent(typeof(PlayerController))]
-public class PlayerHealth:Health
+public class PlayerHealth : Health
 {
     // Variables
     [SerializeField] private float invulnerabilityDuration = 1f;
     [SerializeField] private float blinkInterval = 0.1f;
     [SerializeField] private SpriteRenderer[] renderers;
     [SerializeField] private float knockbackStunTime = 0.2f;
+
+    private Animator animator;
     private PlayerController playerController;
     private Rigidbody2D body;
     private Coroutine invulnerabilityCoroutine;
     private bool isInvulnerable;
 
+
     // Fases de Unity
     protected override void Awake()
     {
         base.Awake();
+        animator = GetComponent<Animator>();
         playerController = GetComponent<PlayerController>();
         body = GetComponent<Rigidbody2D>();
         if (renderers == null || renderers.Length == 0)
@@ -35,6 +39,8 @@ public class PlayerHealth:Health
         if (invulnerabilityDuration > 0f && invulnerabilityCoroutine == null)
             invulnerabilityCoroutine = StartCoroutine(InvulnerabilityRoutine());
 
+        animator.SetTrigger("damaged");
+        animator.SetBool("isHurt", true);
         body.linearVelocity = Vector2.zero;
         body.AddForce(info.knockbackDirection * info.knockbackForce, ForceMode2D.Impulse);
         StartCoroutine(KnockbackStun());
@@ -56,7 +62,7 @@ public class PlayerHealth:Health
         playerController.SetGravityInverted(false);
     }
 
-  
+
     private void StopInvulnerability()
     {
         if (invulnerabilityCoroutine != null)
@@ -105,5 +111,10 @@ public class PlayerHealth:Health
         SetRenderersVisible(true);
         isInvulnerable = false;
         invulnerabilityCoroutine = null;
+    }
+
+    public void StopHurt()
+    {
+        animator.SetBool("isHurt", false);
     }
 }

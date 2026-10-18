@@ -22,6 +22,10 @@ MonoBehaviour:
     m_Localized: Val
     m_Metadata:
       m_Items: []
+  - m_Id: 436346025492480
+    m_Localized: Soldier statue
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

@@ -32,6 +32,7 @@ public class ContactDamage : DamageDealer
 
     private void TryHit(Collider2D target, Vector2 hitPoint)
     {
+        Debug.Log(target.tag);
         if (Time.time < nextHitTime) return;
         if (owner != null && owner.IsDead) return;
         if ((targetLayers.value & (1 << target.gameObject.layer)) == 0) return;

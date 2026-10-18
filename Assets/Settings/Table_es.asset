@@ -19,11 +19,31 @@ MonoBehaviour:
     m_Items: []
   m_TableData:
   - m_Id: 2664474185728
-    m_Localized: Tenemos dialogo, %(&(YAAY)&)%
+    m_Localized: "Esta es una estatua de un soldado ca\xEDdo....."
     m_Metadata:
       m_Items: []
   - m_Id: 37552670720000
-    m_Localized: bueno chao
+    m_Localized: "Su espada podr\xEDa servirme de algo."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 44303574974464
+    m_Localized: "Prometo que la devolver\xE9..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 197539514630144
+    m_Localized: "Espada de un h\xE9roe ca\xEDdo. Te servir\xE1 para defenderte, por ahora. Presiona Z o CLICK para atacar."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 346382071840768
+    m_Localized: "Pensamos que los muros nos proteger\xEDan... Pero la sombra no rompe la piedra, se filtra por el miedo."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 346431963086848
+    m_Localized: "Cuando nos dimos cuenta, %(ya la llev\xE1bamos dentro)%."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 439557679562752
+    m_Localized: "Tu guardia termina aqu\xED. La m\xEDa apenas comienza."
     m_Metadata:
       m_Items: []
   references:

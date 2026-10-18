@@ -39,6 +39,10 @@ MonoBehaviour:
     m_Key: statue_forest2
     m_Metadata:
       m_Items: []
+  - m_Id: 439557679562752
+    m_Key: statue_forest3
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

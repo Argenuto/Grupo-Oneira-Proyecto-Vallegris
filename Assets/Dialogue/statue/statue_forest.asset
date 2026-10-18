@@ -17,7 +17,7 @@ MonoBehaviour:
       m_TableReference:
         m_TableCollectionName: GUID:6ca0f712d8ff1214887e15a9323e1fc7
       m_TableEntryReference:
-        m_KeyId: 9316175872
+        m_KeyId: 436346025492480
         m_Key: 
       m_FallbackState: 0
       m_WaitForCompletion: 0
@@ -31,7 +31,26 @@ MonoBehaviour:
       m_FallbackState: 0
       m_WaitForCompletion: 0
       m_LocalVariables: []
-    portrait: {fileID: 1959710659338156615, guid: ef779f6ee9e87c046b7daeb84d39abbd, type: 3}
+    portrait: {fileID: -4101998394053537599, guid: 3dab109e78798734b84147e398787811, type: 3}
+  - speakerName:
+      m_TableReference:
+        m_TableCollectionName: GUID:6ca0f712d8ff1214887e15a9323e1fc7
+      m_TableEntryReference:
+        m_KeyId: 436346025492480
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
+    dialogueText:
+      m_TableReference:
+        m_TableCollectionName: GUID:9fa6c6f57ed4d3642974321781fbb65b
+      m_TableEntryReference:
+        m_KeyId: 346431963086848
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
+    portrait: {fileID: -4101998394053537599, guid: 3dab109e78798734b84147e398787811, type: 3}
   - speakerName:
       m_TableReference:
         m_TableCollectionName: GUID:6ca0f712d8ff1214887e15a9323e1fc7
@@ -45,7 +64,7 @@ MonoBehaviour:
       m_TableReference:
         m_TableCollectionName: GUID:9fa6c6f57ed4d3642974321781fbb65b
       m_TableEntryReference:
-        m_KeyId: 346431963086848
+        m_KeyId: 439557679562752
         m_Key: 
       m_FallbackState: 0
       m_WaitForCompletion: 0

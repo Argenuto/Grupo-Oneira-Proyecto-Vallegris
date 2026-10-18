@@ -1,0 +1,652 @@
+fileFormatVersion: 2
+guid: 4f3bcb7456aa6dd4ca802eedf3814ef5
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -4373001185019199728
+    second: vallegrisMesa de trabajo 6_0
+  - first:
+      213: 2061451749692141414
+    second: vallegrisMesa de trabajo 6_1
+  - first:
+      213: -221265158804588998
+    second: vallegrisMesa de trabajo 6_2
+  - first:
+      213: 3871607515747393919
+    second: vallegrisMesa de trabajo 6_3
+  - first:
+      213: 3459448107408862487
+    second: vallegrisMesa de trabajo 6_4
+  - first:
+      213: 4672871492385248850
+    second: vallegrisMesa de trabajo 6_5
+  - first:
+      213: 3836664951597690476
+    second: vallegrisMesa de trabajo 6_6
+  - first:
+      213: 7501645922205236520
+    second: vallegrisMesa de trabajo 6_7
+  - first:
+      213: -2975345460134441160
+    second: vallegrisMesa de trabajo 6_8
+  - first:
+      213: 9213618124261572243
+    second: vallegrisMesa de trabajo 6_9
+  - first:
+      213: 8428238909767211844
+    second: vallegrisMesa de trabajo 6_10
+  - first:
+      213: -6200686436028688709
+    second: vallegrisMesa de trabajo 6_11
+  - first:
+      213: 2404273071354329537
+    second: vallegrisMesa de trabajo 6_12
+  - first:
+      213: 8057900734012558353
+    second: vallegrisMesa de trabajo 6_13
+  - first:
+      213: 1194515501848616360
+    second: vallegrisMesa de trabajo 6_14
+  - first:
+      213: -7870210493072154774
+    second: vallegrisMesa de trabajo 6_15
+  - first:
+      213: 6168866794757081663
+    second: vallegrisMesa de trabajo 6_16
+  - first:
+      213: -3675313793007089177
+    second: vallegrisMesa de trabajo 6_17
+  - first:
+      213: 4855443439465373461
+    second: vallegrisMesa de trabajo 6_18
+  - first:
+      213: -3577157787109413364
+    second: vallegrisMesa de trabajo 6_19
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationMethod: 0
+  spriteTessellationDetail: -1
+  spriteGeometrySubdivision: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: vallegrisMesa de trabajo 6_0
+      rect:
+        serializedVersion: 2
+        x: 635
+        y: 1910
+        width: 299
+        height: 322
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 01f7194679aff43c0800000000000000
+      internalID: -4373001185019199728
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vallegrisMesa de trabajo 6_1
+      rect:
+        serializedVersion: 2
+        x: 2075
+        y: 2000
+        width: 666
+        height: 562
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 66fe10eb17fbb9c10800000000000000
+      internalID: 2061451749692141414
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vallegrisMesa de trabajo 6_2
+      rect:
+        serializedVersion: 2
+        x: 2873
+        y: 1319
+        width: 700
+        height: 963
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a363848a288edecf0800000000000000
+      internalID: -221265158804588998
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vallegrisMesa de trabajo 6_3
+      rect:
+        serializedVersion: 2
+        x: 3543
+        y: 1382
+        width: 1415
+        height: 1103
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f712bddd586bab530800000000000000
+      internalID: 3871607515747393919
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vallegrisMesa de trabajo 6_4
+      rect:
+        serializedVersion: 2
+        x: 5034
+        y: 1533
+        width: 1032
+        height: 863
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 71da00989bd620030800000000000000
+      internalID: 3459448107408862487
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vallegrisMesa de trabajo 6_5
+      rect:
+        serializedVersion: 2
+        x: 6105
+        y: 1688
+        width: 480
+        height: 561
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2561ca84ddf59d040800000000000000
+      internalID: 4672871492385248850
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vallegrisMesa de trabajo 6_6
+      rect:
+        serializedVersion: 2
+        x: 8651
+        y: 2069
+        width: 106
+        height: 131
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c6eeb2a22729e3530800000000000000
+      internalID: 3836664951597690476
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vallegrisMesa de trabajo 6_7
+      rect:
+        serializedVersion: 2
+        x: 8754
+        y: 2197
+        width: 205
+        height: 206
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 82dfcc788333b1860800000000000000
+      internalID: 7501645922205236520
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vallegrisMesa de trabajo 6_8
+      rect:
+        serializedVersion: 2
+        x: 6510
+        y: 628
+        width: 756
+        height: 1063
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 83f8d9c611375b6d0800000000000000
+      internalID: -2975345460134441160
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vallegrisMesa de trabajo 6_9
+      rect:
+        serializedVersion: 2
+        x: 7825
+        y: 1688
+        width: 185
+        height: 106
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 39e36b04ed85ddf70800000000000000
+      internalID: 9213618124261572243
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vallegrisMesa de trabajo 6_10
+      rect:
+        serializedVersion: 2
+        x: 2556
+        y: 956
+        width: 361
+        height: 468
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 44bdcca32ae17f470800000000000000
+      internalID: 8428238909767211844
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vallegrisMesa de trabajo 6_11
+      rect:
+        serializedVersion: 2
+        x: 7436
+        y: 318
+        width: 633
+        height: 1080
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bb65de00a8cb2f9a0800000000000000
+      internalID: -6200686436028688709
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vallegrisMesa de trabajo 6_12
+      rect:
+        serializedVersion: 2
+        x: 7915
+        y: 1364
+        width: 275
+        height: 277
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1c9bc19be91bd5120800000000000000
+      internalID: 2404273071354329537
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vallegrisMesa de trabajo 6_13
+      rect:
+        serializedVersion: 2
+        x: 931
+        y: 1083
+        width: 226
+        height: 204
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 11c8d26660a63df60800000000000000
+      internalID: 8057900734012558353
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vallegrisMesa de trabajo 6_14
+      rect:
+        serializedVersion: 2
+        x: 1915
+        y: 392
+        width: 1135
+        height: 698
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8ad52662585c39010800000000000000
+      internalID: 1194515501848616360
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vallegrisMesa de trabajo 6_15
+      rect:
+        serializedVersion: 2
+        x: 3222
+        y: 389
+        width: 988
+        height: 748
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a6fd1e4314567c290800000000000000
+      internalID: -7870210493072154774
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vallegrisMesa de trabajo 6_16
+      rect:
+        serializedVersion: 2
+        x: 3689
+        y: 956
+        width: 763
+        height: 296
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f3ac2307aa73c9550800000000000000
+      internalID: 6168866794757081663
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vallegrisMesa de trabajo 6_17
+      rect:
+        serializedVersion: 2
+        x: 4139
+        y: 399
+        width: 1114
+        height: 724
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7e908b1f399aefcc0800000000000000
+      internalID: -3675313793007089177
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vallegrisMesa de trabajo 6_18
+      rect:
+        serializedVersion: 2
+        x: 8187
+        y: 374
+        width: 799
+        height: 813
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 51f955c3510026340800000000000000
+      internalID: 4855443439465373461
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vallegrisMesa de trabajo 6_19
+      rect:
+        serializedVersion: 2
+        x: 6558
+        y: 399
+        width: 570
+        height: 610
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c0e22d9f1f16b5ec0800000000000000
+      internalID: -3577157787109413364
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      vallegrisMesa de trabajo 6_0: -4373001185019199728
+      vallegrisMesa de trabajo 6_1: 2061451749692141414
+      vallegrisMesa de trabajo 6_10: 8428238909767211844
+      vallegrisMesa de trabajo 6_11: -6200686436028688709
+      vallegrisMesa de trabajo 6_12: 2404273071354329537
+      vallegrisMesa de trabajo 6_13: 8057900734012558353
+      vallegrisMesa de trabajo 6_14: 1194515501848616360
+      vallegrisMesa de trabajo 6_15: -7870210493072154774
+      vallegrisMesa de trabajo 6_16: 6168866794757081663
+      vallegrisMesa de trabajo 6_17: -3675313793007089177
+      vallegrisMesa de trabajo 6_18: 4855443439465373461
+      vallegrisMesa de trabajo 6_19: -3577157787109413364
+      vallegrisMesa de trabajo 6_2: -221265158804588998
+      vallegrisMesa de trabajo 6_3: 3871607515747393919
+      vallegrisMesa de trabajo 6_4: 3459448107408862487
+      vallegrisMesa de trabajo 6_5: 4672871492385248850
+      vallegrisMesa de trabajo 6_6: 3836664951597690476
+      vallegrisMesa de trabajo 6_7: 7501645922205236520
+      vallegrisMesa de trabajo 6_8: -2975345460134441160
+      vallegrisMesa de trabajo 6_9: 9213618124261572243
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

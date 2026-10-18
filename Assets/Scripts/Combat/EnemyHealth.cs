@@ -101,7 +101,7 @@ public class EnemyHealth : Health
         RestoreColor();
     }
 
-    private IEnumerator FlashRoutine()
+    public IEnumerator FlashRoutine()
     {
         spriteRenderer.color = hitFlashColor;
         yield return new WaitForSeconds(hitFlashDuration);

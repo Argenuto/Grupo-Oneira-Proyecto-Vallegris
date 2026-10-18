@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,6 +10,12 @@ public class PlayerController : MonoBehaviour
     [Header("Movement Settings")]
     [SerializeField] private float moveSpeed = 8f;
     [SerializeField] private float jumpForce = 16f;
+
+    [Header("Interaction Settings")]
+    [SerializeField] private SpriteRenderer interactPromptSprite;
+    [SerializeField] private SpriteRenderer interactPromptBG;
+
+    [SerializeField] private float promptFadeDuration = 0.2f;
 
     [Header("Climb Settings")]
     [SerializeField] private float climbSpeed = 5f;
@@ -71,6 +78,7 @@ public class PlayerController : MonoBehaviour
     private bool isHoldingJump;
     private bool canInteract;
     private Collider2D interactableObject;
+    private Coroutine promptFadeCoroutine;
 
     // Climb State Variables
     private bool isTouchingWall;
@@ -81,6 +89,15 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         playerInput = GetComponent<PlayerInput>();
         animator = GetComponent<Animator>();
+
+        // Make the prompt transparent at the start
+        if (interactPromptSprite != null)
+        {
+            Color c = interactPromptSprite.color;
+            c.a = 0f;
+            interactPromptSprite.color = c;
+            interactPromptBG. color = c;
+        }
 
         jumpAction = playerInput.actions["Jump"];
         baseGravityScale = Mathf.Abs(rb.gravityScale);
@@ -403,6 +420,9 @@ public class PlayerController : MonoBehaviour
         {
             canInteract = true;
             interactableObject = collision;
+
+            if (promptFadeCoroutine != null) StopCoroutine(promptFadeCoroutine);
+            promptFadeCoroutine = StartCoroutine(FadePrompt(1f));
         }
     }
 
@@ -412,7 +432,32 @@ public class PlayerController : MonoBehaviour
         {
             canInteract = false;
             interactableObject = null;
+
+            if (promptFadeCoroutine != null) StopCoroutine(promptFadeCoroutine);
+            promptFadeCoroutine = StartCoroutine(FadePrompt(0f));
         }
+    }
+
+    private IEnumerator FadePrompt(float targetAlpha)
+    {
+        if (interactPromptSprite == null) yield break;
+
+        Color currentColor = interactPromptSprite.color;
+        float startAlpha = currentColor.a;
+        float time = 0f;
+
+        while (time < promptFadeDuration)
+        {
+            time += Time.deltaTime;
+            float newAlpha = Mathf.Lerp(startAlpha, targetAlpha, time / promptFadeDuration);
+            interactPromptSprite.color = new Color(currentColor.r, currentColor.g, currentColor.b, newAlpha);
+            interactPromptBG.color = new Color(currentColor.r, currentColor.g, currentColor.b, newAlpha);
+            yield return null;
+        }
+
+        interactPromptSprite.color = new Color(currentColor.r, currentColor.g, currentColor.b, targetAlpha);
+        interactPromptBG.color = new Color(currentColor.r, currentColor.g, currentColor.b, targetAlpha);
+
     }
 
     public void setAttackTrue()

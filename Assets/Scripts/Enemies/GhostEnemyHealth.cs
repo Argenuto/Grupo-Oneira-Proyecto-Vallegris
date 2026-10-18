@@ -133,4 +133,32 @@ public class GhostEnemyHealth : EnemyHealth
             spriteRenderer.color = c;
         }
     }
+
+    protected override void HandleDamaged(DamageInfo damageInfo)
+    {
+        // Knockback
+        if (rb != null && rb.bodyType == RigidbodyType2D.Dynamic)
+        {
+            // 1. Detener la velocidad actual para que el empuje sea limpio y consistente
+            rb.linearVelocity = Vector2.zero;
+
+            // 2. Aplicar la fuerza
+            rb.AddForce(damageInfo.knockbackDirection * damageInfo.knockbackForce, ForceMode2D.Impulse);
+            Debug.Log(damageInfo.knockbackDirection * damageInfo.knockbackForce);
+
+            // 3. Avisar al script del fantasma que pause su movimiento por código
+            GhostEnemy ghost = GetComponent<GhostEnemy>();
+            if (ghost != null)
+            {
+                ghost.TriggerKnockbackState();
+            }
+        }
+
+        // Parpadeo
+        if (spriteRenderer != null && isActiveAndEnabled)
+        {
+            if (flashRoutine != null) StopCoroutine(flashRoutine);
+            flashRoutine = StartCoroutine(FlashRoutine());
+        }
+    }
 }

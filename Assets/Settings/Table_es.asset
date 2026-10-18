@@ -31,7 +31,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 197539514630144
-    m_Localized: "Espada de un h\xE9roe ca\xEDdo. Te servir\xE1 para defenderte, por ahora."
+    m_Localized: "Espada de un h\xE9roe ca\xEDdo. Te servir\xE1 para defenderte, por ahora. Presiona Z o CLICK para atacar."
     m_Metadata:
       m_Items: []
   - m_Id: 346382071840768

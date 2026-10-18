@@ -37,7 +37,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float attackCooldown = 0.4f;
     [SerializeField] private float comboWindow = 1.5f;
     [SerializeField] private float attackBufferTime = 0.2f;
-    [SerializeField] private bool isAttackUnlocked = false; 
+
     private float attackBufferCounter;
     private float lastAttackTime = 0f;
     private bool isSecondAttack = false;
@@ -86,7 +86,7 @@ public class PlayerController : MonoBehaviour
         baseScaleY = Mathf.Abs(transform.localScale.y);
     }
 
-   private void Update()
+    private void Update()
     {
         isHoldingJump = jumpAction != null && jumpAction.IsPressed();
 
@@ -134,19 +134,19 @@ public class PlayerController : MonoBehaviour
         }
 
         // --- Jump Logic ---
-        if (coyoteTimeCounter > 0f || isClimbing) 
+        if (coyoteTimeCounter > 0f || isClimbing)
         {
             // FIX: Added "|| isClimbing" inside the parenthesis so the jump block runs on walls
-            if (jumpBufferCounter > 0f && (!isJumping || isClimbing)) 
+            if (jumpBufferCounter > 0f && (!isJumping || isClimbing))
             {
                 float jumpDir = isGravityInverted ? -1f : 1f;
 
                 if (isClimbing)
                 {
-                    climbCooldownTimer = 0.2f; 
+                    climbCooldownTimer = 0.2f;
                     isClimbing = false;
                 }
-                
+
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce * jumpDir);
 
                 jumpBufferCounter = 0f;
@@ -158,7 +158,7 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         bool grounded = IsGrounded();
-        if ((DialogueManager.Instance != null && DialogueManager.Instance.IsDialogueActive) || 
+        if ((DialogueManager.Instance != null && DialogueManager.Instance.IsDialogueActive) ||
             (ItemObtainedManager.Instance != null && ItemObtainedManager.Instance.IsActive))
         {
             rb.linearVelocity = Vector2.zero;
@@ -169,18 +169,18 @@ public class PlayerController : MonoBehaviour
         {
             // Stop gravity while climbing
             rb.gravityScale = 0f;
-            
+
             // Apply vertical climbing velocity
             float verticalClimbSpeed = moveInput.y * climbSpeed;
             if (isGravityInverted) verticalClimbSpeed *= -1f;
 
             float horizontalInput = (isGravityInverted && invertHorizontalInputWithCamera) ? -moveInput.x : moveInput.x;
             rb.linearVelocity = new Vector2(horizontalInput * moveSpeed, verticalClimbSpeed);
-            
+
             // --- ANIMATION LOGIC FOR CLIMBING ---
             animator.SetBool("isClimbing", true);
             animator.SetBool("isWalking", false);
-            
+
             // Freeze animation if not moving vertically, play normally if moving
             if (Mathf.Abs(moveInput.y) > 0.1f)
             {
@@ -204,7 +204,7 @@ public class PlayerController : MonoBehaviour
             {
                 float horizontalInput = (isGravityInverted && invertHorizontalInputWithCamera) ? -moveInput.x : moveInput.x;
                 rb.linearVelocity = new Vector2(horizontalInput * moveSpeed, rb.linearVelocity.y);
-                
+
                 if (facingDirection.x > 0)
                     sprite.flipX = false;
                 else if (facingDirection.x < 0)
@@ -333,7 +333,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        if (value.isPressed)
+        if (value.isPressed && GameManager.Instance != null && GameManager.Instance.isAttackUnlocked)
         {
             attackBufferCounter = attackBufferTime;
         }

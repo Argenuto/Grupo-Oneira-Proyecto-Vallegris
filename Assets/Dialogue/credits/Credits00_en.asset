@@ -27,7 +27,19 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 3469162307584
-    m_Localized: Game Design
+    m_Localized: Script and Narrative
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158256843448320
+    m_Localized: "Ilustraci\xF3n"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 173319285366784
+    m_Localized: UI Design
+    m_Metadata:
+      m_Items: []
+  - m_Id: 176043968159744
+    m_Localized: Sound Effects
     m_Metadata:
       m_Items: []
   references:

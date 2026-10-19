@@ -19,7 +19,7 @@ MonoBehaviour:
     m_Items: []
   m_TableData:
   - m_Id: 693355143168
-    m_Localized: Manager de Pryecto
+    m_Localized: Manager de Proyecto
     m_Metadata:
       m_Items: []
   - m_Id: 2629034827776
@@ -27,7 +27,19 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 3469162307584
-    m_Localized: "Dise\xF1o de Juegos"
+    m_Localized: "Gui\xF3n y Narrativa"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158256843448320
+    m_Localized: Ilustration
+    m_Metadata:
+      m_Items: []
+  - m_Id: 173319285366784
+    m_Localized: Interfaz de Usuario
+    m_Metadata:
+      m_Items: []
+  - m_Id: 176043968159744
+    m_Localized: Efectos de Sonido
     m_Metadata:
       m_Items: []
   references:

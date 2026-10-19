@@ -13,6 +13,7 @@ public class PlayerHealth : Health
     [Header("Audio")]
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip hurtSFX;
+    [SerializeField] private AudioClip deathClip;
 
     [Header("Save Settings")]
     [SerializeField] private string healthPrefsKey = "PlayerCurrentHealth";
@@ -25,7 +26,7 @@ public class PlayerHealth : Health
     private Animator animator;
     private PlayerController playerController;
     private Rigidbody2D body;
-    
+
     private Coroutine invulnerabilityCoroutine;
     private Coroutine regenCoroutine;
     private bool isInvulnerable;
@@ -37,7 +38,7 @@ public class PlayerHealth : Health
         animator = GetComponent<Animator>();
         playerController = GetComponent<PlayerController>();
         body = GetComponent<Rigidbody2D>();
-        
+
         if (renderers == null || renderers.Length == 0)
             renderers = GetComponentsInChildren<SpriteRenderer>(true);
     }
@@ -48,7 +49,7 @@ public class PlayerHealth : Health
         if (PlayerPrefs.HasKey(healthPrefsKey))
         {
             float savedHealth = PlayerPrefs.GetFloat(healthPrefsKey);
-            
+
             // If the saved health is 0 or less, the player died in the last session.
             // We should respawn them with full health instead of instantly killing them.
             if (savedHealth <= 0f)
@@ -95,13 +96,31 @@ public class PlayerHealth : Health
     protected override void OnDeath()
     {
         // Delete the saved health so we don't spawn with 0 health next time
-        PlayerPrefs.DeleteKey(healthPrefsKey); 
+        PlayerPrefs.DeleteKey(healthPrefsKey);
         PlayerPrefs.Save();
 
         if (regenCoroutine != null)
         {
             StopCoroutine(regenCoroutine);
             regenCoroutine = null;
+        }
+
+        // Fix: Force Animator parameters to neutral so airborne states don't block the death animation
+        animator.SetInteger("yVelocity", 0);
+        animator.SetBool("isWalking", false);
+        animator.SetBool("isClimbing", false);
+
+        AudioSource[] allAudioSources = FindObjectsOfType<AudioSource>();
+        foreach (AudioSource source in allAudioSources)
+        {
+            source.Stop();
+        }
+
+        // 2. Play the specific death clip
+        if (audioSource != null && deathClip != null)
+        {
+            // Using PlayOneShot allows the clip to play even if the AudioSource was just stopped above
+            audioSource.PlayOneShot(deathClip);
         }
 
         animator.SetTrigger("dead");
@@ -113,12 +132,12 @@ public class PlayerHealth : Health
     protected override void HandleReset()
     {
         // This hook runs after base.ResetHealth() has restored CurrentHealth to MaxHealth
-        SaveHealth(); 
-        
+        SaveHealth();
+
         StopHurt();
         StopInvulnerability();
         RestartRegeneration();
-        
+
         playerController.enabled = true;
         playerController.CanMove = true;
         playerController.SetGravityInverted(false);
@@ -187,7 +206,7 @@ public class PlayerHealth : Health
         if (regenCoroutine != null)
             StopCoroutine(regenCoroutine);
 
-        if (!IsDead && CurrentHealth < MaxHealth) 
+        if (!IsDead && CurrentHealth < MaxHealth)
         {
             regenCoroutine = StartCoroutine(RegenerationRoutine());
         }
@@ -206,7 +225,7 @@ public class PlayerHealth : Health
             yield return new WaitForSeconds(regenInterval);
         }
 
-     
+
         regenCoroutine = null;
     }
 

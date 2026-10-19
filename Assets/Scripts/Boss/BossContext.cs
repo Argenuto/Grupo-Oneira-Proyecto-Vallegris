@@ -22,6 +22,7 @@ public class BossContext
     public BossArena arena;
     public Transform player;
     public ContactDamage contact;
+    public AudioSource audioSource;
     public float speedMultiplier = 1f;
 
     public Vector2 Position => rb != null ? rb.position : (Vector2)boss.transform.position;

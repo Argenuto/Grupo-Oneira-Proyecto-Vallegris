@@ -549,6 +549,8 @@ public class PlayerController : MonoBehaviour
     public IEnumerator DieScene()
     {
 
+
+        yield return new WaitForSeconds(4f);
         yield return StartCoroutine(FadeManager.Instance.FadeToBlack());
 
         SceneManager.LoadScene(sceneToLoad);

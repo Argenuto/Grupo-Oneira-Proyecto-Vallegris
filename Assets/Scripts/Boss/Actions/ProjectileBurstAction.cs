@@ -16,6 +16,8 @@ public class ProjectileBurstAction : BossAction
     [Min(0.1f)] public float projectileSpeed = 8f;
     [Min(0f)] public float intervalBetweenShots = 0f;
     [Min(0f)] public float damageOverride = 0f;
+    public AudioClip chargeClip;
+    public AudioClip throwBall;
     public BlindPayload blind = new BlindPayload();
 
     public override string Title => $"Proyectiles x{count}" + (blind != null && blind.applyBlind ? " (ciega)" : "");
@@ -28,11 +30,13 @@ public class ProjectileBurstAction : BossAction
             yield break;
             
         ctx.animator.SetTrigger("charging attack");
+        PlaySFX(chargeClip, ctx);
         Vector2 origin = ctx.boss.ProjectileSpawn.position;
         float baseAngle = ResolveBaseAngle(ctx, origin);
         ctx.FaceDirection(ctx.player.position.x - origin.x);
         yield return new WaitForSeconds(0.8f);
 
+        PlaySFX(throwBall, ctx);
 
         for (int i = 0; i < count; i++)
         {
@@ -70,4 +74,17 @@ public class ProjectileBurstAction : BossAction
                 return Mathf.Atan2(to.y, to.x) * Mathf.Rad2Deg;
         }
     }
+
+    public void PlaySFX(AudioClip clip, BossContext ctx)
+    {
+        Debug.Log("HOLAAAA");
+        if (clip != null && ctx.audioSource != null)
+        {
+                    Debug.Log("COLAAAAcaco");
+
+            ctx.audioSource.pitch = UnityEngine.Random.Range(0.9f, 1.1f);
+            ctx.audioSource.PlayOneShot(clip);
+        }
+    }
 }
+

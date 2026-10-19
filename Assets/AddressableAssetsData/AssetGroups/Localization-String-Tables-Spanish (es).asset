@@ -21,6 +21,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale-es
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 586cc48d603028f4cbe493677e8dc749
+    m_Address: Credits00_es
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-es
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 73838054908d295459c0cc0484f9051c
     m_Address: speakers_es
     m_ReadOnly: 1

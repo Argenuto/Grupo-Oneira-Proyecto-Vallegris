@@ -485,8 +485,11 @@ public class PlayerController : MonoBehaviour
             canInteract = true;
             interactableObject = collision;
 
-            if (promptFadeCoroutine != null) StopCoroutine(promptFadeCoroutine);
-            promptFadeCoroutine = StartCoroutine(FadePrompt(1f));
+            if (isActiveAndEnabled)
+            {
+                if (promptFadeCoroutine != null) StopCoroutine(promptFadeCoroutine);
+                promptFadeCoroutine = StartCoroutine(FadePrompt(1f));
+            }
         }
         else if (collision.CompareTag("Destroyable"))
         {
@@ -502,8 +505,11 @@ public class PlayerController : MonoBehaviour
             canInteract = false;
             interactableObject = null;
 
-            if (promptFadeCoroutine != null) StopCoroutine(promptFadeCoroutine);
-            promptFadeCoroutine = StartCoroutine(FadePrompt(0f));
+            if (isActiveAndEnabled)
+            {
+                if (promptFadeCoroutine != null) StopCoroutine(promptFadeCoroutine);
+                promptFadeCoroutine = StartCoroutine(FadePrompt(0f));
+            }
         }
         else if (collision.CompareTag("Destroyable"))
         {

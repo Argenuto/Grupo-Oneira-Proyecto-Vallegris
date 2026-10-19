@@ -18,10 +18,12 @@ public class RoomTransition : MonoBehaviour
 
     private IEnumerator TransitionRoutine(GameObject player)
     {
-        player.GetComponent<PlayerController>().enabled = false;
+        Scene scene = SceneManager.GetActiveScene();
+
+        if (scene.name != "MainMenu")
+            player.GetComponent<PlayerController>().enabled = false;
 
         yield return StartCoroutine(FadeManager.Instance.FadeToBlack());
-         Scene scene = SceneManager.GetActiveScene();
 
         if (scene.name == "MainMenu")
             PlayerPrefs.DeleteAll();

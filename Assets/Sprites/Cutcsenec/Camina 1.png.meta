@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 2d807134b8d7ee942b2d07646f7bac4c
+guid: b0884ce1aa4e5dd4ba8e93cef41d2d05
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 5035247695231352731
-    second: Toca_0
+      213: -4411276400734849491
+    second: Camina 1_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -99,6 +99,19 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
     buildTarget: WebGL
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -115,13 +128,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Toca_0
+      name: Camina 1_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 3
-        width: 8001
-        height: 4497
+        y: 0
+        width: 8000
+        height: 4501
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -130,8 +143,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: b9f7e56d91bc0e540800000000000000
-      internalID: 5035247695231352731
+      spriteID: d26b2284c7ff7c2c0800000000000000
+      internalID: -4411276400734849491
       vertices: []
       indices: 
       edges: []
@@ -150,7 +163,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Toca_0: 5035247695231352731
+      Camina 1_0: -4411276400734849491
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

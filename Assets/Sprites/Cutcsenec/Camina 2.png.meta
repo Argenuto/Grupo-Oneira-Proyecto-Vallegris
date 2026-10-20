@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: a5cafad8d12b72049b43c941e5b6de8f
+guid: 776d715126616a544a12dd06d1be069f
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7935199383070959241
-    second: Se le mota encima la sombra_0
+      213: -7891953112618634571
+    second: Camina 2_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -99,6 +99,19 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
     buildTarget: WebGL
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -115,13 +128,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Se le mota encima la sombra_0
+      name: Camina 2_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 3
+        y: 0
         width: 8001
-        height: 4497
+        height: 4501
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -130,8 +143,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 986e7d1ebcd7f1e60800000000000000
-      internalID: 7935199383070959241
+      spriteID: 5b2f35a15762a7290800000000000000
+      internalID: -7891953112618634571
       vertices: []
       indices: 
       edges: []
@@ -150,7 +163,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Se le mota encima la sombra_0: 7935199383070959241
+      Camina 2_0: -7891953112618634571
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

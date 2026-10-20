@@ -39,6 +39,10 @@ MonoBehaviour:
     m_Key: fx
     m_Metadata:
       m_Items: []
+  - m_Id: 334213094961152
+    m_Key: animat
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

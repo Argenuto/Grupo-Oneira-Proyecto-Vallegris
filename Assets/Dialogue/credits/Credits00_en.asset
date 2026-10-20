@@ -42,6 +42,10 @@ MonoBehaviour:
     m_Localized: Sound Effects
     m_Metadata:
       m_Items: []
+  - m_Id: 334213094961152
+    m_Localized: Animation
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

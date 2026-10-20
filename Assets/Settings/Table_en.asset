@@ -19,7 +19,63 @@ MonoBehaviour:
     m_Items: []
   m_TableData:
   - m_Id: 2664474185728
-    m_Localized: cacacacac
+    m_Localized: This is the statue of a fallen soldier...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 37552670720000
+    m_Localized: His sword might be useful.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 44303574974464
+    m_Localized: I will put it back, I promise...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 197539514630144
+    m_Localized: Sword of a fallen hero. It will serve to defend you, for now. Press Z or CLICK to attack.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 346382071840768
+    m_Localized: We thought the walls would protect us... But the shadow does not break the stone; it seeps in through fear.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 346431963086848
+    m_Localized: By the time we realized, %(it was already inside of us)%.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 439557679562752
+    m_Localized: Your watch ends here. Mine is just beginning.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 522667238703104
+    m_Localized: This appears to be the ladder of the old well...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 527828824702976
+    m_Localized: You have obtained Astral Perception, now you can find new paths. Use it with E or X.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 530613150498816
+    m_Localized: I am sure that shadow came through here...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 530702812135424
+    m_Localized: '%(I must catch it)%, only then will I be able to free my people.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 588870711853056
+    m_Localized: You are the one keeping all the knowledge locked in here.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 588948658798592
+    m_Localized: A bunch of books are useless without anyone willing to read them.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 608293854199808
+    m_Localized: Unlike you, I won't let ignorance absorb me. I will use my sight to learn and to end you if necessary.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 608391791198208
+    m_Localized: Then %(attack)%, Val.
     m_Metadata:
       m_Items: []
   references:

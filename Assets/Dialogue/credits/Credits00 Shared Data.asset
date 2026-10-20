@@ -43,6 +43,14 @@ MonoBehaviour:
     m_Key: animat
     m_Metadata:
       m_Items: []
+  - m_Id: 377710206668800
+    m_Key: game_design
+    m_Metadata:
+      m_Items: []
+  - m_Id: 378854651875328
+    m_Key: music
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

@@ -19,7 +19,7 @@ MonoBehaviour:
     m_Items: []
   m_TableData:
   - m_Id: 2664474185728
-    m_Localized: "Esta es una estatua de un soldado ca\xEDdo....."
+    m_Localized: "Esta es la estatua de un soldado ca\xEDdo..."
     m_Metadata:
       m_Items: []
   - m_Id: 37552670720000
@@ -63,15 +63,15 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 588870711853056
-    m_Localized: "T\xFA eres el que mantiene todo el conocimiento encerrado ac\xE1. \r\n"
+    m_Localized: "T\xFA eres el que mantiene todo el conocimiento encerrado ac\xE1."
     m_Metadata:
       m_Items: []
   - m_Id: 588948658798592
-    m_Localized: "Da nada sirven un mont\xF3n de libros sin nadie dispuesto a leerlos."
+    m_Localized: "De nada sirven un mont\xF3n de libros sin nadie dispuesto a leerlos."
     m_Metadata:
       m_Items: []
   - m_Id: 608293854199808
-    m_Localized: "A diferencia de t\xED, no dejare que la ignorancia me absorba, usar\xE9 mi vista para conocer y para acabarte de ser necesario. "
+    m_Localized: "A diferencia de ti, no dejar\xE9 que la ignorancia me absorba, usar\xE9 mi vista para conocer y para acabarte de ser necesario."
     m_Metadata:
       m_Items: []
   - m_Id: 608391791198208

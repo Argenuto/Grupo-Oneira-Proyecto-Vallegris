@@ -1498,7 +1498,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 4095
 --- !u!114 &644178644
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3580,6 +3580,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   isAttackUnlocked: 0
   isDestroyUnlocked: 1
+  onlyIfCanDestroy: []
 --- !u!4 &1054506933
 Transform:
   m_ObjectHideFlags: 0

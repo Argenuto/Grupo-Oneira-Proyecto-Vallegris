@@ -57,7 +57,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 350
+  spritePixelsToUnits: 87.5
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -117,6 +117,19 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -125,48 +138,49 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 129
-        width: 6886
-        height: 12242
+        y: 0
+        width: 1724
+        height: 3093
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline:
-      - - {x: 1833.169, y: -6094.866}
-        - {x: 1287.4814, y: -5489.5312}
-        - {x: 213.15918, y: -3323.9668}
-        - {x: 76.737305, y: -2096.245}
-        - {x: -25.579102, y: 1459.032}
-        - {x: -17.052734, y: 2183.7288}
-        - {x: 264.31738, y: 2703.8052}
-        - {x: 1747.9053, y: 2490.6592}
-        - {x: 2071.9072, y: 2550.34}
-        - {x: 2208.329, y: 2712.331}
-        - {x: 1526.2197, y: 3019.2615}
-        - {x: 2992.755, y: 3641.648}
-        - {x: 3146.2295, y: 3684.2773}
-        - {x: 3443, y: 4110.5693}
-        - {x: 3443, y: 4281.0864}
-        - {x: 3299.704, y: 4315.19}
-        - {x: 2992.755, y: 3923.001}
-        - {x: 2702.8584, y: 4067.9402}
-        - {x: 1833.169, y: 4008.2593}
-        - {x: 1261.9023, y: 3206.83}
-        - {x: 818.53125, y: 3326.192}
-        - {x: -85.26367, y: 3257.985}
-        - {x: -179.05371, y: 5483.2305}
-        - {x: -230.21191, y: 6105.617}
-        - {x: -878.2158, y: 6121}
-        - {x: -2242.4346, y: 6121}
-        - {x: -2165.6973, y: 18.164253}
-        - {x: -2336.2246, y: -3997.5083}
-        - {x: -2719.9111, y: -5327.54}
-        - {x: -3427.5996, y: -6001.082}
-        - {x: -3443, y: -6018.1333}
-        - {x: -3443, y: -6111.918}
-        - {x: -3419.0732, y: -6120.444}
-        - {x: 1850.2217, y: -6120.444}
+      - - {x: 463.67432, y: -1512.3938}
+        - {x: 380.5327, y: -1446.3132}
+        - {x: 126.84424, y: -994.4069}
+        - {x: 20.252441, y: -589.3966}
+        - {x: 13.856934, y: -271.78323}
+        - {x: -20.252441, y: 548.89557}
+        - {x: 18.120605, y: 606.44965}
+        - {x: 314.4458, y: 704.5048}
+        - {x: 401.85107, y: 617.10785}
+        - {x: 559.60693, y: 653.3456}
+        - {x: 540.4204, y: 691.715}
+        - {x: 491.38818, y: 907.00995}
+        - {x: 627.8257, y: 947.511}
+        - {x: 753.604, y: 896.3518}
+        - {x: 862, y: 1034.908}
+        - {x: 862, y: 1092.462}
+        - {x: 834.6138, y: 1111.6467}
+        - {x: 706.7036, y: 1015.72327}
+        - {x: 585.18896, y: 1026.3815}
+        - {x: 474.3335, y: 1000.8018}
+        - {x: 299.52295, y: 817.4814}
+        - {x: 156.68994, y: 840.9293}
+        - {x: -30.911621, y: 819.613}
+        - {x: -33.043457, y: 915.5365}
+        - {x: -54.361816, y: 1535.8418}
+        - {x: -248.35889, y: 1546.5}
+        - {x: -561.7388, y: 1546.5}
+        - {x: -540.4204, y: 22.382149}
+        - {x: -570.2661, y: -821.7446}
+        - {x: -757.8677, y: -1405.8121}
+        - {x: -841.0093, y: -1446.3132}
+        - {x: -862, y: -1484.6826}
+        - {x: -862, y: -1520.9204}
+        - {x: -806.8999, y: -1523.052}
+        - {x: 470.06982, y: -1523.052}
       physicsShape: []
       tessellationDetail: 0.058
       bones: []
@@ -180,22 +194,23 @@ TextureImporter:
       name: Recurso 20bosquee (1)_1
       rect:
         serializedVersion: 2
-        x: 5717
-        y: 131
-        width: 5276
-        height: 12240
+        x: 1427
+        y: 0
+        width: 1324
+        height: 3093
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline:
-      - - {x: 2638, y: -4600.8438}
-        - {x: 1445.29, y: 6120}
-        - {x: -566.9327, y: 6120}
-        - {x: -609.5645, y: 6090.565}
-        - {x: -2638, y: -6041.7114}
-        - {x: -2638, y: -6118.444}
-        - {x: 2638, y: -6118.444}
+      - - {x: 662, y: -1167.0692}
+        - {x: 358.95023, y: 1546.5}
+        - {x: -146.29489, y: 1546.5}
+        - {x: -154.82224, y: 1493.2091}
+        - {x: -218.77731, y: -363.44348}
+        - {x: -662, y: -1491.0775}
+        - {x: -662, y: -1518.7887}
+        - {x: 662, y: -1518.7887}
       physicsShape: []
       tessellationDetail: 0
       bones: []
@@ -209,23 +224,24 @@ TextureImporter:
       name: Recurso 20bosquee (1)_2
       rect:
         serializedVersion: 2
-        x: 10229
+        x: 2555
         y: 0
-        width: 7233
-        height: 12241
+        width: 1811
+        height: 3093
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline:
-      - - {x: 3616.5, y: -5635.583}
-        - {x: 1604.5797, y: 6104.5044}
-        - {x: 1476.6842, y: 6120.5}
-        - {x: -2044.7056, y: 6120.5}
-        - {x: -3613.5571, y: 5933.988}
-        - {x: -3613.5571, y: -1065.7306}
-        - {x: -2010.6001, y: -6120.5}
-        - {x: 3616.5, y: -6120.5}
+      - - {x: 905.5, y: -1512.3938}
+        - {x: 391.18668, y: 1514.5255}
+        - {x: 367.73648, y: 1518.7887}
+        - {x: -804.77325, y: 1518.7887}
+        - {x: -904.96954, y: 1505.9989}
+        - {x: -904.96954, y: -165.20158}
+        - {x: -431.70197, y: -1542.2367}
+        - {x: -414.64728, y: -1546.5}
+        - {x: 905.5, y: -1546.5}
       physicsShape: []
       tessellationDetail: 0
       bones: []
@@ -247,7 +263,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
       Recurso 20bosquee (1)_0: -8915914308603592814
       Recurso 20bosquee (1)_1: -4937338578724780952

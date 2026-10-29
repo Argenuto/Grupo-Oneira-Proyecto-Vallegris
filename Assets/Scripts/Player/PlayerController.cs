@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     [Header("Climb Settings")]
     [SerializeField] private float climbSpeed = 5f;
     [SerializeField] private Transform wallCheck;
+    [SerializeField] private Transform topWallCheck;
     [SerializeField] private Vector2 wallCheckSize = new Vector2(0.2f, 0.5f);
     [SerializeField] private LayerMask climbableLayer;
 
@@ -93,6 +94,15 @@ public class PlayerController : MonoBehaviour
     // Climb State Variables
     private bool isTouchingWall;
     private bool isClimbing;
+
+    public enum PlayerState
+    {
+        Normal,
+        Climbing,
+        Locked     
+    }
+
+    public PlayerState CurrentState { get; private set; } = PlayerState.Normal;
 
     private void Awake()
     {
@@ -206,6 +216,13 @@ public class PlayerController : MonoBehaviour
 
             // Apply vertical climbing velocity
             float verticalClimbSpeed = moveInput.y * climbSpeed;
+
+            // --- NEW: Block upward movement if reaching the top of the wall ---
+            if (moveInput.y > 0 && !IsTouchingTopWall())
+            {
+                verticalClimbSpeed = 0f;
+            }
+
             if (isGravityInverted) verticalClimbSpeed *= -1f;
 
             float horizontalInput = (isGravityInverted && invertHorizontalInputWithCamera) ? -moveInput.x : moveInput.x;
@@ -216,7 +233,8 @@ public class PlayerController : MonoBehaviour
             animator.SetBool("isWalking", false);
 
             // Freeze animation if not moving vertically, play normally if moving
-            if (Mathf.Abs(moveInput.y) > 0.1f)
+            // (Updated to also freeze if we are stuck at the top)
+            if (Mathf.Abs(moveInput.y) > 0.1f && verticalClimbSpeed != 0f)
             {
                 animator.speed = 1f;
             }
@@ -433,6 +451,11 @@ public class PlayerController : MonoBehaviour
         if (wallCheck == null) return false;
         return Physics2D.OverlapBox(wallCheck.position, wallCheckSize, 0f, climbableLayer) != null;
     }
+    private bool IsTouchingTopWall()
+    {
+        if (topWallCheck == null) return true; // Failsafe so you don't get stuck if you forget to assign it
+        return Physics2D.OverlapBox(topWallCheck.position, wallCheckSize, 0f, climbableLayer) != null;
+    }
 
     private void OnDrawGizmosSelected()
     {
@@ -446,6 +469,13 @@ public class PlayerController : MonoBehaviour
         {
             Gizmos.color = Color.blue;
             Gizmos.DrawWireCube(wallCheck.position, wallCheckSize);
+        }
+
+        // --- NEW: Draw Top Wall Check ---
+        if (topWallCheck != null)
+        {
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawWireCube(topWallCheck.position, wallCheckSize);
         }
 
         Gizmos.color = Color.red;

@@ -92,6 +92,37 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
+--- !u!1 &4979947307299389403
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8021094975918520935}
+  m_Layer: 8
+  m_Name: TopWallCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8021094975918520935
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4979947307299389403}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.02, y: 1.11, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 701346016590202478}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5126486148006276617
 GameObject:
   m_ObjectHideFlags: 0
@@ -401,6 +432,10 @@ PrefabInstance:
       value: level02
       objectReference: {fileID: 0}
     - target: {fileID: 4094860165422834387, guid: 525d75da22ce26d41b7e03df2737ecb3, type: 3}
+      propertyPath: topWallCheck
+      value: 
+      objectReference: {fileID: 8021094975918520935}
+    - target: {fileID: 4094860165422834387, guid: 525d75da22ce26d41b7e03df2737ecb3, type: 3}
       propertyPath: attackCooldown
       value: 0.3
       objectReference: {fileID: 0}
@@ -506,6 +541,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4169674770420281951, guid: 525d75da22ce26d41b7e03df2737ecb3, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5255644980887464092}
+    - targetCorrespondingSourceObject: {fileID: 4169674770420281951, guid: 525d75da22ce26d41b7e03df2737ecb3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8021094975918520935}
     - targetCorrespondingSourceObject: {fileID: 4169674770420281951, guid: 525d75da22ce26d41b7e03df2737ecb3, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1982064246553044810}
@@ -747,4 +785,4 @@ MonoBehaviour:
   walkSFX: {fileID: 8300000, guid: b87388e4a1893634d853d9a5d33b9c49, type: 3}
   jumpSFX: {fileID: 8300000, guid: 546a67d20caa4484384924c9efcc7c39, type: 3}
   attackSFX: {fileID: 8300000, guid: fc8dd3dc2222aa44390d336e0e2d8270, type: 3}
-  walkSFXInterval: 1
+  walkSFXInterval: 0.6

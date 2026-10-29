@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -15,11 +14,6 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private string sceneToLoad;
 
-    [Header("Interaction Settings")]
-    [SerializeField] private SpriteRenderer interactPromptSprite;
-    [SerializeField] private SpriteRenderer interactPromptBG;
-
-    [SerializeField] private float promptFadeDuration = 0.2f;
 
     [Header("Climb Settings")]
     [SerializeField] private float climbSpeed = 5f;
@@ -69,13 +63,9 @@ public class PlayerController : MonoBehaviour
     private float baseScaleY;
     private float baseScaleX;
 
-    [Header("Audio Settings")]
-    [SerializeField] private AudioSource audioSource;
-    [SerializeField] private AudioClip walkSFX;
-    [SerializeField] private AudioClip jumpSFX;
-    [SerializeField] private AudioClip attackSFX;
-    [SerializeField] private float walkSFXInterval = 0.3f;
-    private float walkTimer;
+    [Header("Component References")]
+    [SerializeField] private PlayerAudio playerAudio;
+    [SerializeField] private PlayerUI playerUI;
 
     public bool CanMove { get; set; } = true;
     private Rigidbody2D rb;
@@ -111,14 +101,6 @@ public class PlayerController : MonoBehaviour
         playerInput = GetComponent<PlayerInput>();
         animator = GetComponent<Animator>();
 
-        // Make the prompt transparent at the start
-        if (interactPromptSprite != null)
-        {
-            Color c = interactPromptSprite.color;
-            c.a = 0f;
-            interactPromptSprite.color = c;
-            interactPromptBG.color = c;
-        }
 
         jumpAction = playerInput.actions["Jump"];
         baseGravityScale = Mathf.Abs(rb.gravityScale);
@@ -203,7 +185,7 @@ public class PlayerController : MonoBehaviour
                 jumpBufferCounter = 0f;
                 coyoteTimeCounter = 0f;
                 isJumping = true;
-                PlaySFX(jumpSFX);
+                playerAudio.PlayJump();
             }
         }
     }
@@ -276,18 +258,12 @@ public class PlayerController : MonoBehaviour
             {
                 animator.SetBool("isWalking", true);
 
-                // Add this block for footstep sounds
-                walkTimer -= Time.fixedDeltaTime;
-                if (walkTimer <= 0f)
-                {
-                    PlaySFX(walkSFX);
-                    walkTimer = walkSFXInterval;
-                }
+                playerAudio.SetWalking(true);
             }
             else
             {
                 animator.SetBool("isWalking", false);
-                walkTimer = 0f; // Reset timer when stopping
+                playerAudio.SetWalking(false);
             }
             ApplyBetterJumpGravity();
         }
@@ -342,7 +318,7 @@ public class PlayerController : MonoBehaviour
 
     private void PerformAttack()
     {
-        PlaySFX(attackSFX);
+        playerAudio.PlayAttack();
         nextAttackTime = Time.time + attackCooldown;
 
         if (Time.time - lastAttackTime > comboWindow)
@@ -484,12 +460,7 @@ public class PlayerController : MonoBehaviour
         {
             canInteract = true;
             interactableObject = collision;
-
-            if (isActiveAndEnabled)
-            {
-                if (promptFadeCoroutine != null) StopCoroutine(promptFadeCoroutine);
-                promptFadeCoroutine = StartCoroutine(FadePrompt(1f));
-            }
+            if (isActiveAndEnabled) playerUI.ShowInteractPrompt();
         }
         else if (collision.CompareTag("Destroyable"))
         {
@@ -504,12 +475,7 @@ public class PlayerController : MonoBehaviour
         {
             canInteract = false;
             interactableObject = null;
-
-            if (isActiveAndEnabled)
-            {
-                if (promptFadeCoroutine != null) StopCoroutine(promptFadeCoroutine);
-                promptFadeCoroutine = StartCoroutine(FadePrompt(0f));
-            }
+            if (isActiveAndEnabled) playerUI.HideInteractPrompt(); // <--- Updated
         }
         else if (collision.CompareTag("Destroyable"))
         {
@@ -518,28 +484,6 @@ public class PlayerController : MonoBehaviour
             canDestroy = false;
             interactableObject = null;
         }
-    }
-
-    private IEnumerator FadePrompt(float targetAlpha)
-    {
-        if (interactPromptSprite == null) yield break;
-
-        Color currentColor = interactPromptSprite.color;
-        float startAlpha = currentColor.a;
-        float time = 0f;
-
-        while (time < promptFadeDuration)
-        {
-            time += Time.deltaTime;
-            float newAlpha = Mathf.Lerp(startAlpha, targetAlpha, time / promptFadeDuration);
-            interactPromptSprite.color = new Color(currentColor.r, currentColor.g, currentColor.b, newAlpha);
-            interactPromptBG.color = new Color(currentColor.r, currentColor.g, currentColor.b, newAlpha);
-            yield return null;
-        }
-
-        interactPromptSprite.color = new Color(currentColor.r, currentColor.g, currentColor.b, targetAlpha);
-        interactPromptBG.color = new Color(currentColor.r, currentColor.g, currentColor.b, targetAlpha);
-
     }
 
     public void setAttackTrue()
@@ -552,15 +496,12 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("isAttacking", false);
     }
 
-    public IEnumerator DieScene()
+    public void OnDeathAnimationComplete()
     {
-
-
-        yield return new WaitForSeconds(4f);
-        yield return StartCoroutine(FadeManager.Instance.FadeToBlack());
-
-        SceneManager.LoadScene(sceneToLoad);
-
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.HandlePlayerDeath();
+        }
     }
 
     private IEnumerator FadeAndDisableObject(GameObject targetObject)
@@ -590,12 +531,4 @@ public class PlayerController : MonoBehaviour
         targetObject.SetActive(false);
     }
 
-    private void PlaySFX(AudioClip clip)
-    {
-        if (clip != null && audioSource != null)
-        {
-            audioSource.pitch = UnityEngine.Random.Range(0.9f, 1.1f);
-            audioSource.PlayOneShot(clip);
-        }
-    }
 }

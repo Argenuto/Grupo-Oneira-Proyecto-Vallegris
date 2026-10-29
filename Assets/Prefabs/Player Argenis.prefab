@@ -361,6 +361,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 6936124809823879605}
     - target: {fileID: 4094860165422834387, guid: 525d75da22ce26d41b7e03df2737ecb3, type: 3}
+      propertyPath: playerUI
+      value: 
+      objectReference: {fileID: 7130356739137389506}
+    - target: {fileID: 4094860165422834387, guid: 525d75da22ce26d41b7e03df2737ecb3, type: 3}
       propertyPath: attackSFX
       value: 
       objectReference: {fileID: 8300000, guid: fc8dd3dc2222aa44390d336e0e2d8270, type: 3}
@@ -388,6 +392,10 @@ PrefabInstance:
       propertyPath: meleeAttack
       value: 
       objectReference: {fileID: 5028362890506888039}
+    - target: {fileID: 4094860165422834387, guid: 525d75da22ce26d41b7e03df2737ecb3, type: 3}
+      propertyPath: playerAudio
+      value: 
+      objectReference: {fileID: 5483790902817804837}
     - target: {fileID: 4094860165422834387, guid: 525d75da22ce26d41b7e03df2737ecb3, type: 3}
       propertyPath: sceneToLoad
       value: level02
@@ -514,6 +522,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7902855792567983122, guid: 525d75da22ce26d41b7e03df2737ecb3, type: 3}
       insertIndex: -1
       addedObject: {fileID: 632956679214801010}
+    - targetCorrespondingSourceObject: {fileID: 7902855792567983122, guid: 525d75da22ce26d41b7e03df2737ecb3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7130356739137389506}
+    - targetCorrespondingSourceObject: {fileID: 7902855792567983122, guid: 525d75da22ce26d41b7e03df2737ecb3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5483790902817804837}
   m_SourcePrefab: {fileID: 100100000, guid: 525d75da22ce26d41b7e03df2737ecb3, type: 3}
 --- !u!4 &701346016590202478 stripped
 Transform:
@@ -703,3 +717,34 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &7130356739137389506
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6758374822794143779}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f22eda0f899471444b144900328e4f28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerUI
+  interactPromptSprite: {fileID: 2400444390978272785}
+  interactPromptBG: {fileID: 3125526538522609063}
+  promptFadeDuration: 0.2
+--- !u!114 &5483790902817804837
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6758374822794143779}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7011038e3a45681429853e99d63a4bb7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerAudio
+  walkSFX: {fileID: 8300000, guid: b87388e4a1893634d853d9a5d33b9c49, type: 3}
+  jumpSFX: {fileID: 8300000, guid: 546a67d20caa4484384924c9efcc7c39, type: 3}
+  attackSFX: {fileID: 8300000, guid: fc8dd3dc2222aa44390d336e0e2d8270, type: 3}
+  walkSFXInterval: 1

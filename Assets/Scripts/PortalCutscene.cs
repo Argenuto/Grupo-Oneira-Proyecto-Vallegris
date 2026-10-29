@@ -12,7 +12,7 @@ public class PortalCutscene : MonoBehaviour
     public GameObject portalPrefab;
     public Transform portalSpawnPoint;
     public AudioClip portalSound;
-    
+
     [Header("Transition Settings")]
     public string sceneToLoad;
     public string connectionId;
@@ -33,17 +33,14 @@ public class PortalCutscene : MonoBehaviour
     {
         // 1. Stop Player Input and Movement
         // 1. Stop Player Input, Movement, and Animation
-        player.GetComponent<PlayerController>().enabled = false;
-        Rigidbody2D rb = player.GetComponent<Rigidbody2D>();
-        rb.linearVelocity = Vector2.zero; 
-
+        
         Animator anim = player.GetComponent<Animator>();
         if (anim != null)
         {
             anim.SetBool("isWalking", false);
             anim.SetBool("isClimbing", false);
             anim.SetInteger("yVelocity", 0);
-            anim.speed = 1f; 
+            anim.speed = 1f;
         }
         // 2. Crossfade Audio
         StartCoroutine(FadeAudioVolume(currentMusic, 0f, audioFadeSpeed));
@@ -51,10 +48,13 @@ public class PortalCutscene : MonoBehaviour
         newMusic.Play();
         StartCoroutine(FadeAudioVolume(newMusic, 1f, audioFadeSpeed));
 
-      // 3. Screen drains of color via Post-Processing Volume
+        // 3. Screen drains of color via Post-Processing Volume
         yield return StartCoroutine(FadeManager.Instance.AnimateDesaturation(0.7f, 2f));
+        GameManager.Instance.TogglePlayerControl(false);
+        Rigidbody2D rb = player.GetComponent<Rigidbody2D>();
+        rb.linearVelocity = Vector2.zero;
         yield return new WaitForSeconds(3f); // Dramatic pause
-
+        
         // 4. Portal appears
         GameObject portal = Instantiate(portalPrefab, portalSpawnPoint.position, portalSpawnPoint.rotation);
         portalSource.PlayOneShot(portalSound);
@@ -72,7 +72,7 @@ public class PortalCutscene : MonoBehaviour
         {
             timer += Time.deltaTime;
             float t = timer / drawDuration;
-            
+
             // Sucks the player towards the portal center and shrinks them
             player.transform.position = Vector3.Lerp(startPos, portal.transform.position, t);
             player.transform.localScale = Vector3.Lerp(startScale, Vector3.zero, t);
@@ -85,15 +85,15 @@ public class PortalCutscene : MonoBehaviour
 
         // 6. Fade to black and transition scenes
         yield return StartCoroutine(FadeManager.Instance.FadeToBlack());
-        
-        TransitionManager.targetConnectionId = connectionId; 
-        SceneManager.LoadScene(sceneToLoad); 
+
+        TransitionManager.targetConnectionId = connectionId;
+        SceneManager.LoadScene(sceneToLoad);
     }
 
     private IEnumerator FadeAudioVolume(AudioSource audioSource, float targetVolume, float duration)
     {
         if (audioSource == null) yield break;
-        
+
         float startVolume = audioSource.volume;
         float timer = 0f;
 

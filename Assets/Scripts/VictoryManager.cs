@@ -50,8 +50,7 @@ public class VictoryManager : MonoBehaviour
     private IEnumerator VictorySequenceRoutine()
     {
         // 1. Setup initial state and disable player
-        if (playerController != null) playerController.enabled = false;
-        
+        GameManager.Instance.TogglePlayerControl(false);        
         blackScreenGroup.alpha = 0f;
         blackScreenGroup.gameObject.SetActive(true);
         

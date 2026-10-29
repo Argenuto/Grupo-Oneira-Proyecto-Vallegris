@@ -98,13 +98,14 @@ public class PlayerHealth : Health
         // Delete the saved health so we don't spawn with 0 health next time
         PlayerPrefs.DeleteKey(healthPrefsKey);
         PlayerPrefs.Save();
+        
 
         if (regenCoroutine != null)
         {
             StopCoroutine(regenCoroutine);
             regenCoroutine = null;
         }
-
+        GameManager.Instance.TogglePlayerControl(false);
         // Fix: Force Animator parameters to neutral so airborne states don't block the death animation
         animator.SetInteger("yVelocity", 0);
         animator.SetBool("isWalking", false);

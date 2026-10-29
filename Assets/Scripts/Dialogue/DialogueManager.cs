@@ -79,6 +79,7 @@ public class DialogueManager : MonoBehaviour
 
     public void StartDialogue(DialogueObject dialogueObj, Action onEnd = null)
     {
+        GameManager.Instance.TogglePlayerControl(false);
         if (dialogueObj == null || dialogueObj.lines == null || dialogueObj.lines.Length == 0) return;
 
         currentDialogue = dialogueObj;
@@ -262,6 +263,7 @@ public class DialogueManager : MonoBehaviour
 
     private void EndDialogue()
     {
+        GameManager.Instance.TogglePlayerControl(true);
         dialoguePanel.SetActive(false);
         currentDialogue = null;
 

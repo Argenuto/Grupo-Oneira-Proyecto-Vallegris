@@ -217,12 +217,14 @@ En `BossController`:
 - `startsAtHealthPercent`: `100`
 - `pattern`: asignar `BossPattern_Walker`
 - `speedMultiplier`: `1`
-- `transitionInvulnerableTime`: `1`
+- `transitionInvulnerableTime`: entre `1.5` y `2`
 
 Esto significa:
 - al empezar el combate, entra en la fase 1
-- ejecuta el patrón
+- ejecuta el patrón si `decisionTree` está vacío
 - se repite mientras el boss siga vivo
+
+El sistema mantiene compatibilidad con los patrones existentes: si una fase no tiene `decisionTree`, sigue ejecutando su `BossPattern` en el modo `Loop` o `Once` configurado.
 
 ---
 
@@ -337,8 +339,31 @@ Esto hace que al entrar en la escena el combate arranque solo.
 - el objeto del jugador debe tener el tag `Player`
 
 ### 9.3 Comprobar que hay arena
-- `BossArena` debe estar asignado
+- Asignar `BossArena` en el prefab cuando sea posible. Si está vacío, el boss busca un `BossArena` activo en la escena.
+- Mantener una sola arena por combate para evitar referencias ambiguas.
 - `projectileSpawn` debe estar correcto
+
+### 9.4 Configurar las tres fases del prefab `Boss`
+El prefab del proyecto ya incluye tres fases con estos umbrales:
+
+| Fase | Vida | Velocidad | Árbol |
+|---|---:|---:|---|
+| Tanteo | 100% | 1.0 | `BossDecisionTree_Phase1` |
+| Se pone serio | 66% | 1.15 | `BossDecisionTree_Phase2` |
+| Enfurecido | 33% | 1.3 | `BossDecisionTree_Phase3` |
+
+Cada fase expone en Odin el retardo de reacción, la duración mínima del telegraph, la ventana mínima del jugador, las distancias y el color. Los árboles usan ramas por distancia y hojas de entradas ponderadas; cada hoja tiene una acción de respaldo. Se pueden cambiar las acciones y sus pesos directamente desde el árbol.
+Una entrada puede ejecutar una acción, un patrón legacy o un combo de acciones; los combos respetan `maxComboActions` y garantizan `minimumPlayerWindow` entre acciones, contando la recuperación configurada.
+
+Acciones disponibles:
+- `MeleeSlashAction`: asignar `targetLayers` a la capa del jugador.
+- `DashAction` y `BackstepAction`: respetan los límites de `BossArena`.
+- `ProjectileFanAction`, `ProjectilePairAction` y `ProjectileBurstAction`: asignar `BossProjectile` y verificar su `targetLayers`.
+- `BlindAction`: tiene señal previa y duración limitada; no crea proyectiles.
+- `ArenaHazardAction`: solo está en fase 3; muestra una marca en el suelo antes de soltar hasta dos proyectiles de peligro. Ajustar `floorOffset` al nivel del suelo.
+- `RecoveryAction`: puede configurarse con una ventana visible y multiplicador de daño recibido.
+
+La transición cancela la acción, desactiva el daño por contacto, limpia proyectiles/peligros y da invulnerabilidad temporal. El proyecto no tiene Feel instalado; `phaseColor`, `onEnter` y `onPhaseChanged` quedan disponibles para enlazar feedback de cámara, sonido o música sin agregar una dependencia.
 
 ---
 
@@ -396,7 +421,8 @@ Si quieres dejar la escena funcionando con lo mínimo necesario, este es el chec
 - [ ] BossHealth configurado
 - [ ] ContactDamage apuntando al Player
 - [ ] ScriptableObject `BossPattern`
-- [ ] Fase 1 con patrón del boss
+- [ ] Fases con árbol de decisiones o patrón legacy
+- [ ] `BossArena` con límites y referencia disponible para el boss
 - [ ] `PatrolAction` en el patrón
 - [ ] `WaitAction` en el patrón
 - [ ] `ProjectileBurstAction` en el patrón

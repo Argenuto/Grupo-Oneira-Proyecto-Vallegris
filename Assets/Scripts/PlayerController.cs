@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
+using UnityEngine.Events;
 
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -15,15 +15,11 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private string sceneToLoad;
 
-    [Header("Interaction Settings")]
-    [SerializeField] private SpriteRenderer interactPromptSprite;
-    [SerializeField] private SpriteRenderer interactPromptBG;
-
-    [SerializeField] private float promptFadeDuration = 0.2f;
 
     [Header("Climb Settings")]
     [SerializeField] private float climbSpeed = 5f;
     [SerializeField] private Transform wallCheck;
+    [SerializeField] private Transform topWallCheck;
     [SerializeField] private Vector2 wallCheckSize = new Vector2(0.2f, 0.5f);
     [SerializeField] private LayerMask climbableLayer;
 
@@ -69,15 +65,14 @@ public class PlayerController : MonoBehaviour
     private float baseScaleY;
     private float baseScaleX;
 
-    [Header("Audio Settings")]
-    [SerializeField] private AudioSource audioSource;
-    [SerializeField] private AudioClip walkSFX;
-    [SerializeField] private AudioClip jumpSFX;
-    [SerializeField] private AudioClip attackSFX;
-    [SerializeField] private float walkSFXInterval = 0.3f;
-    private float walkTimer;
+    [Header("Component References")]
+    [SerializeField] private PlayerAudio playerAudio;
+    [SerializeField] private PlayerUI playerUI;
 
     public bool CanMove { get; set; } = true;
+    public UnityEvent onAttackStarted = new UnityEvent();
+    public bool IsGroundedForBoss => IsGrounded();
+    public Vector2 WorldVelocity => rb != null ? rb.linearVelocity : Vector2.zero;
     private Rigidbody2D rb;
     private PlayerInput playerInput;
     private InputAction jumpAction;
@@ -104,6 +99,15 @@ public class PlayerController : MonoBehaviour
     private bool isTouchingWall;
     private bool isClimbing;
 
+    public enum PlayerState
+    {
+        Normal,
+        Climbing,
+        Locked
+    }
+
+    public PlayerState CurrentState { get; private set; } = PlayerState.Normal;
+
     private void Awake()
     {
         StartCoroutine(FadeManager.Instance.FadeToClear());
@@ -111,14 +115,6 @@ public class PlayerController : MonoBehaviour
         playerInput = GetComponent<PlayerInput>();
         animator = GetComponent<Animator>();
 
-        // Make the prompt transparent at the start
-        if (interactPromptSprite != null)
-        {
-            Color c = interactPromptSprite.color;
-            c.a = 0f;
-            interactPromptSprite.color = c;
-            interactPromptBG.color = c;
-        }
 
         jumpAction = playerInput.actions["Jump"];
         baseGravityScale = Mathf.Abs(rb.gravityScale);
@@ -137,32 +133,61 @@ public class PlayerController : MonoBehaviour
         transform.localScale = scale;
     }
 
+    private void OnEnable()
+    {
+        // Subscribe to the event
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.OnPlayerControlToggled += HandleControlToggle;
+        }
+    }
+
+    private void OnDisable()
+    {
+        // Always unsubscribe to prevent memory leaks
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.OnPlayerControlToggled -= HandleControlToggle;
+        }
+    }
+
+
+
     private void Update()
     {
-        isHoldingJump = jumpAction != null && jumpAction.IsPressed();
+        if (CurrentState == PlayerState.Locked) return;
 
+        isHoldingJump = jumpAction != null && jumpAction.IsPressed();
         bool grounded = IsGrounded();
         float verticalVelocityRel = isGravityInverted ? -rb.linearVelocity.y : rb.linearVelocity.y;
 
-        if (climbCooldownTimer > 0f)
-        {
-            climbCooldownTimer -= Time.deltaTime;
-        }
+        // Timers
+        if (climbCooldownTimer > 0f) climbCooldownTimer -= Time.deltaTime;
+        if (jumpBufferCounter > 0f) jumpBufferCounter -= Time.deltaTime;
+        if (attackBufferCounter > 0f) attackBufferCounter -= Time.deltaTime;
 
-        // --- Climbing Logic ---
+        // --- State Transitions ---
         isTouchingWall = IsTouchingWall();
 
         if (isTouchingWall && Mathf.Abs(moveInput.y) > 0.1f && climbCooldownTimer <= 0f)
         {
-            isClimbing = true;
-            isJumping = false; // <--- FIX: Reset jump state when grabbing a wall
+            CurrentState = PlayerState.Climbing;
+            isJumping = false;
         }
         else if (!isTouchingWall || grounded)
         {
-            isClimbing = false;
+            if (CurrentState == PlayerState.Climbing) CurrentState = PlayerState.Normal;
         }
 
-        if (grounded && verticalVelocityRel <= 0.01f && !isClimbing)
+        // --- Attack Buffer ---
+        if (attackBufferCounter > 0f && Time.time >= nextAttackTime)
+        {
+            PerformAttack();
+            attackBufferCounter = 0f;
+        }
+
+        // --- Coyote Time & Jump Logic ---
+        if (grounded && verticalVelocityRel <= 0.01f && CurrentState != PlayerState.Climbing)
         {
             coyoteTimeCounter = coyoteTime;
             isJumping = false;
@@ -172,125 +197,83 @@ public class PlayerController : MonoBehaviour
             coyoteTimeCounter -= Time.deltaTime;
         }
 
-        if (jumpBufferCounter > 0f)
-            jumpBufferCounter -= Time.deltaTime;
-
-        if (attackBufferCounter > 0f)
-            attackBufferCounter -= Time.deltaTime;
-
-        if (attackBufferCounter > 0f && Time.time >= nextAttackTime)
+        if ((coyoteTimeCounter > 0f || CurrentState == PlayerState.Climbing) && jumpBufferCounter > 0f)
         {
-            PerformAttack();
-            attackBufferCounter = 0f;
+            ExecuteJump();
+        }
+    }
+
+    private void ExecuteJump()
+    {
+        float jumpDir = isGravityInverted ? -1f : 1f;
+
+        if (CurrentState == PlayerState.Climbing)
+        {
+            climbCooldownTimer = 0.2f;
+            CurrentState = PlayerState.Normal;
         }
 
-        // --- Jump Logic ---
-        if (coyoteTimeCounter > 0f || isClimbing)
-        {
-            // FIX: Added "|| isClimbing" inside the parenthesis so the jump block runs on walls
-            if (jumpBufferCounter > 0f && (!isJumping || isClimbing))
-            {
-                float jumpDir = isGravityInverted ? -1f : 1f;
-
-                if (isClimbing)
-                {
-                    climbCooldownTimer = 0.2f;
-                    isClimbing = false;
-                }
-
-                rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce * jumpDir);
-
-                jumpBufferCounter = 0f;
-                coyoteTimeCounter = 0f;
-                isJumping = true;
-                PlaySFX(jumpSFX);
-            }
-        }
+        rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce * jumpDir);
+        jumpBufferCounter = 0f;
+        coyoteTimeCounter = 0f;
+        isJumping = true;
+        playerAudio.PlayJump();
     }
     private void FixedUpdate()
     {
+        if (CurrentState == PlayerState.Locked) return;
+
+        switch (CurrentState)
+        {
+            case PlayerState.Normal:
+                HandleNormalMovement();
+                break;
+            case PlayerState.Climbing:
+                HandleClimbingMovement();
+                break;
+        }
+    }
+
+    private void HandleClimbingMovement()
+    {
+        rb.gravityScale = 0f;
+        float verticalClimbSpeed = moveInput.y * climbSpeed;
+
+        if (moveInput.y > 0 && !IsTouchingTopWall())
+        {
+            verticalClimbSpeed = 0f;
+        }
+
+        if (isGravityInverted) verticalClimbSpeed *= -1f;
+
+        float horizontalInput = (isGravityInverted && invertHorizontalInputWithCamera) ? -moveInput.x : moveInput.x;
+        rb.linearVelocity = new Vector2(horizontalInput * moveSpeed, verticalClimbSpeed);
+
+        animator.SetBool("isClimbing", true);
+        animator.SetBool("isWalking", false);
+        animator.speed = (Mathf.Abs(moveInput.y) > 0.1f && verticalClimbSpeed != 0f) ? 1f : 0f;
+    }
+
+    private void HandleNormalMovement()
+    {
+        animator.SetBool("isClimbing", false);
+        animator.speed = 1f;
+
+        rb.gravityScale = isGravityInverted ? -baseGravityScale : baseGravityScale;
+        float horizontalInput = (isGravityInverted && invertHorizontalInputWithCamera) ? -moveInput.x : moveInput.x;
+
+        rb.linearVelocity = new Vector2(horizontalInput * moveSpeed, rb.linearVelocity.y);
+
+        velocityConverted = (int)Math.Floor(rb.linearVelocity.y * (isGravityInverted ? -100f : 100f));
+
         bool grounded = IsGrounded();
-        if ((DialogueManager.Instance != null && DialogueManager.Instance.IsDialogueActive) ||
-            (ItemObtainedManager.Instance != null && ItemObtainedManager.Instance.IsActive))
-        {
-            rb.linearVelocity = Vector2.zero;
-            return;
-        }
+        animator.SetInteger("yVelocity", grounded ? 0 : velocityConverted);
 
-        if (isClimbing)
-        {
-            // Stop gravity while climbing
-            rb.gravityScale = 0f;
+        bool isMovingH = rb.linearVelocity.x != 0 && grounded;
+        animator.SetBool("isWalking", isMovingH);
+        playerAudio.SetWalking(isMovingH);
 
-            // Apply vertical climbing velocity
-            float verticalClimbSpeed = moveInput.y * climbSpeed;
-            if (isGravityInverted) verticalClimbSpeed *= -1f;
-
-            float horizontalInput = (isGravityInverted && invertHorizontalInputWithCamera) ? -moveInput.x : moveInput.x;
-            rb.linearVelocity = new Vector2(horizontalInput * moveSpeed, verticalClimbSpeed);
-
-            // --- ANIMATION LOGIC FOR CLIMBING ---
-            animator.SetBool("isClimbing", true);
-            animator.SetBool("isWalking", false);
-
-            // Freeze animation if not moving vertically, play normally if moving
-            if (Mathf.Abs(moveInput.y) > 0.1f)
-            {
-                animator.speed = 1f;
-            }
-            else
-            {
-                animator.speed = 0f;
-            }
-        }
-        else
-        {
-            // --- RESET ANIMATION LOGIC FOR NORMAL MOVEMENT ---
-            animator.SetBool("isClimbing", false);
-            animator.speed = 1f; // IMPORTANT: Always reset speed to 1 when not climbing!
-
-            // Restore proper gravity scale
-            rb.gravityScale = isGravityInverted ? -baseGravityScale : baseGravityScale;
-
-            if (CanMove)
-            {
-                float horizontalInput = (isGravityInverted && invertHorizontalInputWithCamera) ? -moveInput.x : moveInput.x;
-                rb.linearVelocity = new Vector2(horizontalInput * moveSpeed, rb.linearVelocity.y);
-
-                /*if (facingDirection.x > 0)
-                    sprite.flipX = false;
-                else if (facingDirection.x < 0)
-                    sprite.flipX = true;*/
-            }
-
-            if (isGravityInverted)
-                velocityConverted = (int)Math.Floor(rb.linearVelocity.y * -100f);
-            else
-                velocityConverted = (int)Math.Floor(rb.linearVelocity.y * 100f);
-
-            animator.SetInteger("yVelocity", velocityConverted);
-            if (grounded)
-                animator.SetInteger("yVelocity", 0);
-
-            if (rb.linearVelocity.x != 0 && grounded)
-            {
-                animator.SetBool("isWalking", true);
-
-                // Add this block for footstep sounds
-                walkTimer -= Time.fixedDeltaTime;
-                if (walkTimer <= 0f)
-                {
-                    PlaySFX(walkSFX);
-                    walkTimer = walkSFXInterval;
-                }
-            }
-            else
-            {
-                animator.SetBool("isWalking", false);
-                walkTimer = 0f; // Reset timer when stopping
-            }
-            ApplyBetterJumpGravity();
-        }
+        ApplyBetterJumpGravity();
     }
 
     private void ApplyBetterJumpGravity()
@@ -342,7 +325,8 @@ public class PlayerController : MonoBehaviour
 
     private void PerformAttack()
     {
-        PlaySFX(attackSFX);
+        onAttackStarted.Invoke();
+        playerAudio.PlayAttack();
         nextAttackTime = Time.time + attackCooldown;
 
         if (Time.time - lastAttackTime > comboWindow)
@@ -371,18 +355,13 @@ public class PlayerController : MonoBehaviour
     [UnityEngine.Scripting.Preserve]
     private void OnMove(InputValue value)
     {
-        if ((DialogueManager.Instance != null && DialogueManager.Instance.IsDialogueActive) ||
-            (ItemObtainedManager.Instance != null && ItemObtainedManager.Instance.IsActive))
-        {
-            moveInput = Vector2.zero;
-            return;
-        }
+        if (CurrentState == PlayerState.Locked) return;
 
         moveInput = value.Get<Vector2>();
 
         float effectiveInputX = (isGravityInverted && invertHorizontalInputWithCamera) ? -moveInput.x : moveInput.x;
 
-        if (Mathf.Abs(effectiveInputX) > 0.1f && !isClimbing)
+        if (Mathf.Abs(effectiveInputX) > 0.1f && CurrentState != PlayerState.Climbing)
         {
             facingDirection = effectiveInputX > 0 ? Vector2.right : Vector2.left;
             UpdateFlip();
@@ -391,32 +370,20 @@ public class PlayerController : MonoBehaviour
     [UnityEngine.Scripting.Preserve]
     private void OnJump(InputValue value)
     {
-        if ((DialogueManager.Instance != null && DialogueManager.Instance.IsDialogueActive) ||
-            (ItemObtainedManager.Instance != null && ItemObtainedManager.Instance.IsActive))
-        {
-            return;
-        }
-
-        if (value.isPressed)
-        {
-            jumpBufferCounter = jumpBufferTime;
-        }
+        if (CurrentState == PlayerState.Locked) return;
+        if (value.isPressed) jumpBufferCounter = jumpBufferTime;
     }
     [UnityEngine.Scripting.Preserve]
     private void OnAttack(InputValue value)
     {
-        if ((DialogueManager.Instance != null && DialogueManager.Instance.IsDialogueActive) ||
-            (ItemObtainedManager.Instance != null && ItemObtainedManager.Instance.IsActive))
-        {
-            return;
-        }
+        if (CurrentState == PlayerState.Locked) return;
 
         if (value.isPressed && GameManager.Instance != null && GameManager.Instance.isAttackUnlocked)
         {
             attackBufferCounter = attackBufferTime;
         }
 
-        if (canInteract && interactableObject != null && !isClimbing)
+        if (canInteract && interactableObject != null && CurrentState != PlayerState.Climbing)
         {
             interactableObject.GetComponent<DialogueTrigger>().Interact();
         }
@@ -457,6 +424,11 @@ public class PlayerController : MonoBehaviour
         if (wallCheck == null) return false;
         return Physics2D.OverlapBox(wallCheck.position, wallCheckSize, 0f, climbableLayer) != null;
     }
+    private bool IsTouchingTopWall()
+    {
+        if (topWallCheck == null) return true; // Failsafe so you don't get stuck if you forget to assign it
+        return Physics2D.OverlapBox(topWallCheck.position, wallCheckSize, 0f, climbableLayer) != null;
+    }
 
     private void OnDrawGizmosSelected()
     {
@@ -472,6 +444,13 @@ public class PlayerController : MonoBehaviour
             Gizmos.DrawWireCube(wallCheck.position, wallCheckSize);
         }
 
+        // --- NEW: Draw Top Wall Check ---
+        if (topWallCheck != null)
+        {
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawWireCube(topWallCheck.position, wallCheckSize);
+        }
+
         Gizmos.color = Color.red;
         Vector2 drawDirection = facingDirection;
         Vector2 drawPosition = (Vector2)transform.position + (drawDirection * attackDistance);
@@ -484,12 +463,7 @@ public class PlayerController : MonoBehaviour
         {
             canInteract = true;
             interactableObject = collision;
-
-            if (isActiveAndEnabled)
-            {
-                if (promptFadeCoroutine != null) StopCoroutine(promptFadeCoroutine);
-                promptFadeCoroutine = StartCoroutine(FadePrompt(1f));
-            }
+            if (isActiveAndEnabled) playerUI.ShowInteractPrompt();
         }
         else if (collision.CompareTag("Destroyable"))
         {
@@ -504,12 +478,7 @@ public class PlayerController : MonoBehaviour
         {
             canInteract = false;
             interactableObject = null;
-
-            if (isActiveAndEnabled)
-            {
-                if (promptFadeCoroutine != null) StopCoroutine(promptFadeCoroutine);
-                promptFadeCoroutine = StartCoroutine(FadePrompt(0f));
-            }
+            if (isActiveAndEnabled) playerUI.HideInteractPrompt(); // <--- Updated
         }
         else if (collision.CompareTag("Destroyable"))
         {
@@ -518,28 +487,6 @@ public class PlayerController : MonoBehaviour
             canDestroy = false;
             interactableObject = null;
         }
-    }
-
-    private IEnumerator FadePrompt(float targetAlpha)
-    {
-        if (interactPromptSprite == null) yield break;
-
-        Color currentColor = interactPromptSprite.color;
-        float startAlpha = currentColor.a;
-        float time = 0f;
-
-        while (time < promptFadeDuration)
-        {
-            time += Time.deltaTime;
-            float newAlpha = Mathf.Lerp(startAlpha, targetAlpha, time / promptFadeDuration);
-            interactPromptSprite.color = new Color(currentColor.r, currentColor.g, currentColor.b, newAlpha);
-            interactPromptBG.color = new Color(currentColor.r, currentColor.g, currentColor.b, newAlpha);
-            yield return null;
-        }
-
-        interactPromptSprite.color = new Color(currentColor.r, currentColor.g, currentColor.b, targetAlpha);
-        interactPromptBG.color = new Color(currentColor.r, currentColor.g, currentColor.b, targetAlpha);
-
     }
 
     public void setAttackTrue()
@@ -552,15 +499,20 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("isAttacking", false);
     }
 
-    public IEnumerator DieScene()
+    public void OnDeathAnimationComplete()
     {
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.HandlePlayerDeath();
+        }
+    }
 
-
-        yield return new WaitForSeconds(4f);
-        yield return StartCoroutine(FadeManager.Instance.FadeToBlack());
-
-        SceneManager.LoadScene(sceneToLoad);
-
+    private void OnDestroy()
+    {
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.OnPlayerControlToggled -= HandleControlToggle;
+        }
     }
 
     private IEnumerator FadeAndDisableObject(GameObject targetObject)
@@ -590,12 +542,24 @@ public class PlayerController : MonoBehaviour
         targetObject.SetActive(false);
     }
 
-    private void PlaySFX(AudioClip clip)
+    public void SetState(PlayerState newState)
     {
-        if (clip != null && audioSource != null)
+        CurrentState = newState;
+
+        if (CurrentState == PlayerState.Locked)
         {
-            audioSource.pitch = UnityEngine.Random.Range(0.9f, 1.1f);
-            audioSource.PlayOneShot(clip);
+            rb.linearVelocity = Vector2.zero;
+            moveInput = Vector2.zero;
+            animator.SetBool("isWalking", false);
+            animator.SetBool("isClimbing", false);
+            playerAudio.SetWalking(false);
         }
     }
+
+    private void HandleControlToggle(bool enableControl)
+    {
+        Debug.Log($"Player received signal! Setting control to: {enableControl}");
+        SetState(enableControl ? PlayerState.Normal : PlayerState.Locked);
+    }
+
 }

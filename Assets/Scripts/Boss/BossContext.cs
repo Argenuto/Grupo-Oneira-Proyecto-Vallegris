@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Reflection;
 using UnityEngine;
 
 public enum MoveTarget
@@ -21,11 +20,24 @@ public class BossContext
     public Animator animator;
     public BossArena arena;
     public Transform player;
+    public PlayerController playerController;
     public ContactDamage contact;
     public AudioSource audioSource;
     public float speedMultiplier = 1f;
+    public float minimumTelegraphDuration = 0.25f;
 
-    public Vector2 Position => rb != null ? rb.position : (Vector2)boss.transform.position;
+    public Vector2 Position => rb != null ? rb.position : boss != null ? (Vector2)boss.transform.position : Vector2.zero;
+    public bool HasLivingPlayer
+    {
+        get
+        {
+            if (player == null)
+                return false;
+
+            Health playerHealth = player.GetComponentInParent<Health>();
+            return playerHealth == null || !playerHealth.IsDead;
+        }
+    }
 
     public float ResolveX(MoveTarget target, float offset)
     {
@@ -50,18 +62,7 @@ public class BossContext
 
     public void SetContactDamage(bool on)
     {
-        if (contact == null) return;
-
-        var damageEnabledField = typeof(ContactDamage).GetField("DamageEnabled",
-            BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-
-        if (damageEnabledField != null)
-        {
-            damageEnabledField.SetValue(contact, on);
-            return;
-        }
-
-        contact.enabled = on;
+        if (contact != null) contact.SetEnabled(on);
     }
 
     public void StopHorizontal()
@@ -78,9 +79,15 @@ public class BossContext
         if (rb == null)
             yield break;
 
+        if (arena != null)
+            x = Mathf.Clamp(x, arena.LeftX, arena.RightX);
+
         float t = 0f;
         while (t < timeout)
         {
+            if (boss == null || !boss.FightActive)
+                break;
+
             float diff = x - rb.position.x;
             float velocity = speed * speedMultiplier;
             if (Mathf.Abs(diff) <= Mathf.Max(0.05f, velocity * Time.fixedDeltaTime))

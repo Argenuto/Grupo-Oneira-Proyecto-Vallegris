@@ -17,25 +17,29 @@ public class PatrolAction : BossAction
 
     protected override IEnumerator Run(BossContext ctx)
     {
-        ctx.animator.SetBool("Walking", true);
-
+        SetWalking(ctx, true);
         ctx.SetContactDamage(damageOnContact);
-
-        if (ctx.arena == null)
-            yield break;
-
-        float left = ctx.arena.LeftX;
-        float right = ctx.arena.RightX;
-        bool goRight = Mathf.Abs(ctx.Position.x - left) < Mathf.Abs(ctx.Position.x - right);
-
-        for (int i = 0; i < passes; i++)
+        try
         {
-            yield return ctx.MoveToX(goRight ? right : left, speed);
-            goRight = !goRight;
-            if (pauseAtEdges > 0f)
-                yield return new WaitForSeconds(pauseAtEdges / Mathf.Max(0.1f, ctx.speedMultiplier));
-        }
+            if (ctx.arena == null)
+                yield break;
 
-        ctx.SetContactDamage(false);
+            float left = ctx.arena.LeftX;
+            float right = ctx.arena.RightX;
+            bool goRight = Mathf.Abs(ctx.Position.x - left) < Mathf.Abs(ctx.Position.x - right);
+
+            for (int i = 0; i < passes; i++)
+            {
+                yield return ctx.MoveToX(goRight ? right : left, speed);
+                goRight = !goRight;
+                if (pauseAtEdges > 0f)
+                    yield return new WaitForSeconds(pauseAtEdges / Mathf.Max(0.1f, ctx.speedMultiplier));
+            }
+        }
+        finally
+        {
+            ctx.SetContactDamage(false);
+            SetWalking(ctx, false);
+        }
     }
 }

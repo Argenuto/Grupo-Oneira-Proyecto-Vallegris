@@ -17,8 +17,15 @@ public class MoveToAction : BossAction
 
     protected override IEnumerator Run(BossContext ctx)
     {
-        ctx.animator.SetBool("Walking", true);
-        float x = ctx.ResolveX(target, offsetX);
-        yield return ctx.MoveToX(x, speed, timeout);
+        SetWalking(ctx, true);
+        try
+        {
+            float x = ctx.ResolveX(target, offsetX);
+            yield return ctx.MoveToX(x, speed, timeout);
+        }
+        finally
+        {
+            SetWalking(ctx, false);
+        }
     }
 }

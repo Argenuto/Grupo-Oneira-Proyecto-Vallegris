@@ -1,0 +1,221 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e020146224836e49b38fdcdb3aab01d, type: 3}
+  m_Name: BossDecisionTree_Phase2
+  m_EditorClassIdentifier: Assembly-CSharp::BossDecisionTree
+  root:
+    rid: 201001
+  references:
+    version: 2
+    RefIds:
+    - rid: 201001
+      type: {class: BossDecisionBranch, ns: , asm: Assembly-CSharp}
+      data:
+        condition: 0
+        distanceBand: 0
+        healthThreshold: 66
+        idleSeconds: 1
+        yes: {rid: 201002}
+        no: {rid: 201003}
+    - rid: 201002
+      type: {class: BossDecisionLeaf, ns: , asm: Assembly-CSharp}
+      data:
+        entries:
+        - action: {rid: 201005}
+          pattern: {fileID: 0}
+          weight: 1
+          cooldown: 0
+          maxConsecutives: 2
+        - action: {rid: 201006}
+          pattern: {fileID: 0}
+          weight: 1.2
+          cooldown: 2
+          maxConsecutives: 2
+        - action: {rid: 201007}
+          pattern: {fileID: 0}
+          weight: 0.8
+          cooldown: 0
+          maxConsecutives: 2
+        - combo:
+          - {rid: 201006}
+          - {rid: 201005}
+          pattern: {fileID: 0}
+          weight: 0.55
+          cooldown: 3
+          maxConsecutives: 1
+        fallbackAction: {rid: 201004}
+        fallbackPattern: {fileID: 0}
+    - rid: 201003
+      type: {class: BossDecisionLeaf, ns: , asm: Assembly-CSharp}
+      data:
+        entries:
+        - action: {rid: 201008}
+          pattern: {fileID: 0}
+          weight: 1
+          cooldown: 1
+          maxConsecutives: 2
+        - action: {rid: 201009}
+          pattern: {fileID: 0}
+          weight: 1
+          cooldown: 1
+          maxConsecutives: 2
+        - action: {rid: 201006}
+          pattern: {fileID: 0}
+          weight: 0.8
+          cooldown: 2
+          maxConsecutives: 2
+        - action: {rid: 201010}
+          pattern: {fileID: 0}
+          weight: 0.3
+          cooldown: 8
+          maxConsecutives: 1
+        fallbackAction: {rid: 201004}
+        fallbackPattern: {fileID: 0}
+    - rid: 201004
+      type: {class: WaitAction, ns: , asm: Assembly-CSharp}
+      data:
+        enabled: 1
+        telegraphDuration: 0
+        telegraphColor: {r: 1, g: 0.85, b: 0.2, a: 1}
+        recoveryDuration: 0
+        recoveryColor: {r: 0.55, g: 0.55, b: 0.55, a: 1}
+        recoveryDamageMultiplier: 1
+        onStart:
+          m_PersistentCalls:
+            m_Calls: []
+        onEnd:
+          m_PersistentCalls:
+            m_Calls: []
+        duration: 0.5
+    - rid: 201005
+      type: {class: MeleeSlashAction, ns: , asm: Assembly-CSharp}
+      data:
+        enabled: 1
+        telegraphDuration: 0.4
+        telegraphColor: {r: 1, g: 0.7, b: 0.15, a: 1}
+        recoveryDuration: 0.7
+        recoveryColor: {r: 0.55, g: 0.55, b: 0.55, a: 1}
+        recoveryDamageMultiplier: 1.25
+        onStart:
+          m_PersistentCalls:
+            m_Calls: []
+        onEnd:
+          m_PersistentCalls:
+            m_Calls: []
+        reach: 2.5
+        verticalSize: 1.5
+        damage: 18
+        activeDuration: 0.15
+        knockbackForce: 6
+        targetLayers:
+          serializedVersion: 2
+          m_Bits: 256
+    - rid: 201006
+      type: {class: DashAction, ns: , asm: Assembly-CSharp}
+      data:
+        enabled: 1
+        telegraphDuration: 0.4
+        telegraphColor: {r: 1, g: 0.7, b: 0.15, a: 1}
+        recoveryDuration: 0.7
+        recoveryColor: {r: 0.55, g: 0.55, b: 0.55, a: 1}
+        recoveryDamageMultiplier: 1.25
+        onStart:
+          m_PersistentCalls:
+            m_Calls: []
+        onEnd:
+          m_PersistentCalls:
+            m_Calls: []
+        distance: 5
+        speed: 12
+        cooldown: 2
+        timeout: 1.5
+        maximumStalledSteps: 3
+        damageOnContact: 1
+    - rid: 201007
+      type: {class: BackstepAction, ns: , asm: Assembly-CSharp}
+      data:
+        enabled: 1
+        telegraphDuration: 0.35
+        telegraphColor: {r: 0.2, g: 0.75, b: 0.9, a: 1}
+        recoveryDuration: 0
+        recoveryColor: {r: 0.55, g: 0.55, b: 0.55, a: 1}
+        recoveryDamageMultiplier: 1
+        onStart:
+          m_PersistentCalls:
+            m_Calls: []
+        onEnd:
+          m_PersistentCalls:
+            m_Calls: []
+        distance: 2
+        speed: 6
+        timeout: 1.5
+    - rid: 201008
+      type: {class: ProjectilePairAction, ns: , asm: Assembly-CSharp}
+      data:
+        enabled: 1
+        telegraphDuration: 0.4
+        telegraphColor: {r: 0.75, g: 0.4, b: 0.9, a: 1}
+        recoveryDuration: 0.7
+        recoveryColor: {r: 0.55, g: 0.55, b: 0.55, a: 1}
+        recoveryDamageMultiplier: 1.25
+        onStart:
+          m_PersistentCalls:
+            m_Calls: []
+        onEnd:
+          m_PersistentCalls:
+            m_Calls: []
+        projectilePrefab: {fileID: 7380293237107069630, guid: 08cd4a890ab3658418084283d4f79829, type: 3}
+        pairCount: 2
+        verticalSeparation: 0.5
+        delayBetweenPairs: 0.25
+        projectileSpeed: 12
+        damageOverride: 0
+        chargeClip: {fileID: 8300000, guid: 8fd56436582289841af65bd1f8f49b6d, type: 3}
+    - rid: 201009
+      type: {class: ProjectileFanAction, ns: , asm: Assembly-CSharp}
+      data:
+        enabled: 1
+        telegraphDuration: 0.4
+        telegraphColor: {r: 0.75, g: 0.4, b: 0.9, a: 1}
+        recoveryDuration: 0.7
+        recoveryColor: {r: 0.55, g: 0.55, b: 0.55, a: 1}
+        recoveryDamageMultiplier: 1.25
+        onStart:
+          m_PersistentCalls:
+            m_Calls: []
+        onEnd:
+          m_PersistentCalls:
+            m_Calls: []
+        projectilePrefab: {fileID: 7380293237107069630, guid: 08cd4a890ab3658418084283d4f79829, type: 3}
+        projectileCount: 3
+        spreadAngle: 35
+        projectileSpeed: 12
+        damageOverride: 0
+        chargeClip: {fileID: 8300000, guid: 8fd56436582289841af65bd1f8f49b6d, type: 3}
+    - rid: 201010
+      type: {class: BlindAction, ns: , asm: Assembly-CSharp}
+      data:
+        enabled: 1
+        telegraphDuration: 0.55
+        telegraphColor: {r: 1, g: 0.95, b: 0.3, a: 1}
+        recoveryDuration: 0.7
+        recoveryColor: {r: 0.55, g: 0.55, b: 0.55, a: 1}
+        recoveryDamageMultiplier: 1.25
+        onStart:
+          m_PersistentCalls:
+            m_Calls: []
+        onEnd:
+          m_PersistentCalls:
+            m_Calls: []
+        blindDuration: 1.75
+        intensity: 0.8
+        warningClip: {fileID: 8300000, guid: 8fd56436582289841af65bd1f8f49b6d, type: 3}

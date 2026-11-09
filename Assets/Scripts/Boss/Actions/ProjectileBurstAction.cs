@@ -14,6 +14,7 @@ public class ProjectileBurstAction : BossAction
     public AimMode aim = AimMode.AtPlayer;
     [ShowIf("aim", AimMode.FixedAngle)] public float fixedAngle = 0f;
     [Min(0.1f)] public float projectileSpeed = 8f;
+    [Min(0f)] public float chargeDuration = 0.8f;
     [Min(0f)] public float intervalBetweenShots = 0f;
     [Min(0f)] public float damageOverride = 0f;
     public AudioClip chargeClip;
@@ -21,7 +22,7 @@ public class ProjectileBurstAction : BossAction
     public BlindPayload blind = new BlindPayload();
 
     public override string Title => $"Proyectiles x{count}" + (blind != null && blind.applyBlind ? " (ciega)" : "");
-    protected override float BodyDuration => Mathf.Max(0.2f, (count - 1) * intervalBetweenShots + 0.2f);
+    protected override float BodyDuration => chargeDuration + Mathf.Max(0.2f, (count - 1) * intervalBetweenShots + 0.2f);
     public override Color TimelineColor => new Color(0.65f, 0.4f, 0.85f);
 
     protected override IEnumerator Run(BossContext ctx)
@@ -29,17 +30,22 @@ public class ProjectileBurstAction : BossAction
         if (projectilePrefab == null || ctx == null || ctx.boss == null)
             yield break;
             
-        ctx.animator.SetTrigger("charging attack");
+        if (ctx.animator != null)
+            ctx.animator.SetTrigger("charging attack");
         PlaySFX(chargeClip, ctx);
         Vector2 origin = ctx.boss.ProjectileSpawn.position;
         float baseAngle = ResolveBaseAngle(ctx, origin);
-        ctx.FaceDirection(ctx.player.position.x - origin.x);
-        yield return new WaitForSeconds(0.8f);
+        if (ctx.HasLivingPlayer)
+            ctx.FaceDirection(ctx.player.position.x - origin.x);
+        yield return new WaitForSeconds(chargeDuration / Mathf.Max(0.1f, ctx.speedMultiplier));
 
         PlaySFX(throwBall, ctx);
 
         for (int i = 0; i < count; i++)
         {
+            if (!BossProjectile.CanSpawn())
+                break;
+
             float offset = count > 1 ? Mathf.Lerp(-spreadAngle * 0.5f, spreadAngle * 0.5f, i / (float)(count - 1)) : 0f;
             float rad = (baseAngle + offset) * Mathf.Deg2Rad;
             Vector2 dir = new Vector2(Mathf.Cos(rad), Mathf.Sin(rad));
@@ -77,14 +83,10 @@ public class ProjectileBurstAction : BossAction
 
     public void PlaySFX(AudioClip clip, BossContext ctx)
     {
-        Debug.Log("HOLAAAA");
         if (clip != null && ctx.audioSource != null)
         {
-                    Debug.Log("COLAAAAcaco");
-
             ctx.audioSource.pitch = UnityEngine.Random.Range(0.9f, 1.1f);
             ctx.audioSource.PlayOneShot(clip);
         }
     }
 }
-

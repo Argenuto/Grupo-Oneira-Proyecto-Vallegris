@@ -13,8 +13,8 @@ public class WaitAction : BossAction
 
     protected override IEnumerator Run(BossContext ctx)
     {
+        SetWalking(ctx, false);
         yield return new WaitForSeconds(duration / Mathf.Max(0.1f, ctx.speedMultiplier));
-        ctx.animator.SetBool("Walking", false);
     }
     
 }

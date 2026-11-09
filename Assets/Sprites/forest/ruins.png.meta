@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: da8e069fee9f9e84b9d358661d154742
+guid: e2e6cce071067c44d944a478c552b925
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7853871828399156175
-    second: "Recurso 9dise\xF1o de nivel_0"
+      213: -4078598819517545160
+    second: Recurso 33ruinas_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -51,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 150
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -111,27 +111,40 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: "Recurso 9dise\xF1o de nivel_0"
+      name: Recurso 33ruinas_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 918
-        height: 1845
+        width: 6345
+        height: 4513
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: fcbed2bf0de8efc60800000000000000
-      internalID: 7853871828399156175
+      spriteID: 8354455abf7e567c0800000000000000
+      internalID: -4078598819517545160
       vertices: []
       indices: 
       edges: []
@@ -140,7 +153,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 594d16cfaa183dd46925a86567d9df6d
     internalID: 0
     vertices: []
     indices: 
@@ -148,9 +161,11 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      "Recurso 9dise\xF1o de nivel_0": 7853871828399156175
+      Recurso 33ruinas_0: -4078598819517545160
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

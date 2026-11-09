@@ -25,7 +25,7 @@ public class ItemObtainedManager : MonoBehaviour
 
     // This property lets other scripts (like PlayerController) know the screen is open
     public bool IsActive => mainPanel != null && mainPanel.activeSelf;
-    
+
     private bool isWaitingForInput = false;
 
     private void Awake()
@@ -49,13 +49,13 @@ public class ItemObtainedManager : MonoBehaviour
 
     // Call this method from chests, enemies, or events when you get an item
     public void ShowItem(string itemName, Sprite icon)
-    {   
-        Debug.Log("aszx");
+    {
+        GameManager.Instance.TogglePlayerControl(false);
         if (IsActive) return;
-         
+
         itemText.text = itemName;
         itemIcon.sprite = icon;
-        
+
         itemIcon.preserveAspect = true;
         StartCoroutine(FadeInRoutine());
     }
@@ -86,7 +86,7 @@ public class ItemObtainedManager : MonoBehaviour
         // 4. Wait a tiny fraction of a second so the player doesn't accidentally 
         // skip the screen if they were mashing the attack button.
         yield return new WaitForSeconds(0.25f);
-        
+
         isWaitingForInput = true;
     }
 
@@ -100,7 +100,7 @@ public class ItemObtainedManager : MonoBehaviour
             contentGroup.alpha = newAlpha;
             yield return null;
         }
-
+        GameManager.Instance.TogglePlayerControl(true);
         mainPanel.SetActive(false);
     }
 }

@@ -1,4 +1,7 @@
+using System.Collections;
+using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -8,6 +11,8 @@ public class GameManager : MonoBehaviour
     public bool isAttackUnlocked = false;
     public bool isDestroyUnlocked = false;
     public GameObject[] onlyIfCanDestroy;
+
+    public event Action<bool> OnPlayerControlToggled;
 
     private void Awake()
     {
@@ -65,5 +70,29 @@ public class GameManager : MonoBehaviour
     {
         isAttackUnlocked = PlayerPrefs.GetInt("AttackUnlocked", 0) == 1;
         isDestroyUnlocked = PlayerPrefs.GetInt("DestroyUnlocked", 0) == 1;
+    }
+
+    public void HandlePlayerDeath()
+    {
+        StartCoroutine(DeathSequenceRoutine());
+    }
+
+    private IEnumerator DeathSequenceRoutine()
+    {
+        // Wait for dramatic effect, then fade out
+        yield return new WaitForSeconds(4f);
+
+        if (FadeManager.Instance != null)
+        {
+            yield return StartCoroutine(FadeManager.Instance.FadeToBlack());
+        }
+
+        // Load the respawn scene or last checkpoint
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+    public void TogglePlayerControl(bool enableControl)
+    {
+        OnPlayerControlToggled?.Invoke(enableControl);
+        Debug.Log("carajo hostia puta");
     }
 }

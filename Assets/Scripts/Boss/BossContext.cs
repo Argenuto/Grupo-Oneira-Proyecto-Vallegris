@@ -25,6 +25,10 @@ public class BossContext
     public AudioSource audioSource;
     public float speedMultiplier = 1f;
     public float minimumTelegraphDuration = 0.25f;
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+    public string CurrentActionEndReason { get; private set; }
+    private BossAction currentAction;
+#endif
 
     public Vector2 Position => rb != null ? rb.position : boss != null ? (Vector2)boss.transform.position : Vector2.zero;
     public bool HasLivingPlayer
@@ -60,10 +64,44 @@ public class BossContext
             sprite.flipX = dir > 0f;
     }
 
+    /// <summary>
+    /// Orienta al jefe hacia el jugador (si está vivo). Usa la misma convención de FaceDirection.
+    /// </summary>
+    public void FacePlayer()
+    {
+        if (!HasLivingPlayer)
+            return;
+
+        FaceDirection(player.position.x - Position.x);
+    }
+
     public void SetContactDamage(bool on)
     {
         if (contact != null) contact.SetEnabled(on);
     }
+
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+    public void BeginAction(BossAction action)
+    {
+        currentAction = action;
+        CurrentActionEndReason = null;
+    }
+
+    public void EndAction(BossAction action)
+    {
+        if (currentAction == action)
+        {
+            currentAction = null;
+            CurrentActionEndReason = null;
+        }
+    }
+
+    public void SetActionEndReason(string reason)
+    {
+        if (currentAction != null && CurrentActionEndReason == null)
+            CurrentActionEndReason = reason;
+    }
+#endif
 
     public void StopHorizontal()
     {
@@ -74,7 +112,7 @@ public class BossContext
     /// <summary>
     /// Camina en X hasta llegar (o hasta agotar el timeout).
     /// </summary>
-    public IEnumerator MoveToX(float x, float speed, float timeout = 8f)
+    public IEnumerator MoveToX(float x, float speed, float timeout = 8f, bool faceMovement = true)
     {
         if (rb == null)
             yield break;
@@ -94,12 +132,18 @@ public class BossContext
                 break;
 
             float dir = Mathf.Sign(diff);
-            FaceDirection(dir);
+            if (faceMovement)
+                FaceDirection(dir);
             rb.linearVelocity = new Vector2(dir * velocity, rb.linearVelocity.y);
 
             t += Time.fixedDeltaTime;
             yield return new WaitForFixedUpdate();
         }
+
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+        if (t >= timeout && Mathf.Abs(x - rb.position.x) > Mathf.Max(0.05f, speed * speedMultiplier * Time.fixedDeltaTime))
+            SetActionEndReason("timeout");
+#endif
 
         StopHorizontal();
     }

@@ -44,7 +44,15 @@ public class MeleeSlashAction : BossAction
         if (ctx.animator != null)
             ctx.animator.SetTrigger("charging attack");
 
+        ctx.FacePlayer();
         float direction = ctx.sprite != null && ctx.sprite.flipX ? 1f : -1f;
+        if (ctx.HasLivingPlayer)
+        {
+            float playerDirection = Mathf.Sign(ctx.player.position.x - ctx.Position.x);
+            if (!Mathf.Approximately(playerDirection, 0f))
+                direction = playerDirection;
+        }
+
         Vector2 center = ctx.Position + new Vector2(direction * reach * 0.5f, 0f);
         Vector2 size = new Vector2(reach, verticalSize);
         HashSet<IDamageable> hitTargets = new HashSet<IDamageable>();
@@ -141,8 +149,18 @@ public class DashAction : BossAction
                     stalledSteps = 0;
 
                 if (stalledSteps >= maximumStalledSteps)
+                {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+                    ctx.SetActionEndReason("stalled");
+#endif
                     break;
+                }
             }
+
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            if (elapsed >= timeout && Mathf.Abs(ctx.Position.x - targetX) > 0.03f)
+                ctx.SetActionEndReason("timeout");
+#endif
         }
         finally
         {
@@ -180,7 +198,7 @@ public class BackstepAction : BossAction
         SetWalking(ctx, true);
         try
         {
-            yield return ctx.MoveToX(targetX, speed, timeout);
+            yield return ctx.MoveToX(targetX, speed, timeout, faceMovement: false);
         }
         finally
         {
@@ -229,6 +247,10 @@ public class ProjectileFanAction : BossAction
             spawned++;
         }
 
+        BossDebug.ProjectileSpawn("ProjectileFan", spawned, BossProjectile.ActiveProjectileCount,
+                                  ctx.Position, ctx.boss.ProjectileSpawn.position,
+                                  ctx.sprite != null && ctx.sprite.flipX, ctx.HasLivingPlayer,
+                                  ctx.HasLivingPlayer ? (Vector2)ctx.player.position : Vector2.zero);
         if (spawned > 0)
             yield return new WaitForSeconds(0.2f / Mathf.Max(0.1f, ctx.speedMultiplier));
     }
@@ -258,6 +280,7 @@ public class ProjectilePairAction : BossAction
             ctx.animator.SetTrigger("charging attack");
         BossActionUtilities.Play(chargeClip, ctx);
 
+        int spawned = 0;
         for (int i = 0; i < pairCount && BossProjectile.CanSpawn(); i++)
         {
             Vector2 origin = ctx.boss.ProjectileSpawn.position;
@@ -272,11 +295,17 @@ public class ProjectilePairAction : BossAction
                 Vector2 spawn = origin + Vector2.up * (side * verticalSeparation * 0.5f);
                 BossProjectile projectile = UnityEngine.Object.Instantiate(projectilePrefab, spawn, Quaternion.identity);
                 projectile.Init(direction, projectileSpeed, null, damageOverride);
+                spawned++;
             }
 
             if (delayBetweenPairs > 0f && i < pairCount - 1)
                 yield return new WaitForSeconds(delayBetweenPairs / Mathf.Max(0.1f, ctx.speedMultiplier));
         }
+
+        BossDebug.ProjectileSpawn("ProjectilePair", spawned, BossProjectile.ActiveProjectileCount,
+                                  ctx.Position, ctx.boss.ProjectileSpawn.position,
+                                  ctx.sprite != null && ctx.sprite.flipX, ctx.HasLivingPlayer,
+                                  ctx.HasLivingPlayer ? (Vector2)ctx.player.position : Vector2.zero);
     }
 }
 
@@ -329,9 +358,11 @@ public class ArenaHazardAction : BossAction
             yield break;
 
         int columns = Mathf.Min(columnCount, 2 - BossProjectile.ActiveHazardCount);
+        int spawned = 0;
         for (int i = 0; i < columns; i++)
         {
             float x = UnityEngine.Random.Range(ctx.arena.LeftX, ctx.arena.RightX);
+            BossDebug.Hazard(x, warningDuration);
             float floorY = ctx.Position.y + floorOffset;
             GameObject markerObject = new GameObject("BossHazardTelegraph");
             LineRenderer marker = markerObject.AddComponent<LineRenderer>();
@@ -373,11 +404,17 @@ public class ArenaHazardAction : BossAction
                 Vector2 spawn = new Vector2(x, floorY + dropHeight);
                 BossProjectile projectile = UnityEngine.Object.Instantiate(hazardPrefab, spawn, Quaternion.identity);
                 projectile.Init(Vector2.down, dropSpeed, null, damageOverride, true);
+                spawned++;
             }
 
             if (delayBetweenColumns > 0f && i < columns - 1)
                 yield return new WaitForSeconds(delayBetweenColumns / Mathf.Max(0.1f, ctx.speedMultiplier));
         }
+
+        BossDebug.ProjectileSpawn("ArenaHazard", spawned, BossProjectile.ActiveProjectileCount,
+                                  ctx.Position, ctx.boss.ProjectileSpawn.position,
+                                  ctx.sprite != null && ctx.sprite.flipX, ctx.HasLivingPlayer,
+                                  ctx.HasLivingPlayer ? (Vector2)ctx.player.position : Vector2.zero);
     }
 }
 

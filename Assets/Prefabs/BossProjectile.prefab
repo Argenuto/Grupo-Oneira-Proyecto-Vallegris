@@ -171,7 +171,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03d59a36c2374e145808425b21a58100, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossProjectile
-  damage: 10
+  damage: 13
   knockbackForce: 6
   targetLayers:
     serializedVersion: 2
@@ -179,7 +179,7 @@ MonoBehaviour:
   lifetime: 6
   obstacleLayers:
     serializedVersion: 2
-    m_Bits: 1032
+    m_Bits: 8
   destroyOnHit: 1
 --- !u!95 &1941430773377416821
 Animator:

@@ -17,46 +17,62 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
     - rid: 101001
       type: {class: BossDecisionBranch, ns: , asm: Assembly-CSharp}
       data:
         condition: 0
         distanceBand: 0
         healthThreshold: 66
+        action:
+          rid: -2
         idleSeconds: 1
-        yes: {rid: 101002}
-        no: {rid: 101003}
+        yes:
+          rid: 101002
+        no:
+          rid: 101003
     - rid: 101002
       type: {class: BossDecisionLeaf, ns: , asm: Assembly-CSharp}
       data:
         entries:
-        - action: {rid: 101005}
+        - action:
+            rid: 101005
+          combo: []
+          pattern: {fileID: 0}
+          weight: 0.3
+          cooldown: 0
+          maxConsecutives: 2
+        - action:
+            rid: 101006
+          combo: []
           pattern: {fileID: 0}
           weight: 1
           cooldown: 0
           maxConsecutives: 2
-        - action: {rid: 101006}
-          pattern: {fileID: 0}
-          weight: 1
-          cooldown: 0
-          maxConsecutives: 2
-        fallbackAction: {rid: 101004}
+        fallbackAction:
+          rid: 101004
         fallbackPattern: {fileID: 0}
     - rid: 101003
       type: {class: BossDecisionLeaf, ns: , asm: Assembly-CSharp}
       data:
         entries:
-        - action: {rid: 101005}
+        - action:
+            rid: 101005
+          combo: []
+          pattern: {fileID: 0}
+          weight: 0.3
+          cooldown: 0
+          maxConsecutives: 2
+        - action:
+            rid: 101007
+          combo: []
           pattern: {fileID: 0}
           weight: 1
           cooldown: 0
           maxConsecutives: 2
-        - action: {rid: 101007}
-          pattern: {fileID: 0}
-          weight: 1
-          cooldown: 0
-          maxConsecutives: 2
-        fallbackAction: {rid: 101004}
+        fallbackAction:
+          rid: 101004
         fallbackPattern: {fileID: 0}
     - rid: 101004
       type: {class: WaitAction, ns: , asm: Assembly-CSharp}
@@ -99,9 +115,9 @@ MonoBehaviour:
         enabled: 1
         telegraphDuration: 0.45
         telegraphColor: {r: 1, g: 0.85, b: 0.2, a: 1}
-        recoveryDuration: 0.6
+        recoveryDuration: 0.45
         recoveryColor: {r: 0.55, g: 0.55, b: 0.55, a: 1}
-        recoveryDamageMultiplier: 1.25
+        recoveryDamageMultiplier: 1.1
         onStart:
           m_PersistentCalls:
             m_Calls: []
@@ -110,7 +126,7 @@ MonoBehaviour:
             m_Calls: []
         reach: 2.5
         verticalSize: 1.5
-        damage: 15
+        damage: 20
         activeDuration: 0.15
         knockbackForce: 6
         targetLayers:
@@ -137,9 +153,9 @@ MonoBehaviour:
         aim: 0
         fixedAngle: 0
         projectileSpeed: 12
+        chargeDuration: 0.4
         intervalBetweenShots: 0
         damageOverride: 0
-        chargeDuration: 0.4
         chargeClip: {fileID: 8300000, guid: 8fd56436582289841af65bd1f8f49b6d, type: 3}
         throwBall: {fileID: 8300000, guid: ca2d85a34cf371f488e5df01cb0f4ddc, type: 3}
         blind:

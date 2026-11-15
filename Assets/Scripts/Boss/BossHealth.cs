@@ -10,7 +10,23 @@ public class BossHealth : EnemyHealth
 
     protected override bool CanTakeDamage(DamageInfo damageInfo)
     {
-        return !Invulnerable && base.CanTakeDamage(damageInfo);
+        if (Invulnerable)
+        {
+            BossDebug.DamageBlocked(BossDebug.DamageSource(damageInfo.source), "Boss", "bossInvulnerable", damageInfo.amount);
+            return false;
+        }
+
+        return base.CanTakeDamage(damageInfo);
+    }
+
+    protected override void HandleDamaged(DamageInfo damageInfo)
+    {
+        base.HandleDamaged(damageInfo);
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+        BossController controller = GetComponent<BossController>();
+        BossDebug.BossDamage(damageInfo, CurrentHealth, MaxHealth, DamageTakenMultiplier,
+                             controller != null ? controller.CurrentPhaseIndex : -1);
+#endif
     }
 
     protected override float ModifyDamage(DamageInfo damageInfo)

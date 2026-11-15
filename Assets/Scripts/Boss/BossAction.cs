@@ -26,6 +26,12 @@ public abstract class BossAction
 
     public virtual Color TimelineColor => new Color(0.35f, 0.55f, 0.9f);
 
+    /// <summary>
+    /// Si es true, el jefe se orienta hacia el jugador durante el aviso y al ejecutar.
+    /// Las acciones de movimiento lo desactivan porque miran hacia donde caminan.
+    /// </summary>
+    protected virtual bool FacesPlayer => true;
+
     public float EstimatedDuration => telegraphDuration + BodyDuration + recoveryDuration;
 
     public virtual bool IsReady(BossContext ctx) => true;
@@ -34,13 +40,26 @@ public abstract class BossAction
 
     public IEnumerator Execute(BossContext ctx)
     {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+        float startTime = Time.time;
+        int startPhase = ctx != null && ctx.boss != null ? ctx.boss.CurrentPhaseIndex : -1;
+        if (ctx != null)
+            ctx.BeginAction(this);
+        BossDebug.ActionStarted(this, ctx);
+#endif
         onStart.Invoke();
 
         Color original = ctx != null && ctx.sprite != null ? ctx.sprite.color : Color.white;
         bool hasOriginalColor = ctx != null && ctx.sprite != null;
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+        bool completed = false;
+#endif
 
         try
         {
+            if (ctx != null && FacesPlayer)
+                ctx.FacePlayer();
+
             if (telegraphDuration > 0f)
             {
                 if (ctx != null && ctx.boss != null)
@@ -51,12 +70,26 @@ public abstract class BossAction
 
                 float scaledTelegraph = telegraphDuration / Mathf.Max(0.1f, ctx != null ? ctx.speedMultiplier : 1f);
                 float telegraphTime = Mathf.Max(ctx != null ? ctx.minimumTelegraphDuration : 0f, scaledTelegraph);
-                yield return new WaitForSeconds(telegraphTime);
+                float elapsed = 0f;
+                while (elapsed < telegraphTime)
+                {
+                    if (ctx != null && FacesPlayer)
+                        ctx.FacePlayer();
+
+                    yield return null;
+                    elapsed += Time.deltaTime;
+                }
 
                 if (hasOriginalColor)
                     ctx.sprite.color = original;
             }
 
+            if (ctx != null && FacesPlayer)
+                ctx.FacePlayer();
+
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            BossDebug.ActionActive(this);
+#endif
             if (ctx != null)
                 yield return Run(ctx);
 
@@ -69,6 +102,9 @@ public abstract class BossAction
 
                 yield return new WaitForSeconds(recoveryDuration / Mathf.Max(0.1f, ctx != null ? ctx.speedMultiplier : 1f));
             }
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            completed = true;
+#endif
         }
         finally
         {
@@ -76,6 +112,22 @@ public abstract class BossAction
                 ctx.boss.EndRecovery();
             if (hasOriginalColor && ctx.sprite != null)
                 ctx.sprite.color = original;
+
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            string reason = ctx != null ? ctx.CurrentActionEndReason : null;
+            if (!completed && string.IsNullOrEmpty(reason))
+            {
+                if (ctx != null && ctx.boss != null && ctx.boss.CurrentPhaseIndex != startPhase)
+                    reason = "phaseChange";
+                else if (ctx != null && ctx.boss != null && !ctx.boss.FightActive)
+                    reason = "stopped";
+                else
+                    reason = "interrupted";
+            }
+            BossDebug.ActionEnded(this, Time.time - startTime, !completed, reason ?? string.Empty);
+            if (ctx != null)
+                ctx.EndAction(this);
+#endif
         }
 
         onEnd.Invoke();

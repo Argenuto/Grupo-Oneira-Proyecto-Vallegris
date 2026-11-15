@@ -41,6 +41,7 @@ public class PlayerStatusEffects : MonoBehaviour
     {
         if (duration <= 0f) return;
 
+        BossDebug.BlindApplied(duration, intensity);
         blindEndTime = Mathf.Max(blindEndTime, Time.time + duration);
         BlindIntensity = IsBlind ? Mathf.Max(BlindIntensity, intensity) : intensity;
 

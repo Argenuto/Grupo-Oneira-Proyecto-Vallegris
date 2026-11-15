@@ -75,7 +75,13 @@ public class PlayerHealth : Health
     // Métodos
     protected override bool CanTakeDamage(DamageInfo damageInfo)
     {
-        return !isInvulnerable;
+        if (isInvulnerable)
+        {
+            BossDebug.DamageBlocked(BossDebug.DamageSource(damageInfo.source), "Player", "playerIFrames", damageInfo.amount);
+            return false;
+        }
+
+        return true;
     }
 
     protected override void HandleDamaged(DamageInfo info)

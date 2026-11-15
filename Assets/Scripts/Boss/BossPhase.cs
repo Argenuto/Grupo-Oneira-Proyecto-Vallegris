@@ -28,7 +28,7 @@ public class BossPhase
 
     [Range(0.15f, 0.35f)] public float reactionDelay = 0.25f;
     [Min(0.25f)] public float minimumTelegraphDuration = 0.3f;
-    [Min(0.5f)] public float minimumPlayerWindow = 0.5f;
+    [Min(0.15f)] public float minimumPlayerWindow = 0.5f;
     [Range(1, 3)] public int maxComboActions = 1;
     [Min(2.5f)] public float nearDistance = 2.5f;
     [Min(0f)] public float farDistance = 6f;

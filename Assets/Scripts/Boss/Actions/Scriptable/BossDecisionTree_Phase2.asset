@@ -17,68 +17,92 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
     - rid: 201001
       type: {class: BossDecisionBranch, ns: , asm: Assembly-CSharp}
       data:
         condition: 0
         distanceBand: 0
         healthThreshold: 66
+        action:
+          rid: -2
         idleSeconds: 1
-        yes: {rid: 201002}
-        no: {rid: 201003}
+        yes:
+          rid: 201002
+        no:
+          rid: 201003
     - rid: 201002
       type: {class: BossDecisionLeaf, ns: , asm: Assembly-CSharp}
       data:
         entries:
-        - action: {rid: 201005}
+        - action:
+            rid: 201005
+          combo: []
           pattern: {fileID: 0}
           weight: 1
           cooldown: 0
           maxConsecutives: 2
-        - action: {rid: 201006}
+        - action:
+            rid: 201006
+          combo: []
           pattern: {fileID: 0}
           weight: 1.2
           cooldown: 2
           maxConsecutives: 2
-        - action: {rid: 201007}
+        - action:
+            rid: 201007
+          combo: []
           pattern: {fileID: 0}
           weight: 0.8
           cooldown: 0
           maxConsecutives: 2
-        - combo:
-          - {rid: 201006}
-          - {rid: 201005}
+        - action:
+            rid: -2
+          combo:
+          - rid: 201006
+          - rid: 201005
           pattern: {fileID: 0}
           weight: 0.55
           cooldown: 3
           maxConsecutives: 1
-        fallbackAction: {rid: 201004}
+        fallbackAction:
+          rid: 201004
         fallbackPattern: {fileID: 0}
     - rid: 201003
       type: {class: BossDecisionLeaf, ns: , asm: Assembly-CSharp}
       data:
         entries:
-        - action: {rid: 201008}
+        - action:
+            rid: 201008
+          combo: []
           pattern: {fileID: 0}
           weight: 1
           cooldown: 1
           maxConsecutives: 2
-        - action: {rid: 201009}
+        - action:
+            rid: 201009
+          combo: []
           pattern: {fileID: 0}
           weight: 1
           cooldown: 1
           maxConsecutives: 2
-        - action: {rid: 201006}
+        - action:
+            rid: 201006
+          combo: []
           pattern: {fileID: 0}
           weight: 0.8
           cooldown: 2
           maxConsecutives: 2
-        - action: {rid: 201010}
+        - action:
+            rid: 201010
+          combo: []
           pattern: {fileID: 0}
-          weight: 0.3
-          cooldown: 8
+          weight: 0.5
+          cooldown: 7
           maxConsecutives: 1
-        fallbackAction: {rid: 201004}
+        fallbackAction:
+          rid: 201004
         fallbackPattern: {fileID: 0}
     - rid: 201004
       type: {class: WaitAction, ns: , asm: Assembly-CSharp}
@@ -102,9 +126,9 @@ MonoBehaviour:
         enabled: 1
         telegraphDuration: 0.4
         telegraphColor: {r: 1, g: 0.7, b: 0.15, a: 1}
-        recoveryDuration: 0.7
+        recoveryDuration: 0.5
         recoveryColor: {r: 0.55, g: 0.55, b: 0.55, a: 1}
-        recoveryDamageMultiplier: 1.25
+        recoveryDamageMultiplier: 1.1
         onStart:
           m_PersistentCalls:
             m_Calls: []
@@ -113,7 +137,7 @@ MonoBehaviour:
             m_Calls: []
         reach: 2.5
         verticalSize: 1.5
-        damage: 18
+        damage: 30
         activeDuration: 0.15
         knockbackForce: 6
         targetLayers:
@@ -125,7 +149,7 @@ MonoBehaviour:
         enabled: 1
         telegraphDuration: 0.4
         telegraphColor: {r: 1, g: 0.7, b: 0.15, a: 1}
-        recoveryDuration: 0.7
+        recoveryDuration: 0.5
         recoveryColor: {r: 0.55, g: 0.55, b: 0.55, a: 1}
         recoveryDamageMultiplier: 1.25
         onStart:
@@ -174,7 +198,7 @@ MonoBehaviour:
           m_PersistentCalls:
             m_Calls: []
         projectilePrefab: {fileID: 7380293237107069630, guid: 08cd4a890ab3658418084283d4f79829, type: 3}
-        pairCount: 2
+        pairCount: 3
         verticalSeparation: 0.5
         delayBetweenPairs: 0.25
         projectileSpeed: 12
@@ -186,7 +210,7 @@ MonoBehaviour:
         enabled: 1
         telegraphDuration: 0.4
         telegraphColor: {r: 0.75, g: 0.4, b: 0.9, a: 1}
-        recoveryDuration: 0.7
+        recoveryDuration: 0.5
         recoveryColor: {r: 0.55, g: 0.55, b: 0.55, a: 1}
         recoveryDamageMultiplier: 1.25
         onStart:
@@ -207,7 +231,7 @@ MonoBehaviour:
         enabled: 1
         telegraphDuration: 0.55
         telegraphColor: {r: 1, g: 0.95, b: 0.3, a: 1}
-        recoveryDuration: 0.7
+        recoveryDuration: 0.5
         recoveryColor: {r: 0.55, g: 0.55, b: 0.55, a: 1}
         recoveryDamageMultiplier: 1.25
         onStart:

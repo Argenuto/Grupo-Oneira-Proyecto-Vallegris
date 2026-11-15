@@ -14,6 +14,7 @@ public class PatrolAction : BossAction
     public override string Title => $"Patrullar x{passes}" + (damageOnContact ? " (daño)" : "");
     protected override float BodyDuration => passes * (3f + pauseAtEdges);
     public override Color TimelineColor => new Color(0.9f, 0.4f, 0.35f);
+    protected override bool FacesPlayer => false;
 
     protected override IEnumerator Run(BossContext ctx)
     {

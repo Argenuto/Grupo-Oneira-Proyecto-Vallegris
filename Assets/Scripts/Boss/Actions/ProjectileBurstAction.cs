@@ -35,6 +35,7 @@ public class ProjectileBurstAction : BossAction
         PlaySFX(chargeClip, ctx);
         Vector2 origin = ctx.boss.ProjectileSpawn.position;
         float baseAngle = ResolveBaseAngle(ctx, origin);
+        int spawned = 0;
         if (ctx.HasLivingPlayer)
             ctx.FaceDirection(ctx.player.position.x - origin.x);
         yield return new WaitForSeconds(chargeDuration / Mathf.Max(0.1f, ctx.speedMultiplier));
@@ -52,11 +53,16 @@ public class ProjectileBurstAction : BossAction
 
             BossProjectile projectile = UnityEngine.Object.Instantiate(projectilePrefab, origin, Quaternion.identity);
             projectile.Init(dir, projectileSpeed, blind, damageOverride);
+            spawned++;
 
             if (intervalBetweenShots > 0f && i < count - 1)
                 yield return new WaitForSeconds(intervalBetweenShots / Mathf.Max(0.1f, ctx.speedMultiplier));
         }
 
+        BossDebug.ProjectileSpawn("ProjectileBurst", spawned, BossProjectile.ActiveProjectileCount,
+                                  ctx.Position, ctx.boss.ProjectileSpawn.position,
+                                  ctx.sprite != null && ctx.sprite.flipX, ctx.HasLivingPlayer,
+                                  ctx.HasLivingPlayer ? (Vector2)ctx.player.position : Vector2.zero);
         yield return new WaitForSeconds(0.2f);
     }
 

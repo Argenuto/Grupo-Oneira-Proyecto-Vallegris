@@ -50,6 +50,10 @@ public class BossController : MonoBehaviour
     private float actionStartTime;
     private Color baseColor = Color.white;
     private Color phaseColor = Color.white;
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+    private readonly Dictionary<BossDecisionLeaf, int> decisionLeafIds = new Dictionary<BossDecisionLeaf, int>();
+#endif
+    private Health observedPlayerHealth;
     private PlayerController playerController;
     private float idleTimer;
     private float farPlayerTimer;
@@ -87,7 +91,7 @@ public class BossController : MonoBehaviour
         {
             health.onHealthChanged.AddListener(OnHealthChanged);
             health.onTakeDamage.AddListener(OnBossTakeDamage);
-            health.onDeath.AddListener(StopFight);
+            health.onDeath.AddListener(OnBossDeath);
             health.onRevive.AddListener(StartFight);
         }
 
@@ -101,9 +105,13 @@ public class BossController : MonoBehaviour
 
     private void OnDisable()
     {
-        StopRoutine();
+        bool summarizeFight = FightActive;
+        string reason = health != null && health.IsDead ? "bossDead" : "stopped";
+        StopRoutine(reason);
         FightActive = false;
-        BindPlayer(null);
+        if (summarizeFight)
+            BossDebug.Summary(reason, observedPlayerHealth != null ? observedPlayerHealth.CurrentHealth : 0f);
+        BindPlayer(null, null);
     }
 
     private void OnEnable()
@@ -143,21 +151,200 @@ public class BossController : MonoBehaviour
             return;
 
         GameObject playerObject = GameObject.FindWithTag("Player");
-        BindPlayer(playerObject != null ? playerObject.GetComponent<PlayerController>() : null);
+        BindPlayer(playerObject != null ? playerObject.GetComponent<PlayerController>() : null,
+                   playerObject != null ? playerObject.GetComponentInParent<Health>() : null);
         ctx.player = playerObject != null ? playerObject.transform : null;
         CurrentPhaseIndex = -1;
         FightActive = true;
+        BossDebug.Begin();
+        BossDebug.SetPhaseCount(phases.Count);
+        float playerHealth = observedPlayerHealth != null ? observedPlayerHealth.CurrentHealth : 0f;
+        BossDebug.Log("FIGHT_START", $"bossHp={BossDebug.Format(health != null ? health.CurrentHealth : 0f)} playerHp={BossDebug.Format(playerHealth)} phases={phases.Count}");
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+        LogArenaSnapshot();
+#endif
         EnterPhase(ComputePhaseIndex(HealthPercent));
     }
 
     [Button(ButtonSizes.Medium), HideInEditorMode]
     public void StopFight()
     {
+        bool summarizeFight = FightActive;
         wantFight = false;
         FightActive = false;
-        StopRoutine();
+        StopRoutine("stopped");
+        if (summarizeFight)
+            BossDebug.Summary("stopped", observedPlayerHealth != null ? observedPlayerHealth.CurrentHealth : 0f);
     }
 
+#if UNITY_EDITOR
+    [Button]
+    private void DumpBossDebug()
+    {
+        BossDebug.DumpLast(200);
+    }
+#endif
+
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+    private void LogArenaSnapshot()
+    {
+        if (!BossDebug.IsActive || arena == null)
+            return;
+
+        BossProjectile prefab = FindProjectilePrefabForSnapshot();
+        if (prefab == null)
+        {
+            BossDebug.Log("ARENA_SNAPSHOT", $"arenaX=({BossDebug.Format(arena.LeftX - 2f)},{BossDebug.Format(arena.RightX + 2f)}) bossPos=({BossDebug.Format(transform.position.x)},{BossDebug.Format(transform.position.y)}) colliders=unavailable mask=unavailable");
+            return;
+        }
+
+        float minX = arena.LeftX - 2f;
+        float maxX = arena.RightX + 2f;
+        Vector2 center = new Vector2((minX + maxX) * 0.5f, transform.position.y);
+        Vector2 size = new Vector2(maxX - minX, 12f);
+        LayerMask mask = prefab.ObstacleLayers;
+        Collider2D[] colliders = Physics2D.OverlapBoxAll(center, size, 0f, mask);
+        int logged = 0;
+        foreach (Collider2D collider in colliders)
+        {
+            if (collider == null || logged >= 20)
+                continue;
+
+            Bounds bounds = collider.bounds;
+            string name = collider.gameObject.name.Replace("\"", "\\\"");
+            string layer = LayerMask.LayerToName(collider.gameObject.layer);
+            BossDebug.Log("ARENA_COLLIDER", $"name=\"{name}\" layer={layer} trigger={collider.isTrigger} enabled={collider.enabled} active={collider.gameObject.activeInHierarchy} bounds=({BossDebug.Format(bounds.min.x)},{BossDebug.Format(bounds.min.y)})-({BossDebug.Format(bounds.max.x)},{BossDebug.Format(bounds.max.y)})");
+            logged++;
+        }
+
+        BossDebug.Log("ARENA_SNAPSHOT", $"arenaX=({BossDebug.Format(minX)},{BossDebug.Format(maxX)}) bossPos=({BossDebug.Format(transform.position.x)},{BossDebug.Format(transform.position.y)}) colliders={colliders.Length} mask={LayerMaskName(mask)}");
+    }
+
+    private BossProjectile FindProjectilePrefabForSnapshot()
+    {
+        if (phases == null)
+            return null;
+
+        HashSet<BossDecisionNode> visited = new HashSet<BossDecisionNode>();
+        foreach (BossPhase phase in phases)
+        {
+            if (phase == null)
+                continue;
+
+            BossProjectile prefab = FindPatternProjectilePrefab(phase.pattern);
+            if (prefab != null)
+                return prefab;
+
+            prefab = FindProjectilePrefab(phase.fallbackAction);
+            if (prefab != null)
+                return prefab;
+
+            if (phase.decisionTree != null)
+            {
+                prefab = FindDecisionProjectilePrefab(phase.decisionTree.root, visited);
+                if (prefab != null)
+                    return prefab;
+            }
+        }
+
+        return null;
+    }
+
+    private BossProjectile FindPatternProjectilePrefab(BossPattern pattern)
+    {
+        if (pattern == null || pattern.actions == null)
+            return null;
+
+        foreach (BossAction action in pattern.actions)
+        {
+            BossProjectile prefab = FindProjectilePrefab(action);
+            if (prefab != null)
+                return prefab;
+        }
+
+        return null;
+    }
+
+    private BossProjectile FindProjectilePrefab(BossAction action)
+    {
+        if (action is ProjectileBurstAction burst) return burst.projectilePrefab;
+        if (action is ProjectileFanAction fan) return fan.projectilePrefab;
+        if (action is ProjectilePairAction pair) return pair.projectilePrefab;
+        if (action is ArenaHazardAction hazard) return hazard.hazardPrefab;
+        return null;
+    }
+
+    private BossProjectile FindDecisionProjectilePrefab(BossDecisionNode node, HashSet<BossDecisionNode> visited)
+    {
+        if (node == null || !visited.Add(node))
+            return null;
+
+        if (node is BossDecisionBranch branch)
+        {
+            BossProjectile prefab = FindProjectilePrefab(branch.action);
+            if (prefab != null)
+                return prefab;
+
+            prefab = FindDecisionProjectilePrefab(branch.yes, visited);
+            return prefab != null ? prefab : FindDecisionProjectilePrefab(branch.no, visited);
+        }
+
+        if (node is BossDecisionLeaf leaf)
+        {
+            BossProjectile prefab = FindProjectilePrefab(leaf.fallbackAction);
+            if (prefab != null)
+                return prefab;
+
+            prefab = FindPatternProjectilePrefab(leaf.fallbackPattern);
+            if (prefab != null)
+                return prefab;
+
+            if (leaf.entries != null)
+            {
+                foreach (BossWeightedEntry entry in leaf.entries)
+                {
+                    if (entry == null)
+                        continue;
+
+                    prefab = FindProjectilePrefab(entry.action);
+                    if (prefab != null)
+                        return prefab;
+
+                    if (entry.combo != null)
+                    {
+                        foreach (BossAction action in entry.combo)
+                        {
+                            prefab = FindProjectilePrefab(action);
+                            if (prefab != null)
+                                return prefab;
+                        }
+                    }
+
+                    prefab = FindPatternProjectilePrefab(entry.pattern);
+                    if (prefab != null)
+                        return prefab;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private static string LayerMaskName(LayerMask mask)
+    {
+        List<string> names = new List<string>();
+        for (int layer = 0; layer < 32; layer++)
+        {
+            if ((mask.value & (1 << layer)) == 0)
+                continue;
+
+            string name = LayerMask.LayerToName(layer);
+            names.Add(string.IsNullOrEmpty(name) ? $"Layer{layer}" : name);
+        }
+
+        return names.Count == 0 ? "none" : string.Join(",", names);
+    }
+#endif
     private void RefreshPlayerReference()
     {
         if (ctx.player != null && ctx.player.gameObject.activeInHierarchy)
@@ -167,21 +354,38 @@ public class BossController : MonoBehaviour
 
         nextPlayerSearchTime = Time.time + 0.5f;
         GameObject playerObject = GameObject.FindWithTag("Player");
-        BindPlayer(playerObject != null ? playerObject.GetComponent<PlayerController>() : null);
+        BindPlayer(playerObject != null ? playerObject.GetComponent<PlayerController>() : null,
+                   playerObject != null ? playerObject.GetComponentInParent<Health>() : null);
         ctx.player = playerObject != null ? playerObject.transform : null;
     }
 
-    private void BindPlayer(PlayerController nextPlayer)
+    private void BindPlayer(PlayerController nextPlayer, Health nextHealth)
     {
-        if (playerController == nextPlayer)
+        Health resolvedHealth = nextHealth != null ? nextHealth : nextPlayer != null ? nextPlayer.GetComponentInParent<Health>() : null;
+        if (playerController == nextPlayer && observedPlayerHealth == resolvedHealth)
             return;
 
         if (playerController != null)
             playerController.onAttackStarted.RemoveListener(OnPlayerAttackStarted);
+        if (observedPlayerHealth != null)
+        {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            observedPlayerHealth.onTakeDamage.RemoveListener(OnPlayerTakeDamage);
+            observedPlayerHealth.onDeath.RemoveListener(OnPlayerDeath);
+#endif
+        }
 
         playerController = nextPlayer;
+        observedPlayerHealth = resolvedHealth;
         if (playerController != null)
             playerController.onAttackStarted.AddListener(OnPlayerAttackStarted);
+        if (observedPlayerHealth != null)
+        {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            observedPlayerHealth.onTakeDamage.AddListener(OnPlayerTakeDamage);
+            observedPlayerHealth.onDeath.AddListener(OnPlayerDeath);
+#endif
+        }
 
         if (ctx != null)
         {
@@ -198,6 +402,7 @@ public class BossController : MonoBehaviour
         playerAttackStreak = Mathf.Min(playerAttackStreak + 1, 3);
         if (playerAttackStreak >= 3)
             adaptationUntil = Time.time + 8f;
+        BossDebug.PlayerAttack(playerAttackStreak, Time.time < adaptationUntil);
     }
 
     private void OnBossTakeDamage(DamageInfo damageInfo)
@@ -205,6 +410,30 @@ public class BossController : MonoBehaviour
         playerAttackStreak = 0;
         adaptationUntil = 0f;
     }
+
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+    private void OnPlayerTakeDamage(DamageInfo damageInfo)
+    {
+        BossDebug.PlayerDamage(damageInfo, observedPlayerHealth.CurrentHealth, observedPlayerHealth.MaxHealth,
+                               health != null ? health.CurrentHealth : 0f);
+    }
+
+    private void OnPlayerDeath()
+    {
+        BossDebug.Summary("playerDead", observedPlayerHealth != null ? observedPlayerHealth.CurrentHealth : 0f);
+    }
+#endif
+
+    private void OnBossDeath()
+    {
+        bool summarizeFight = FightActive;
+        wantFight = false;
+        FightActive = false;
+        StopRoutine("stopped");
+        if (summarizeFight)
+            BossDebug.Summary("bossDead", observedPlayerHealth != null ? observedPlayerHealth.CurrentHealth : 0f);
+    }
+
 
     private int ComputePhaseIndex(float percent)
     {
@@ -239,6 +468,13 @@ public class BossController : MonoBehaviour
         BossProjectile.ClearAll();
         ctx.speedMultiplier = phase.speedMultiplier;
         ctx.minimumTelegraphDuration = phase.minimumTelegraphDuration;
+        BossDebug.Phase(index, phase.name, HealthPercent,
+                        observedPlayerHealth != null ? observedPlayerHealth.CurrentHealth : 0f,
+                        phase.speedMultiplier, phase.reactionDelay, phase.minimumPlayerWindow);
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+        if (index == 1)
+            LogArenaSnapshot();
+#endif
         phaseColor = phase.phaseColor;
         if (sprite != null) sprite.color = phaseColor;
         PlaySFX(phase.transitionClip);
@@ -312,7 +548,16 @@ public class BossController : MonoBehaviour
 
             RefreshPlayerReference();
             BossDecisionLeaf leaf = phase.decisionTree.Evaluate(this, ctx);
-            BossWeightedEntry entry = SelectDecision(leaf);
+            BossWeightedEntry entry = SelectDecision(leaf, out List<string> candidates, out List<string> excluded);
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            if (BossDebug.IsActive)
+            {
+                string chosen = DecisionChoice(entry, leaf, phase);
+                BossDebug.Decision(CurrentPhaseIndex, GetDecisionLeafId(leaf), DistanceBand(),
+                                   ctx.HasLivingPlayer ? Mathf.Abs(ctx.player.position.x - ctx.Position.x) : -1f,
+                                   candidates, excluded, chosen, Time.time < adaptationUntil);
+            }
+#endif
 
             if (entry != null && entry.combo != null && entry.combo.Count > 0)
                 yield return ExecuteCombo(entry.combo, phase.maxComboActions, phase.minimumPlayerWindow);
@@ -397,8 +642,15 @@ public class BossController : MonoBehaviour
         }
     }
 
-    private BossWeightedEntry SelectDecision(BossDecisionLeaf leaf)
+    private BossWeightedEntry SelectDecision(BossDecisionLeaf leaf, out List<string> candidateDescriptions, out List<string> excludedDescriptions)
     {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+        candidateDescriptions = BossDebug.IsActive ? new List<string>() : null;
+        excludedDescriptions = BossDebug.IsActive ? new List<string>() : null;
+#else
+        candidateDescriptions = null;
+        excludedDescriptions = null;
+#endif
         if (leaf == null || leaf.entries == null)
             return null;
 
@@ -409,27 +661,58 @@ public class BossController : MonoBehaviour
         foreach (BossWeightedEntry entry in leaf.entries)
         {
             bool hasCombo = entry != null && entry.combo != null && entry.combo.Count > 0;
-            if (entry == null || (entry.action == null && entry.pattern == null && !hasCombo) || entry.weight <= 0f)
+            if (entry == null || (entry.action == null && entry.pattern == null && !hasCombo))
+            {
+                if (excludedDescriptions != null)
+                    excludedDescriptions.Add("invalid:invalid");
                 continue;
+            }
+            if (entry.weight <= 0f)
+            {
+                if (excludedDescriptions != null)
+                    excludedDescriptions.Add($"{DecisionEntryName(entry)}:weight");
+                continue;
+            }
             if (ConflictsWithActiveBlindOrProjectiles(entry))
+            {
+                if (excludedDescriptions != null)
+                    excludedDescriptions.Add($"{DecisionEntryName(entry)}:conflicto");
                 continue;
+            }
             if (decisionCooldowns.TryGetValue(entry, out float readyAt) && Time.time < readyAt)
+            {
+                if (excludedDescriptions != null)
+                    excludedDescriptions.Add($"{DecisionEntryName(entry)}:cooldown");
                 continue;
-            if (entry.action != null && !entry.action.IsReady(ctx))
+            }
+            if ((entry.action != null && !entry.action.IsReady(ctx)) ||
+                (hasCombo && entry.combo.Exists(action => action == null || !action.IsReady(ctx))))
+            {
+                if (excludedDescriptions != null)
+                    excludedDescriptions.Add($"{DecisionEntryName(entry)}:noReady");
                 continue;
-            if (hasCombo && entry.combo.Exists(action => action == null || !action.IsReady(ctx)))
-                continue;
+            }
             object target = DecisionTarget(entry);
             if (ReferenceEquals(target, lastDecisionTarget) && consecutiveDecisionCount >= Mathf.Max(1, entry.maxConsecutives))
+            {
+                if (excludedDescriptions != null)
+                    excludedDescriptions.Add($"{DecisionEntryName(entry)}:repetición");
                 continue;
+            }
 
             float weight = entry.weight * AdaptiveWeight(entry);
             if (weight <= 0f)
+            {
+                if (excludedDescriptions != null)
+                    excludedDescriptions.Add($"{DecisionEntryName(entry)}:weight");
                 continue;
+            }
 
             candidates.Add(entry);
             weights.Add(weight);
             totalWeight += weight;
+            if (candidateDescriptions != null)
+                candidateDescriptions.Add($"{DecisionEntryName(entry)}:{BossDebug.Format(weight)}");
         }
 
         if (candidates.Count == 0 || totalWeight <= 0f)
@@ -452,6 +735,72 @@ public class BossController : MonoBehaviour
 
         return null;
     }
+
+    private static string DecisionEntryName(BossWeightedEntry entry)
+    {
+        if (entry.action != null)
+            return BossDebug.ActionName(entry.action);
+        if (entry.combo != null && entry.combo.Count > 0 && entry.combo[0] != null)
+            return "Combo_" + BossDebug.ActionName(entry.combo[0]);
+        if (entry.pattern != null)
+            return "Pattern_" + entry.pattern.name.Replace(" ", "_");
+        return "invalid";
+    }
+
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+    private string DecisionChoice(BossWeightedEntry entry, BossDecisionLeaf leaf, BossPhase phase)
+    {
+        if (entry != null)
+        {
+            if (entry.combo != null && entry.combo.Count > 0)
+            {
+                foreach (BossAction action in entry.combo)
+                    if (action != null && action.enabled) return BossDebug.ActionName(action);
+            }
+            if (entry.action != null)
+                return BossDebug.ActionName(entry.action);
+            if (entry.pattern != null)
+                return FirstPatternAction(entry.pattern);
+        }
+
+        BossPattern fallbackPattern = leaf != null && leaf.fallbackPattern != null ? leaf.fallbackPattern : phase.pattern;
+        if (fallbackPattern != null)
+            return "FALLBACK_" + FirstPatternAction(fallbackPattern);
+
+        BossAction fallback = leaf != null && leaf.fallbackAction != null ? leaf.fallbackAction : phase.fallbackAction;
+        return fallback != null ? "FALLBACK_" + BossDebug.ActionName(fallback) : "FALLBACK_None";
+    }
+
+    private static string FirstPatternAction(BossPattern pattern)
+    {
+        if (pattern == null || pattern.actions == null)
+            return "none";
+        foreach (BossAction action in pattern.actions)
+            if (action != null && action.enabled) return BossDebug.ActionName(action);
+        return "none";
+    }
+
+    private string GetDecisionLeafId(BossDecisionLeaf leaf)
+    {
+        if (leaf == null)
+            return "none";
+        if (!decisionLeafIds.TryGetValue(leaf, out int id))
+        {
+            id = decisionLeafIds.Count + 1;
+            decisionLeafIds.Add(leaf, id);
+        }
+        return "L" + id;
+    }
+
+    private string DistanceBand()
+    {
+        if (!ctx.HasLivingPlayer)
+            return "None";
+        float distance = Mathf.Abs(ctx.player.position.x - ctx.Position.x);
+        return distance < NearDistance ? "Near" : distance <= FarDistance ? "Medium" : "Far";
+    }
+#endif
+
 
     private static object DecisionTarget(BossWeightedEntry entry)
     {
@@ -549,6 +898,9 @@ public class BossController : MonoBehaviour
     private void ResetDecisionState()
     {
         decisionCooldowns.Clear();
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+        decisionLeafIds.Clear();
+#endif
         lastDecisionTarget = null;
         consecutiveDecisionCount = 0;
         playerAttackStreak = 0;
@@ -574,8 +926,12 @@ public class BossController : MonoBehaviour
             sprite.color = phaseColor;
     }
 
-    private void StopRoutine()
+    private void StopRoutine(string actionEndReason = "phaseChange")
     {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+        if (ctx != null)
+            ctx.SetActionEndReason(actionEndReason);
+#endif
         if (runRoutine != null)
         {
             StopCoroutine(runRoutine);

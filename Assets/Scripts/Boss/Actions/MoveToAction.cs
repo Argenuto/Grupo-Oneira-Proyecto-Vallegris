@@ -14,6 +14,7 @@ public class MoveToAction : BossAction
     public override string Title => $"Mover → {target}";
     protected override float BodyDuration => 2f;
     public override Color TimelineColor => new Color(0.3f, 0.7f, 0.45f);
+    protected override bool FacesPlayer => false;
 
     protected override IEnumerator Run(BossContext ctx)
     {

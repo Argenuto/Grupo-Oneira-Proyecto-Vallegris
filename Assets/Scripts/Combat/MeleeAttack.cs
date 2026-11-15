@@ -25,10 +25,6 @@ public class MeleeAttack : DamageDealer
     {
 
         bool result = base.TryDealDamage(target, hitPoint);
-        if (animatorController != null)
-            
-            Debug.Log("sasa");
-        Debug.Log("holiwiris");
 
         if (result) 
         {

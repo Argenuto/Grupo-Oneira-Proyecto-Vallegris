@@ -28,17 +28,70 @@ public class BossProjectile : DamageDealer
     public static int ActiveHazardCount => activeHazardCount;
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
-    public LayerMask ObstacleLayers => obstacleLayers;
-
     public static void ResetDebugIds()
     {
         nextDebugId = 0;
     }
 #endif
 
+    public LayerMask ObstacleLayers => obstacleLayers;
+
     public static bool CanSpawn(int count = 1)
     {
         return count > 0 && activeProjectileCount + count <= MaximumActiveProjectiles;
+    }
+
+    public bool TryGetSafeSpawnPosition(Vector2 requestedPosition, Vector2 bossPosition, string type,
+                                        out Vector2 safePosition)
+    {
+        safePosition = requestedPosition;
+        Collider2D blocker = Physics2D.OverlapCircle(safePosition, SpawnCheckRadius, obstacleLayers);
+        if (blocker == null)
+            return true;
+
+        Vector2 originalPosition = requestedPosition;
+        float stepDistance = Mathf.Max(0.05f, SpawnCheckRadius * 0.75f);
+        int tries = 0;
+        for (int attempt = 0; attempt < 3; attempt++)
+        {
+            Vector2 nextPosition = Vector2.MoveTowards(safePosition, bossPosition, stepDistance);
+            if ((nextPosition - safePosition).sqrMagnitude <= 0.0001f)
+                break;
+
+            safePosition = nextPosition;
+            tries++;
+            blocker = Physics2D.OverlapCircle(safePosition, SpawnCheckRadius, obstacleLayers);
+            if (blocker == null)
+            {
+                BossDebug.ProjectileSpawnAdjusted(type, originalPosition, safePosition, tries);
+                return true;
+            }
+        }
+
+        if (tries > 0)
+            BossDebug.ProjectileSpawnAdjusted(type, originalPosition, safePosition, tries);
+        BossDebug.ProjectileSpawnBlocked(type, safePosition, blocker);
+        return false;
+    }
+
+    private float SpawnCheckRadius
+    {
+        get
+        {
+            CircleCollider2D circleCollider = GetComponent<CircleCollider2D>();
+            if (circleCollider != null)
+            {
+                Vector3 scale = transform.lossyScale;
+                float maxScale = Mathf.Max(Mathf.Abs(scale.x), Mathf.Abs(scale.y));
+                return Mathf.Max(0.05f, (circleCollider.radius + circleCollider.offset.magnitude) * maxScale);
+            }
+
+            Collider2D projectileCollider = GetComponent<Collider2D>();
+            if (projectileCollider == null)
+                return 0.1f;
+            Bounds bounds = projectileCollider.bounds;
+            return Mathf.Max(0.05f, bounds.extents.magnitude);
+        }
     }
 
     private void Awake()

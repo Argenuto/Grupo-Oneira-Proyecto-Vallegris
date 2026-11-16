@@ -28,6 +28,7 @@ public class BossContext
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
     public string CurrentActionEndReason { get; private set; }
     private BossAction currentAction;
+    public string CurrentActionName => currentAction != null ? BossDebug.ActionName(currentAction) : "none";
 #endif
 
     public Vector2 Position => rb != null ? rb.position : boss != null ? (Vector2)boss.transform.position : Vector2.zero;
@@ -61,7 +62,17 @@ public class BossContext
     public void FaceDirection(float dir)
     {
         if (sprite != null && Mathf.Abs(dir) > 0.01f)
+        {
             sprite.flipX = dir > 0f;
+
+            if (boss != null && boss.projectileSpawn != null)
+            {
+                Transform spawn = boss.projectileSpawn;
+                Vector3 localPosition = spawn.localPosition;
+                localPosition.x = Mathf.Abs(localPosition.x) * (sprite.flipX ? 1f : -1f);
+                spawn.localPosition = localPosition;
+            }
+        }
     }
 
     /// <summary>

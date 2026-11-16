@@ -52,6 +52,9 @@ public class BossController : MonoBehaviour
     private Color phaseColor = Color.white;
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
     private readonly Dictionary<BossDecisionLeaf, int> decisionLeafIds = new Dictionary<BossDecisionLeaf, int>();
+    public BossDecisionTrace Trace { get; } = new BossDecisionTrace();
+    private bool loggedOutOfBounds;
+    private float nextOutOfBoundsLogTime;
 #endif
     private Health observedPlayerHealth;
     private PlayerController playerController;
@@ -86,6 +89,9 @@ public class BossController : MonoBehaviour
             contact = contactDamage,
             audioSource = audioSource
         };
+
+        if (sprite != null)
+            ctx.FaceDirection(sprite.flipX ? 1f : -1f);
 
         if (health != null)
         {
@@ -125,6 +131,10 @@ public class BossController : MonoBehaviour
         if (!FightActive || ctx == null)
             return;
 
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+        CheckBossBounds();
+#endif
+
         if (!ctx.HasLivingPlayer)
         {
             PlayerIdleDuration = 0f;
@@ -158,6 +168,11 @@ public class BossController : MonoBehaviour
         FightActive = true;
         BossDebug.Begin();
         BossDebug.SetPhaseCount(phases.Count);
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+        Trace.Clear();
+        loggedOutOfBounds = false;
+        nextOutOfBoundsLogTime = 0f;
+#endif
         float playerHealth = observedPlayerHealth != null ? observedPlayerHealth.CurrentHealth : 0f;
         BossDebug.Log("FIGHT_START", $"bossHp={BossDebug.Format(health != null ? health.CurrentHealth : 0f)} playerHp={BossDebug.Format(playerHealth)} phases={phases.Count}");
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
@@ -218,6 +233,29 @@ public class BossController : MonoBehaviour
         }
 
         BossDebug.Log("ARENA_SNAPSHOT", $"arenaX=({BossDebug.Format(minX)},{BossDebug.Format(maxX)}) bossPos=({BossDebug.Format(transform.position.x)},{BossDebug.Format(transform.position.y)}) colliders={colliders.Length} mask={LayerMaskName(mask)}");
+    }
+
+    private void CheckBossBounds()
+    {
+        if (!BossDebug.IsActive || arena == null)
+            return;
+
+        float x = ctx.Position.x;
+        bool outside = x < arena.LeftX - 0.05f || x > arena.RightX + 0.05f;
+        if (!outside)
+        {
+            loggedOutOfBounds = false;
+            return;
+        }
+
+        if (loggedOutOfBounds || Time.time < nextOutOfBoundsLogTime)
+            return;
+
+        float limit = x < arena.LeftX ? arena.LeftX : arena.RightX;
+        float over = x < arena.LeftX ? arena.LeftX - x : x - arena.RightX;
+        BossDebug.BossOutOfBounds(x, limit, over, ctx.CurrentActionName);
+        loggedOutOfBounds = true;
+        nextOutOfBoundsLogTime = Time.time + 1f;
     }
 
     private BossProjectile FindProjectilePrefabForSnapshot()
@@ -547,16 +585,47 @@ public class BossController : MonoBehaviour
                 yield break;
 
             RefreshPlayerReference();
-            BossDecisionLeaf leaf = phase.decisionTree.Evaluate(this, ctx);
-            BossWeightedEntry entry = SelectDecision(leaf, out List<string> candidates, out List<string> excluded);
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
+            List<int> pathIndices = new List<int>();
+            BossDecisionLeaf leaf = phase.decisionTree.EvaluateWithTrace(this, ctx, pathIndices);
+            List<BossCandidateRecord> candidateRecords = new List<BossCandidateRecord>();
+            BossWeightedEntry entry = SelectDecision(leaf, out List<string> candidates, out List<string> excluded, candidateRecords);
+
+            int chosenEntryIndex = -1;
+            if (entry != null && leaf != null && leaf.entries != null)
+                chosenEntryIndex = leaf.entries.IndexOf(entry);
+
+            string chosenChoice = DecisionChoice(entry, leaf, phase);
+            bool isFallback = chosenChoice.StartsWith("FALLBACK_", System.StringComparison.Ordinal);
+            int leafIdx = phase.decisionTree != null ? phase.decisionTree.IndexOf(leaf) : -1;
+
+            BossDecisionRecord record = new BossDecisionRecord
+            {
+                Time = BossDebug.IsActive ? Time.time - BossDebug.FightStartTime : Time.time,
+                PhaseIndex = CurrentPhaseIndex,
+                NodePath = pathIndices.ToArray(),
+                LeafNodeIndex = leafIdx,
+                DistanceBand = DistanceBand(),
+                Distance = ctx.HasLivingPlayer ? Mathf.Abs(ctx.player.position.x - ctx.Position.x) : -1f,
+                Adaptive = Time.time < adaptationUntil,
+                ChosenAction = chosenChoice,
+                ChosenEntryIndex = chosenEntryIndex,
+                UsedFallback = isFallback,
+                Candidates = candidateRecords
+            };
+            Trace.Add(record);
+
             if (BossDebug.IsActive)
             {
-                string chosen = DecisionChoice(entry, leaf, phase);
+                string pathStr = string.Join(">", pathIndices);
+                string traceSuffix = $"path={pathStr} leafIdx={leafIdx} entry={chosenEntryIndex}";
                 BossDebug.Decision(CurrentPhaseIndex, GetDecisionLeafId(leaf), DistanceBand(),
                                    ctx.HasLivingPlayer ? Mathf.Abs(ctx.player.position.x - ctx.Position.x) : -1f,
-                                   candidates, excluded, chosen, Time.time < adaptationUntil);
+                                   candidates, excluded, chosenChoice, Time.time < adaptationUntil, traceSuffix);
             }
+#else
+            BossDecisionLeaf leaf = phase.decisionTree.Evaluate(this, ctx);
+            BossWeightedEntry entry = SelectDecision(leaf, out List<string> candidates, out List<string> excluded);
 #endif
 
             if (entry != null && entry.combo != null && entry.combo.Count > 0)
@@ -642,7 +711,7 @@ public class BossController : MonoBehaviour
         }
     }
 
-    private BossWeightedEntry SelectDecision(BossDecisionLeaf leaf, out List<string> candidateDescriptions, out List<string> excludedDescriptions)
+    private BossWeightedEntry SelectDecision(BossDecisionLeaf leaf, out List<string> candidateDescriptions, out List<string> excludedDescriptions, List<BossCandidateRecord> candidateRecords = null)
     {
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
         candidateDescriptions = BossDebug.IsActive ? new List<string>() : null;
@@ -658,45 +727,84 @@ public class BossController : MonoBehaviour
         List<float> weights = new List<float>();
         float totalWeight = 0f;
 
-        foreach (BossWeightedEntry entry in leaf.entries)
+        for (int entryIdx = 0; entryIdx < leaf.entries.Count; entryIdx++)
         {
+            BossWeightedEntry entry = leaf.entries[entryIdx];
             bool hasCombo = entry != null && entry.combo != null && entry.combo.Count > 0;
+            string entryName = entry != null ? DecisionEntryName(entry) : "invalid";
+            float baseW = entry != null ? entry.weight : 0f;
+
             if (entry == null || (entry.action == null && entry.pattern == null && !hasCombo))
             {
                 if (excludedDescriptions != null)
                     excludedDescriptions.Add("invalid:invalid");
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+                if (candidateRecords != null)
+                    candidateRecords.Add(new BossCandidateRecord { EntryIndex = entryIdx, ActionName = entryName, BaseWeight = baseW, FinalWeight = 0f, Excluded = true, Reason = "invalid" });
+#endif
                 continue;
             }
             if (entry.weight <= 0f)
             {
                 if (excludedDescriptions != null)
-                    excludedDescriptions.Add($"{DecisionEntryName(entry)}:weight");
+                    excludedDescriptions.Add($"{entryName}:weight");
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+                if (candidateRecords != null)
+                    candidateRecords.Add(new BossCandidateRecord { EntryIndex = entryIdx, ActionName = entryName, BaseWeight = baseW, FinalWeight = 0f, Excluded = true, Reason = "weight" });
+#endif
+                continue;
+            }
+            int minimumProjectilesRequired = MinimumProjectilesRequired(entry);
+            if (minimumProjectilesRequired > 0 && !BossProjectile.CanSpawn(minimumProjectilesRequired))
+            {
+                if (excludedDescriptions != null)
+                    excludedDescriptions.Add($"{entryName}:tope");
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+                if (candidateRecords != null)
+                    candidateRecords.Add(new BossCandidateRecord { EntryIndex = entryIdx, ActionName = entryName, BaseWeight = baseW, FinalWeight = 0f, Excluded = true, Reason = "tope" });
+#endif
                 continue;
             }
             if (ConflictsWithActiveBlindOrProjectiles(entry))
             {
                 if (excludedDescriptions != null)
-                    excludedDescriptions.Add($"{DecisionEntryName(entry)}:conflicto");
+                    excludedDescriptions.Add($"{entryName}:conflicto");
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+                if (candidateRecords != null)
+                    candidateRecords.Add(new BossCandidateRecord { EntryIndex = entryIdx, ActionName = entryName, BaseWeight = baseW, FinalWeight = 0f, Excluded = true, Reason = "conflicto" });
+#endif
                 continue;
             }
             if (decisionCooldowns.TryGetValue(entry, out float readyAt) && Time.time < readyAt)
             {
                 if (excludedDescriptions != null)
-                    excludedDescriptions.Add($"{DecisionEntryName(entry)}:cooldown");
+                    excludedDescriptions.Add($"{entryName}:cooldown");
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+                if (candidateRecords != null)
+                    candidateRecords.Add(new BossCandidateRecord { EntryIndex = entryIdx, ActionName = entryName, BaseWeight = baseW, FinalWeight = 0f, Excluded = true, Reason = "cooldown" });
+#endif
                 continue;
             }
             if ((entry.action != null && !entry.action.IsReady(ctx)) ||
                 (hasCombo && entry.combo.Exists(action => action == null || !action.IsReady(ctx))))
             {
                 if (excludedDescriptions != null)
-                    excludedDescriptions.Add($"{DecisionEntryName(entry)}:noReady");
+                    excludedDescriptions.Add($"{entryName}:noReady");
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+                if (candidateRecords != null)
+                    candidateRecords.Add(new BossCandidateRecord { EntryIndex = entryIdx, ActionName = entryName, BaseWeight = baseW, FinalWeight = 0f, Excluded = true, Reason = "noReady" });
+#endif
                 continue;
             }
             object target = DecisionTarget(entry);
             if (ReferenceEquals(target, lastDecisionTarget) && consecutiveDecisionCount >= Mathf.Max(1, entry.maxConsecutives))
             {
                 if (excludedDescriptions != null)
-                    excludedDescriptions.Add($"{DecisionEntryName(entry)}:repetición");
+                    excludedDescriptions.Add($"{entryName}:repetición");
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+                if (candidateRecords != null)
+                    candidateRecords.Add(new BossCandidateRecord { EntryIndex = entryIdx, ActionName = entryName, BaseWeight = baseW, FinalWeight = 0f, Excluded = true, Reason = "repetición" });
+#endif
                 continue;
             }
 
@@ -704,7 +812,11 @@ public class BossController : MonoBehaviour
             if (weight <= 0f)
             {
                 if (excludedDescriptions != null)
-                    excludedDescriptions.Add($"{DecisionEntryName(entry)}:weight");
+                    excludedDescriptions.Add($"{entryName}:weight");
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+                if (candidateRecords != null)
+                    candidateRecords.Add(new BossCandidateRecord { EntryIndex = entryIdx, ActionName = entryName, BaseWeight = baseW, FinalWeight = 0f, Excluded = true, Reason = "weight" });
+#endif
                 continue;
             }
 
@@ -712,7 +824,11 @@ public class BossController : MonoBehaviour
             weights.Add(weight);
             totalWeight += weight;
             if (candidateDescriptions != null)
-                candidateDescriptions.Add($"{DecisionEntryName(entry)}:{BossDebug.Format(weight)}");
+                candidateDescriptions.Add($"{entryName}:{BossDebug.Format(weight)}");
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            if (candidateRecords != null)
+                candidateRecords.Add(new BossCandidateRecord { EntryIndex = entryIdx, ActionName = entryName, BaseWeight = baseW, FinalWeight = weight, Excluded = false, Reason = "" });
+#endif
         }
 
         if (candidates.Count == 0 || totalWeight <= 0f)
@@ -736,15 +852,50 @@ public class BossController : MonoBehaviour
         return null;
     }
 
+    /// <summary>
+    /// Para entradas compuestas se exige el mayor mínimo individual; cada acción revalida el cupo al ejecutarse.
+    /// </summary>
+    private static int MinimumProjectilesRequired(BossWeightedEntry entry)
+    {
+        int required = entry.action != null ? entry.action.MinimumProjectilesRequired : 0;
+        if (entry.combo != null)
+        {
+            foreach (BossAction action in entry.combo)
+            {
+                if (action != null && action.enabled)
+                    required = Mathf.Max(required, action.MinimumProjectilesRequired);
+            }
+        }
+
+        if (entry.pattern != null && entry.pattern.actions != null)
+        {
+            foreach (BossAction action in entry.pattern.actions)
+            {
+                if (action != null && action.enabled)
+                    required = Mathf.Max(required, action.MinimumProjectilesRequired);
+            }
+        }
+
+        return required;
+    }
+
     private static string DecisionEntryName(BossWeightedEntry entry)
     {
         if (entry.action != null)
-            return BossDebug.ActionName(entry.action);
+            return DecisionActionName(entry.action);
         if (entry.combo != null && entry.combo.Count > 0 && entry.combo[0] != null)
-            return "Combo_" + BossDebug.ActionName(entry.combo[0]);
+            return "Combo_" + DecisionActionName(entry.combo[0]);
         if (entry.pattern != null)
             return "Pattern_" + entry.pattern.name.Replace(" ", "_");
         return "invalid";
+    }
+
+    private static string DecisionActionName(BossAction action)
+    {
+        string name = BossDebug.ActionName(action);
+        return name.StartsWith("Projectile", System.StringComparison.Ordinal)
+            ? name.Substring("Projectile".Length)
+            : name;
     }
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
@@ -872,6 +1023,34 @@ public class BossController : MonoBehaviour
 
         return true;
     }
+
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+    public float GetEntryCooldownRemaining(int phaseIndex, int nodeIndex, int entryIndex)
+    {
+        if (phases == null || phaseIndex < 0 || phaseIndex >= phases.Count)
+            return 0f;
+
+        BossPhase phase = phases[phaseIndex];
+        if (phase == null || phase.decisionTree == null)
+            return 0f;
+
+        IReadOnlyList<BossDecisionNode> nodes = phase.decisionTree.GetNodesInOrder();
+        if (nodeIndex < 0 || nodeIndex >= nodes.Count)
+            return 0f;
+
+        if (nodes[nodeIndex] is BossDecisionLeaf leaf && leaf.entries != null)
+        {
+            if (entryIndex >= 0 && entryIndex < leaf.entries.Count)
+            {
+                BossWeightedEntry entry = leaf.entries[entryIndex];
+                if (entry != null && decisionCooldowns.TryGetValue(entry, out float readyAt))
+                    return Mathf.Max(0f, readyAt - Time.time);
+            }
+        }
+
+        return 0f;
+    }
+#endif
 
     private float AdaptiveWeight(BossWeightedEntry entry)
     {

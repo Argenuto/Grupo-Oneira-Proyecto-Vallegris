@@ -1,0 +1,105 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e5bbf74e2f3181488845c59c2addf7b, type: 3}
+  m_Name: BossPattern_Walker
+  m_EditorClassIdentifier: Assembly-CSharp::BossPattern
+  loopMode: 1
+  delayBetweenLoops: 0.5
+  actions:
+  - rid: 3990496380972171353
+  - rid: 3990496380972171354
+  - rid: 3990496380972171355
+  - rid: 3990496380972171356
+  references:
+    version: 2
+    RefIds:
+    - rid: 3990496380972171353
+      type: {class: PatrolAction, ns: , asm: Assembly-CSharp}
+      data:
+        enabled: 1
+        telegraphDuration: 0.5
+        telegraphColor: {r: 1, g: 0.85, b: 0.2, a: 1}
+        recoveryDuration: 0
+        recoveryColor: {r: 0.55, g: 0.55, b: 0.55, a: 1}
+        recoveryDamageMultiplier: 1
+        onStart:
+          m_PersistentCalls:
+            m_Calls: []
+        onEnd:
+          m_PersistentCalls:
+            m_Calls: []
+        passes: 2
+        speed: 5
+        pauseAtEdges: 0.3
+        damageOnContact: 1
+    - rid: 3990496380972171354
+      type: {class: WaitAction, ns: , asm: Assembly-CSharp}
+      data:
+        enabled: 1
+        telegraphDuration: 0
+        telegraphColor: {r: 1, g: 0.85, b: 0.2, a: 1}
+        recoveryDuration: 0
+        recoveryColor: {r: 0.55, g: 0.55, b: 0.55, a: 1}
+        recoveryDamageMultiplier: 1
+        onStart:
+          m_PersistentCalls:
+            m_Calls: []
+        onEnd:
+          m_PersistentCalls:
+            m_Calls: []
+        duration: 0.5
+    - rid: 3990496380972171355
+      type: {class: ProjectileBurstAction, ns: , asm: Assembly-CSharp}
+      data:
+        enabled: 1
+        telegraphDuration: 0.8
+        telegraphColor: {r: 1, g: 0.85, b: 0.2, a: 1}
+        recoveryDuration: 0
+        recoveryColor: {r: 0.55, g: 0.55, b: 0.55, a: 1}
+        recoveryDamageMultiplier: 1
+        onStart:
+          m_PersistentCalls:
+            m_Calls: []
+        onEnd:
+          m_PersistentCalls:
+            m_Calls: []
+        projectilePrefab: {fileID: 0}
+        count: 5
+        spreadAngle: 50
+        aim: 0
+        fixedAngle: 0
+        projectileSpeed: 8
+        chargeDuration: 0.8
+        intervalBetweenShots: 0
+        damageOverride: 0
+        chargeClip: {fileID: 0}
+        throwBall: {fileID: 0}
+        blind:
+          applyBlind: 1
+          duration: 3
+          intensity: 1
+    - rid: 3990496380972171356
+      type: {class: WaitAction, ns: , asm: Assembly-CSharp}
+      data:
+        enabled: 1
+        telegraphDuration: 0
+        telegraphColor: {r: 1, g: 0.85, b: 0.2, a: 1}
+        recoveryDuration: 0
+        recoveryColor: {r: 0.55, g: 0.55, b: 0.55, a: 1}
+        recoveryDamageMultiplier: 1
+        onStart:
+          m_PersistentCalls:
+            m_Calls: []
+        onEnd:
+          m_PersistentCalls:
+            m_Calls: []
+        duration: 1

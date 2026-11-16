@@ -179,7 +179,7 @@ MonoBehaviour:
   lifetime: 6
   obstacleLayers:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 1024
   destroyOnHit: 1
 --- !u!95 &1941430773377416821
 Animator:

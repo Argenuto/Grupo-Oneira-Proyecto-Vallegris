@@ -34,12 +34,23 @@ public abstract class BossAction
 
     public float EstimatedDuration => telegraphDuration + BodyDuration + recoveryDuration;
 
+    /// <summary>
+    /// Mínimo de proyectiles libres necesario para ejecutar esta acción.
+    /// </summary>
+    public virtual int MinimumProjectilesRequired => 0;
+
     public virtual bool IsReady(BossContext ctx) => true;
 
     protected abstract IEnumerator Run(BossContext ctx);
 
     public IEnumerator Execute(BossContext ctx)
     {
+        if (!HasProjectileCapacity())
+        {
+            BossDebug.ProjectileSkipped(this, BossProjectile.ActiveProjectileCount);
+            yield break;
+        }
+
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
         float startTime = Time.time;
         int startPhase = ctx != null && ctx.boss != null ? ctx.boss.CurrentPhaseIndex : -1;
@@ -84,16 +95,22 @@ public abstract class BossAction
                     ctx.sprite.color = original;
             }
 
-            if (ctx != null && FacesPlayer)
+            bool hasProjectileCapacity = HasProjectileCapacity();
+            if (!hasProjectileCapacity)
+            {
+                BossDebug.ProjectileSkipped(this, BossProjectile.ActiveProjectileCount);
+            }
+            else if (ctx != null && FacesPlayer)
                 ctx.FacePlayer();
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
-            BossDebug.ActionActive(this);
+            if (hasProjectileCapacity)
+                BossDebug.ActionActive(this);
 #endif
-            if (ctx != null)
+            if (ctx != null && hasProjectileCapacity)
                 yield return Run(ctx);
 
-            if (recoveryDuration > 0f)
+            if (hasProjectileCapacity && recoveryDuration > 0f)
             {
                 if (ctx != null && ctx.boss != null)
                     ctx.boss.BeginRecovery(recoveryDamageMultiplier, recoveryColor);
@@ -103,7 +120,7 @@ public abstract class BossAction
                 yield return new WaitForSeconds(recoveryDuration / Mathf.Max(0.1f, ctx != null ? ctx.speedMultiplier : 1f));
             }
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
-            completed = true;
+            completed = hasProjectileCapacity;
 #endif
         }
         finally
@@ -131,6 +148,12 @@ public abstract class BossAction
         }
 
         onEnd.Invoke();
+    }
+
+    private bool HasProjectileCapacity()
+    {
+        return MinimumProjectilesRequired <= 0 ||
+               BossProjectile.CanSpawn(MinimumProjectilesRequired);
     }
 
     protected static void SetWalking(BossContext ctx, bool walking)

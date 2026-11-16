@@ -24,20 +24,28 @@ public class ProjectileBurstAction : BossAction
     public override string Title => $"Proyectiles x{count}" + (blind != null && blind.applyBlind ? " (ciega)" : "");
     protected override float BodyDuration => chargeDuration + Mathf.Max(0.2f, (count - 1) * intervalBetweenShots + 0.2f);
     public override Color TimelineColor => new Color(0.65f, 0.4f, 0.85f);
+    public override int MinimumProjectilesRequired => 1;
 
     protected override IEnumerator Run(BossContext ctx)
     {
         if (projectilePrefab == null || ctx == null || ctx.boss == null)
             yield break;
-            
+
+        Vector2 origin = ctx.boss.ProjectileSpawn.position;
+        if (!projectilePrefab.TryGetSafeSpawnPosition(origin, ctx.Position, "Burst", out origin))
+        {
+            BossDebug.ProjectileSpawn("ProjectileBurst", 0, BossProjectile.ActiveProjectileCount,
+                                     ctx.Position, origin, ctx.sprite != null && ctx.sprite.flipX,
+                                     ctx.HasLivingPlayer,
+                                     ctx.HasLivingPlayer ? (Vector2)ctx.player.position : Vector2.zero, true);
+            yield break;
+        }
+
+        float baseAngle = ResolveBaseAngle(ctx, origin);
         if (ctx.animator != null)
             ctx.animator.SetTrigger("charging attack");
         PlaySFX(chargeClip, ctx);
-        Vector2 origin = ctx.boss.ProjectileSpawn.position;
-        float baseAngle = ResolveBaseAngle(ctx, origin);
         int spawned = 0;
-        if (ctx.HasLivingPlayer)
-            ctx.FaceDirection(ctx.player.position.x - origin.x);
         yield return new WaitForSeconds(chargeDuration / Mathf.Max(0.1f, ctx.speedMultiplier));
 
         PlaySFX(throwBall, ctx);
@@ -60,7 +68,7 @@ public class ProjectileBurstAction : BossAction
         }
 
         BossDebug.ProjectileSpawn("ProjectileBurst", spawned, BossProjectile.ActiveProjectileCount,
-                                  ctx.Position, ctx.boss.ProjectileSpawn.position,
+                                  ctx.Position, origin,
                                   ctx.sprite != null && ctx.sprite.flipX, ctx.HasLivingPlayer,
                                   ctx.HasLivingPlayer ? (Vector2)ctx.player.position : Vector2.zero);
         yield return new WaitForSeconds(0.2f);

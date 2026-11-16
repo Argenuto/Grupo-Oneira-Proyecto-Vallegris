@@ -220,17 +220,27 @@ public class ProjectileFanAction : BossAction
     public override string Title => $"Abanico x{projectileCount}";
     protected override float BodyDuration => 0.3f;
     public override Color TimelineColor => new Color(0.65f, 0.4f, 0.85f);
+    public override int MinimumProjectilesRequired => Mathf.Max(1, projectileCount);
 
     protected override IEnumerator Run(BossContext ctx)
     {
         if (ctx == null || ctx.boss == null || projectilePrefab == null)
             yield break;
 
+        Vector2 origin = ctx.boss.ProjectileSpawn.position;
+        if (!projectilePrefab.TryGetSafeSpawnPosition(origin, ctx.Position, "Fan", out origin))
+        {
+            BossDebug.ProjectileSpawn("ProjectileFan", 0, BossProjectile.ActiveProjectileCount,
+                                     ctx.Position, origin, ctx.sprite != null && ctx.sprite.flipX,
+                                     ctx.HasLivingPlayer,
+                                     ctx.HasLivingPlayer ? (Vector2)ctx.player.position : Vector2.zero, true);
+            yield break;
+        }
+
         if (ctx.animator != null)
             ctx.animator.SetTrigger("charging attack");
         BossActionUtilities.Play(chargeClip, ctx);
 
-        Vector2 origin = ctx.boss.ProjectileSpawn.position;
         Vector2 aim = ctx.HasLivingPlayer ? (Vector2)ctx.player.position - origin : Vector2.left;
         float baseAngle = Mathf.Atan2(aim.y, aim.x) * Mathf.Rad2Deg;
         int spawned = 0;
@@ -248,7 +258,7 @@ public class ProjectileFanAction : BossAction
         }
 
         BossDebug.ProjectileSpawn("ProjectileFan", spawned, BossProjectile.ActiveProjectileCount,
-                                  ctx.Position, ctx.boss.ProjectileSpawn.position,
+                                  ctx.Position, origin,
                                   ctx.sprite != null && ctx.sprite.flipX, ctx.HasLivingPlayer,
                                   ctx.HasLivingPlayer ? (Vector2)ctx.player.position : Vector2.zero);
         if (spawned > 0)
@@ -270,42 +280,73 @@ public class ProjectilePairAction : BossAction
     public override string Title => $"Pares verticales x{pairCount}";
     protected override float BodyDuration => pairCount * delayBetweenPairs;
     public override Color TimelineColor => new Color(0.55f, 0.4f, 0.8f);
+    public override int MinimumProjectilesRequired => 2;
 
     protected override IEnumerator Run(BossContext ctx)
     {
         if (ctx == null || ctx.boss == null || projectilePrefab == null)
             yield break;
 
+        Vector2 firstOrigin = ctx.boss.ProjectileSpawn.position;
+        if (!TryPreparePair(ctx, firstOrigin, out Vector2 firstLower, out Vector2 firstUpper))
+        {
+            BossDebug.ProjectileSpawn("ProjectilePair", 0, BossProjectile.ActiveProjectileCount,
+                                     ctx.Position, firstOrigin, ctx.sprite != null && ctx.sprite.flipX,
+                                     ctx.HasLivingPlayer,
+                                     ctx.HasLivingPlayer ? (Vector2)ctx.player.position : Vector2.zero, true);
+            yield break;
+        }
+
         if (ctx.animator != null)
             ctx.animator.SetTrigger("charging attack");
         BossActionUtilities.Play(chargeClip, ctx);
 
         int spawned = 0;
-        for (int i = 0; i < pairCount && BossProjectile.CanSpawn(); i++)
+        bool blocked = false;
+        Vector2 loggedOrigin = firstLower;
+        for (int i = 0; i < pairCount && BossProjectile.CanSpawn(2); i++)
         {
             Vector2 origin = ctx.boss.ProjectileSpawn.position;
+            Vector2 lower;
+            Vector2 upper;
+            if (i == 0)
+            {
+                lower = firstLower;
+                upper = firstUpper;
+            }
+            else if (!TryPreparePair(ctx, origin, out lower, out upper))
+            {
+                blocked = true;
+                continue;
+            }
+
             Vector2 aim = ctx.HasLivingPlayer ? (Vector2)ctx.player.position - origin : Vector2.left;
             Vector2 direction = aim.sqrMagnitude > 0.001f ? aim.normalized : Vector2.left;
 
-            for (int side = -1; side <= 1; side += 2)
-            {
-                if (!BossProjectile.CanSpawn())
-                    break;
-
-                Vector2 spawn = origin + Vector2.up * (side * verticalSeparation * 0.5f);
-                BossProjectile projectile = UnityEngine.Object.Instantiate(projectilePrefab, spawn, Quaternion.identity);
-                projectile.Init(direction, projectileSpeed, null, damageOverride);
-                spawned++;
-            }
+            BossProjectile lowerProjectile = UnityEngine.Object.Instantiate(projectilePrefab, lower, Quaternion.identity);
+            lowerProjectile.Init(direction, projectileSpeed, null, damageOverride);
+            BossProjectile upperProjectile = UnityEngine.Object.Instantiate(projectilePrefab, upper, Quaternion.identity);
+            upperProjectile.Init(direction, projectileSpeed, null, damageOverride);
+            spawned += 2;
 
             if (delayBetweenPairs > 0f && i < pairCount - 1)
                 yield return new WaitForSeconds(delayBetweenPairs / Mathf.Max(0.1f, ctx.speedMultiplier));
         }
 
         BossDebug.ProjectileSpawn("ProjectilePair", spawned, BossProjectile.ActiveProjectileCount,
-                                  ctx.Position, ctx.boss.ProjectileSpawn.position,
+                                  ctx.Position, loggedOrigin,
                                   ctx.sprite != null && ctx.sprite.flipX, ctx.HasLivingPlayer,
-                                  ctx.HasLivingPlayer ? (Vector2)ctx.player.position : Vector2.zero);
+                                  ctx.HasLivingPlayer ? (Vector2)ctx.player.position : Vector2.zero, blocked);
+    }
+
+    private bool TryPreparePair(BossContext ctx, Vector2 origin, out Vector2 lower, out Vector2 upper)
+    {
+        float halfSeparation = verticalSeparation * 0.5f;
+        Vector2 requestedLower = origin + Vector2.down * halfSeparation;
+        Vector2 requestedUpper = origin + Vector2.up * halfSeparation;
+        bool lowerIsClear = projectilePrefab.TryGetSafeSpawnPosition(requestedLower, ctx.Position, "Pair", out lower);
+        bool upperIsClear = projectilePrefab.TryGetSafeSpawnPosition(requestedUpper, ctx.Position, "Pair", out upper);
+        return lowerIsClear && upperIsClear;
     }
 }
 
@@ -351,6 +392,7 @@ public class ArenaHazardAction : BossAction
     public override string Title => $"Peligro de arena x{columnCount}";
     protected override float BodyDuration => columnCount * (warningDuration + delayBetweenColumns);
     public override Color TimelineColor => new Color(0.85f, 0.2f, 0.25f);
+    public override int MinimumProjectilesRequired => 1;
 
     protected override IEnumerator Run(BossContext ctx)
     {
@@ -359,6 +401,7 @@ public class ArenaHazardAction : BossAction
 
         int columns = Mathf.Min(columnCount, 2 - BossProjectile.ActiveHazardCount);
         int spawned = 0;
+        bool blocked = false;
         for (int i = 0; i < columns; i++)
         {
             float x = UnityEngine.Random.Range(ctx.arena.LeftX, ctx.arena.RightX);
@@ -402,9 +445,14 @@ public class ArenaHazardAction : BossAction
             if (BossProjectile.CanSpawn() && BossProjectile.ActiveHazardCount < 2)
             {
                 Vector2 spawn = new Vector2(x, floorY + dropHeight);
-                BossProjectile projectile = UnityEngine.Object.Instantiate(hazardPrefab, spawn, Quaternion.identity);
-                projectile.Init(Vector2.down, dropSpeed, null, damageOverride, true);
-                spawned++;
+                if (hazardPrefab.TryGetSafeSpawnPosition(spawn, ctx.Position, "ArenaHazard", out Vector2 safeSpawn))
+                {
+                    BossProjectile projectile = UnityEngine.Object.Instantiate(hazardPrefab, safeSpawn, Quaternion.identity);
+                    projectile.Init(Vector2.down, dropSpeed, null, damageOverride, true);
+                    spawned++;
+                }
+                else
+                    blocked = true;
             }
 
             if (delayBetweenColumns > 0f && i < columns - 1)
@@ -414,7 +462,7 @@ public class ArenaHazardAction : BossAction
         BossDebug.ProjectileSpawn("ArenaHazard", spawned, BossProjectile.ActiveProjectileCount,
                                   ctx.Position, ctx.boss.ProjectileSpawn.position,
                                   ctx.sprite != null && ctx.sprite.flipX, ctx.HasLivingPlayer,
-                                  ctx.HasLivingPlayer ? (Vector2)ctx.player.position : Vector2.zero);
+                                  ctx.HasLivingPlayer ? (Vector2)ctx.player.position : Vector2.zero, blocked);
     }
 }
 

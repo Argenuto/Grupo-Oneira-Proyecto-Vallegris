@@ -28,12 +28,17 @@ public static class BossDebug
     private static int projectileDeathClear;
     private static int projectileDeathUnknown;
     private static int projectileEarly;
+    private static int projectileSkipped;
+    private static int projectileAdjusted;
+    private static int projectileBlocked;
+    private static int outOfBounds;
 
     private static bool active;
     private static bool summaryWritten;
 
     public static bool Enabled = true;
     public static bool IsActive => active && Enabled;
+    public static float FightStartTime => fightStartTime;
 
     [Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]
     public static void Begin()
@@ -59,6 +64,10 @@ public static class BossDebug
         projectileDeathClear = 0;
         projectileDeathUnknown = 0;
         projectileEarly = 0;
+        projectileSkipped = 0;
+        projectileAdjusted = 0;
+        projectileBlocked = 0;
+        outOfBounds = 0;
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
         if (BossProjectile.ActiveProjectileCount == 0)
             BossProjectile.ResetDebugIds();
@@ -97,7 +106,7 @@ public static class BossDebug
     }
 
     [Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]
-    public static void Decision(int phase, string leaf, string distanceBand, float distance, IList<string> candidates, IList<string> excluded, string chosen, bool adaptive)
+    public static void Decision(int phase, string leaf, string distanceBand, float distance, IList<string> candidates, IList<string> excluded, string chosen, bool adaptive, string traceSuffix = null)
     {
         if (!IsActive)
             return;
@@ -106,7 +115,12 @@ public static class BossDebug
         decisions++;
         if (chosen.StartsWith("FALLBACK_", StringComparison.Ordinal))
             fallbacks++;
-        Log("DECISION", $"phase={phase} distBand={Clean(distanceBand)} dist={Format(distance)} leaf={Clean(leaf)} chosen={Clean(chosen)} candidates={Quote(Join(candidates))} excluded={Quote(Join(excluded))} adaptive={adaptive.ToString().ToLowerInvariant()}");
+
+        string baseMsg = $"phase={phase} distBand={Clean(distanceBand)} dist={Format(distance)} leaf={Clean(leaf)} chosen={Clean(chosen)} candidates={Quote(Join(candidates))} excluded={Quote(Join(excluded))} adaptive={adaptive.ToString().ToLowerInvariant()}";
+        if (!string.IsNullOrEmpty(traceSuffix))
+            baseMsg += " " + traceSuffix;
+
+        Log("DECISION", baseMsg);
     }
 
     [Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]
@@ -150,22 +164,64 @@ public static class BossDebug
     }
 
     [Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]
-    public static void ProjectileSpawn(string type, int count, int activeNow)
+    public static void ProjectileSkipped(BossAction action, int activeNow)
     {
-        if (IsActive)
-            Log("PROJECTILE_SPAWN", $"type={Clean(type)} count={count} activeNow={activeNow}");
+        if (!IsActive || action == null)
+            return;
+
+        projectileSkipped++;
+        string type = ActionName(action);
+        if (type.StartsWith("Projectile", StringComparison.Ordinal))
+            type = type.Substring("Projectile".Length);
+        Log("PROJECTILE_SKIPPED", $"type={Clean(type)} reason=tope activeNow={activeNow}");
     }
 
     [Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]
     public static void ProjectileSpawn(string type, int count, int activeNow, Vector2 bossPosition,
-                                       Vector2 spawnPosition, bool flipped, bool hasPlayer, Vector2 playerPosition)
+                                       Vector2 spawnPosition, bool flipped, bool hasPlayer, Vector2 playerPosition,
+                                       bool blocked = false)
     {
         if (!IsActive)
             return;
 
         string player = hasPlayer ? FormatVector(playerPosition) : "none";
         string distance = hasPlayer ? Format(Mathf.Abs(playerPosition.x - bossPosition.x)) : "none";
-        Log("PROJECTILE_SPAWN", $"type={Clean(type)} count={count} activeNow={activeNow} bossPos={FormatVector(bossPosition)} spawnPos={FormatVector(spawnPosition)} flip={flipped.ToString().ToLowerInvariant()} playerPos={player} distX={distance}");
+        float facing = flipped ? 1f : -1f;
+        string originSide = (spawnPosition.x - bossPosition.x) * facing > 0.01f ? "front" : "behind";
+        Log("PROJECTILE_SPAWN", $"type={Clean(type)} count={count} activeNow={activeNow} bossPos={FormatVector(bossPosition)} spawnPos={FormatVector(spawnPosition)} flip={flipped.ToString().ToLowerInvariant()} originSide={originSide} blocked={(blocked ? 1 : 0)} playerPos={player} distX={distance}");
+    }
+
+    [Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]
+    public static void ProjectileSpawnAdjusted(string type, Vector2 from, Vector2 to, int tries)
+    {
+        if (!IsActive)
+            return;
+
+        projectileAdjusted++;
+        Log("PROJECTILE_SPAWN_ADJUSTED", $"type={Clean(type)} from={FormatVector(from)} to={FormatVector(to)} tries={tries}");
+    }
+
+    [Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]
+    public static void ProjectileSpawnBlocked(string type, Vector2 position, Collider2D blocker)
+    {
+        if (!IsActive)
+            return;
+
+        projectileBlocked++;
+        string collider = blocker != null
+            ? $"{blocker.gameObject.name}|layer={LayerMask.LayerToName(blocker.gameObject.layer)}"
+            : "unknown";
+        Log("PROJECTILE_SPAWN_BLOCKED", $"type={Clean(type)} at={FormatVector(position)} collider={Quote(collider)}");
+    }
+
+    [Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]
+    public static void BossOutOfBounds(float x, float limit, float over, string action)
+    {
+        if (!IsActive)
+            return;
+
+        outOfBounds++;
+        Log("BOSS_OUT_OF_BOUNDS", $"x={Format(x)} limit={Format(limit)} over={Format(over)} action={Clean(action)}");
     }
     
     [Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]
@@ -300,6 +356,10 @@ public static class BossDebug
         fields.Add($"projDeathClear={projectileDeathClear}");
         fields.Add($"projDeathUnknown={projectileDeathUnknown}");
         fields.Add($"projEarly={projectileEarly}");
+        fields.Add($"projSkipped={projectileSkipped}");
+        fields.Add($"projAdjusted={projectileAdjusted}");
+        fields.Add($"projBlocked={projectileBlocked}");
+        fields.Add($"outOfBounds={outOfBounds}");
         Emit("[BOSSDBG][SUMMARY] " + string.Join(" ", fields), true);
         active = false;
     }

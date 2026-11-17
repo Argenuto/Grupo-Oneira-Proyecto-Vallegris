@@ -22,6 +22,8 @@ public class BossController : MonoBehaviour
     [TabGroup("Boss", "Opciones")] public bool autoStart = true;
     [TabGroup("Boss", "Cerebro"), Min(0f)] public float nearDistance = 2.5f;
     [TabGroup("Boss", "Cerebro"), Min(0f)] public float farDistance = 6f;
+    [TabGroup("Boss", "Cerebro"), Min(0f)] public float minRoomRatio = 0.6f;
+    [TabGroup("Boss", "Cerebro"), Min(0f)] public float maxUsefulDistanceRatio = 1.5f;
 
     [TabGroup("Boss", "Eventos")] public UnityEvent<int> onPhaseChanged = new UnityEvent<int>();
     [TabGroup("Boss", "Eventos")] public UnityEvent onPatternLoop = new UnityEvent();
@@ -53,8 +55,12 @@ public class BossController : MonoBehaviour
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
     private readonly Dictionary<BossDecisionLeaf, int> decisionLeafIds = new Dictionary<BossDecisionLeaf, int>();
     public BossDecisionTrace Trace { get; } = new BossDecisionTrace();
-    private bool loggedOutOfBounds;
+    private Collider2D[] bossColliders;
+    private int groundLayerMask;
+    private bool outsideArena;
+    private float outsideArenaSince;
     private float nextOutOfBoundsLogTime;
+    private float nextBoundsCheckTime;
 #endif
     private Health observedPlayerHealth;
     private PlayerController playerController;
@@ -71,6 +77,11 @@ public class BossController : MonoBehaviour
     {
         health = GetComponent<BossHealth>();
         rb = GetComponent<Rigidbody2D>();
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+        bossColliders = GetComponentsInChildren<Collider2D>();
+        int groundLayer = LayerMask.NameToLayer("Ground");
+        groundLayerMask = groundLayer >= 0 ? 1 << groundLayer : 0;
+#endif
         if (sprite == null) sprite = GetComponentInChildren<SpriteRenderer>();
         if (contactDamage == null) contactDamage = GetComponent<ContactDamage>();
         if (animator == null) animator = GetComponent<Animator>();
@@ -116,7 +127,7 @@ public class BossController : MonoBehaviour
         StopRoutine(reason);
         FightActive = false;
         if (summarizeFight)
-            BossDebug.Summary(reason, observedPlayerHealth != null ? observedPlayerHealth.CurrentHealth : 0f);
+            BossDebug.Summary(reason, observedPlayerHealth != null ? observedPlayerHealth.CurrentHealth : 0f, CurrentOutsideDuration());
         BindPlayer(null, null);
     }
 
@@ -132,7 +143,11 @@ public class BossController : MonoBehaviour
             return;
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
-        CheckBossBounds();
+        if (Time.time >= nextBoundsCheckTime)
+        {
+            CheckBossBounds();
+            nextBoundsCheckTime = Time.time + 0.25f;
+        }
 #endif
 
         if (!ctx.HasLivingPlayer)
@@ -170,8 +185,10 @@ public class BossController : MonoBehaviour
         BossDebug.SetPhaseCount(phases.Count);
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
         Trace.Clear();
-        loggedOutOfBounds = false;
-        nextOutOfBoundsLogTime = 0f;
+        outsideArena = false;
+        outsideArenaSince = 0f;
+        nextOutOfBoundsLogTime = float.NegativeInfinity;
+        nextBoundsCheckTime = Time.time;
 #endif
         float playerHealth = observedPlayerHealth != null ? observedPlayerHealth.CurrentHealth : 0f;
         BossDebug.Log("FIGHT_START", $"bossHp={BossDebug.Format(health != null ? health.CurrentHealth : 0f)} playerHp={BossDebug.Format(playerHealth)} phases={phases.Count}");
@@ -189,14 +206,14 @@ public class BossController : MonoBehaviour
         FightActive = false;
         StopRoutine("stopped");
         if (summarizeFight)
-            BossDebug.Summary("stopped", observedPlayerHealth != null ? observedPlayerHealth.CurrentHealth : 0f);
+            BossDebug.Summary("stopped", observedPlayerHealth != null ? observedPlayerHealth.CurrentHealth : 0f, CurrentOutsideDuration());
     }
 
 #if UNITY_EDITOR
     [Button]
     private void DumpBossDebug()
     {
-        BossDebug.DumpLast(200);
+        BossDebug.DumpLast(600);
     }
 #endif
 
@@ -235,29 +252,94 @@ public class BossController : MonoBehaviour
         BossDebug.Log("ARENA_SNAPSHOT", $"arenaX=({BossDebug.Format(minX)},{BossDebug.Format(maxX)}) bossPos=({BossDebug.Format(transform.position.x)},{BossDebug.Format(transform.position.y)}) colliders={colliders.Length} mask={LayerMaskName(mask)}");
     }
 
-    private void CheckBossBounds()
+    private void CheckBossBounds(string actionName = null)
     {
         if (!BossDebug.IsActive || arena == null)
             return;
 
         float x = ctx.Position.x;
-        bool outside = x < arena.LeftX - 0.05f || x > arena.RightX + 0.05f;
-        if (!outside)
+        float left = arena.LeftX;
+        float right = arena.RightX;
+        float over = x < left ? left - x : x > right ? x - right : 0f;
+        BossDebug.ObserveOverLimit(over);
+        if (over <= 0.05f)
         {
-            loggedOutOfBounds = false;
+            if (outsideArena)
+            {
+                BossDebug.BossBackInside(Time.time - outsideArenaSince);
+                outsideArena = false;
+            }
             return;
         }
 
-        if (loggedOutOfBounds || Time.time < nextOutOfBoundsLogTime)
+        bool newOutsideEvent = !outsideArena;
+        if (newOutsideEvent)
+        {
+            outsideArena = true;
+            outsideArenaSince = Time.time;
+        }
+        if (!newOutsideEvent || Time.time < nextOutOfBoundsLogTime)
             return;
 
-        float limit = x < arena.LeftX ? arena.LeftX : arena.RightX;
-        float over = x < arena.LeftX ? arena.LeftX - x : x - arena.RightX;
-        BossDebug.BossOutOfBounds(x, limit, over, ctx.CurrentActionName);
-        loggedOutOfBounds = true;
+        float limit = x < left ? left : right;
+        bool touchingWall = false;
+        if (groundLayerMask != 0 && bossColliders != null)
+        {
+            foreach (Collider2D bossCollider in bossColliders)
+            {
+                if (bossCollider != null && bossCollider.enabled && bossCollider.IsTouchingLayers(groundLayerMask))
+                {
+                    touchingWall = true;
+                    break;
+                }
+            }
+        }
+        float playerX = ctx.HasLivingPlayer ? ctx.player.position.x : float.NaN;
+        BossDebug.BossOutOfBounds(x, limit, over,
+                                  string.IsNullOrEmpty(actionName) ? ctx.CurrentActionName : actionName,
+                                  playerX, touchingWall);
         nextOutOfBoundsLogTime = Time.time + 1f;
     }
 
+    private float CurrentOutsideDuration()
+    {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+        return outsideArena ? Mathf.Max(0f, Time.time - outsideArenaSince) : 0f;
+#else
+        return 0f;
+#endif
+    }
+
+#endif
+
+    private float RoomAwayFromPlayer()
+    {
+        if (arena == null)
+            return float.PositiveInfinity;
+
+        float x = ctx.Position.x;
+        bool moveRight;
+        if (ctx.HasLivingPlayer && !Mathf.Approximately(ctx.player.position.x, x))
+            moveRight = x > ctx.player.position.x;
+        else
+            moveRight = sprite != null && sprite.flipX;
+
+        return Mathf.Max(0f, moveRight ? arena.RightX - x : x - arena.LeftX);
+    }
+
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+    private float DistanceOutsideArena()
+    {
+        if (arena == null)
+            return 0f;
+
+        float x = ctx.Position.x;
+        return x < arena.LeftX ? arena.LeftX - x : x > arena.RightX ? x - arena.RightX : 0f;
+    }
+
+#endif
+
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
     private BossProjectile FindProjectilePrefabForSnapshot()
     {
         if (phases == null)
@@ -458,7 +540,7 @@ public class BossController : MonoBehaviour
 
     private void OnPlayerDeath()
     {
-        BossDebug.Summary("playerDead", observedPlayerHealth != null ? observedPlayerHealth.CurrentHealth : 0f);
+        BossDebug.Summary("playerDead", observedPlayerHealth != null ? observedPlayerHealth.CurrentHealth : 0f, CurrentOutsideDuration());
     }
 #endif
 
@@ -469,7 +551,7 @@ public class BossController : MonoBehaviour
         FightActive = false;
         StopRoutine("stopped");
         if (summarizeFight)
-            BossDebug.Summary("bossDead", observedPlayerHealth != null ? observedPlayerHealth.CurrentHealth : 0f);
+            BossDebug.Summary("bossDead", observedPlayerHealth != null ? observedPlayerHealth.CurrentHealth : 0f, CurrentOutsideDuration());
     }
 
 
@@ -586,6 +668,9 @@ public class BossController : MonoBehaviour
 
             RefreshPlayerReference();
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
+            CheckBossBounds();
+#endif
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
             List<int> pathIndices = new List<int>();
             BossDecisionLeaf leaf = phase.decisionTree.EvaluateWithTrace(this, ctx, pathIndices);
             List<BossCandidateRecord> candidateRecords = new List<BossCandidateRecord>();
@@ -621,7 +706,9 @@ public class BossController : MonoBehaviour
                 string traceSuffix = $"path={pathStr} leafIdx={leafIdx} entry={chosenEntryIndex}";
                 BossDebug.Decision(CurrentPhaseIndex, GetDecisionLeafId(leaf), DistanceBand(),
                                    ctx.HasLivingPlayer ? Mathf.Abs(ctx.player.position.x - ctx.Position.x) : -1f,
-                                   candidates, excluded, chosenChoice, Time.time < adaptationUntil, traceSuffix);
+                                   candidates, excluded, chosenChoice, Time.time < adaptationUntil, traceSuffix,
+                                   ctx.Position.x, ctx.HasLivingPlayer ? ctx.player.position.x : float.NaN,
+                                   RoomAwayFromPlayer(), DistanceOutsideArena());
             }
 #else
             BossDecisionLeaf leaf = phase.decisionTree.Evaluate(this, ctx);
@@ -635,6 +722,9 @@ public class BossController : MonoBehaviour
                 CurrentActionIndex = 0;
                 actionStartTime = Time.time;
                 yield return entry.action.Execute(ctx);
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+                CheckBossBounds(BossDebug.ActionName(entry.action));
+#endif
             }
             else
             {
@@ -656,6 +746,9 @@ public class BossController : MonoBehaviour
                         CurrentActionIndex = 0;
                         actionStartTime = Time.time;
                         yield return fallback.Execute(ctx);
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+                        CheckBossBounds(BossDebug.ActionName(fallback));
+#endif
                     }
                     else
                         yield return null;
@@ -663,6 +756,9 @@ public class BossController : MonoBehaviour
             }
 
             CurrentActionIndex = -1;
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            CheckBossBounds();
+#endif
             if (onPatternLoop != null)
                 onPatternLoop.Invoke();
         }
@@ -682,6 +778,9 @@ public class BossController : MonoBehaviour
             CurrentActionIndex = i;
             actionStartTime = Time.time;
             yield return action.Execute(ctx);
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            CheckBossBounds(BossDebug.ActionName(action));
+#endif
         }
     }
 
@@ -697,6 +796,9 @@ public class BossController : MonoBehaviour
             CurrentActionIndex = i;
             actionStartTime = Time.time;
             yield return action.Execute(ctx);
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            CheckBossBounds(BossDebug.ActionName(action));
+#endif
 
             if (!FightActive)
                 yield break;
@@ -796,6 +898,17 @@ public class BossController : MonoBehaviour
 #endif
                 continue;
             }
+            string eligibilityReason = DecisionEligibilityReason(entry);
+            if (!string.IsNullOrEmpty(eligibilityReason))
+            {
+                if (excludedDescriptions != null)
+                    excludedDescriptions.Add($"{entryName}:{eligibilityReason}");
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+                if (candidateRecords != null)
+                    candidateRecords.Add(new BossCandidateRecord { EntryIndex = entryIdx, ActionName = entryName, BaseWeight = baseW, FinalWeight = 0f, Excluded = true, Reason = eligibilityReason });
+#endif
+                continue;
+            }
             object target = DecisionTarget(entry);
             if (ReferenceEquals(target, lastDecisionTarget) && consecutiveDecisionCount >= Mathf.Max(1, entry.maxConsecutives))
             {
@@ -848,6 +961,47 @@ public class BossController : MonoBehaviour
                 return selected;
             }
         }
+
+        return null;
+    }
+
+    private string DecisionEligibilityReason(BossWeightedEntry entry)
+    {
+        if (entry.combo != null && entry.combo.Count > 0)
+        {
+            foreach (BossAction action in entry.combo)
+            {
+                string reason = ActionEligibilityReason(action);
+                if (!string.IsNullOrEmpty(reason))
+                    return reason;
+            }
+            return null;
+        }
+
+        if (entry.action != null)
+            return ActionEligibilityReason(entry.action);
+
+        if (entry.pattern != null && entry.pattern.actions != null)
+        {
+            foreach (BossAction action in entry.pattern.actions)
+            {
+                string reason = ActionEligibilityReason(action);
+                if (!string.IsNullOrEmpty(reason))
+                    return reason;
+            }
+        }
+
+        return null;
+    }
+
+    private string ActionEligibilityReason(BossAction action)
+    {
+        if (action is BackstepAction backstep && RoomAwayFromPlayer() < minRoomRatio * backstep.EligibilityDistance)
+            return "sinEspacio";
+
+        if (ctx.HasLivingPlayer && action is DashAction dash &&
+            Mathf.Abs(ctx.player.position.x - ctx.Position.x) > maxUsefulDistanceRatio * dash.EligibilityDistance)
+            return "fueraDeAlcance";
 
         return null;
     }

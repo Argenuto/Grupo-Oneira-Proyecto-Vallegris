@@ -103,6 +103,7 @@ public class DashAction : BossAction
     public override string Title => "Embestida";
     protected override float BodyDuration => timeout;
     public override Color TimelineColor => new Color(0.95f, 0.5f, 0.18f);
+    public float EligibilityDistance => distance;
 
     public override bool IsReady(BossContext ctx) => Time.time >= nextReadyTime;
 
@@ -181,6 +182,7 @@ public class BackstepAction : BossAction
     public override string Title => "Paso atrás";
     protected override float BodyDuration => timeout;
     public override Color TimelineColor => new Color(0.3f, 0.75f, 0.85f);
+    public float EligibilityDistance => distance;
 
     protected override IEnumerator Run(BossContext ctx)
     {
@@ -191,14 +193,21 @@ public class BackstepAction : BossAction
         if (Mathf.Approximately(direction, 0f))
             direction = ctx.sprite != null && ctx.sprite.flipX ? 1f : -1f;
 
-        float targetX = ctx.Position.x + direction * distance;
+        float startX = ctx.Position.x;
+        float targetX = startX + direction * distance;
         if (ctx.arena != null)
             targetX = Mathf.Clamp(targetX, ctx.arena.LeftX, ctx.arena.RightX);
+        float plannedDistance = Mathf.Abs(targetX - startX);
 
         SetWalking(ctx, true);
         try
         {
             yield return ctx.MoveToX(targetX, speed, timeout, faceMovement: false);
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            float movedDistance = Mathf.Abs(ctx.Position.x - startX);
+            if (plannedDistance > 0.05f && movedDistance < plannedDistance * 0.5f)
+                BossDebug.BackstepBlocked(plannedDistance, movedDistance);
+#endif
         }
         finally
         {

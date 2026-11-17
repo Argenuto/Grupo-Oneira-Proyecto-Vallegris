@@ -78,15 +78,15 @@ MonoBehaviour:
           combo: []
           pattern: {fileID: 0}
           weight: 1
-          cooldown: 1
-          maxConsecutives: 2
+          cooldown: 4
+          maxConsecutives: 1
         - action:
             rid: 201009
           combo: []
           pattern: {fileID: 0}
           weight: 1
-          cooldown: 1
-          maxConsecutives: 2
+          cooldown: 5
+          maxConsecutives: 1
         - action:
             rid: 201006
           combo: []
@@ -101,6 +101,13 @@ MonoBehaviour:
           weight: 0.5
           cooldown: 7
           maxConsecutives: 1
+        - action:
+            rid: 3990496420381327449
+          combo: []
+          pattern: {fileID: 0}
+          weight: 1.5
+          cooldown: 0
+          maxConsecutives: 2
         fallbackAction:
           rid: 201004
         fallbackPattern: {fileID: 0}
@@ -198,9 +205,9 @@ MonoBehaviour:
           m_PersistentCalls:
             m_Calls: []
         projectilePrefab: {fileID: 7380293237107069630, guid: 08cd4a890ab3658418084283d4f79829, type: 3}
-        pairCount: 3
-        verticalSeparation: 0.5
-        delayBetweenPairs: 0.25
+        pairCount: 2
+        verticalSeparation: 1.2
+        delayBetweenPairs: 0.5
         projectileSpeed: 12
         damageOverride: 0
         chargeClip: {fileID: 8300000, guid: 8fd56436582289841af65bd1f8f49b6d, type: 3}
@@ -222,7 +229,7 @@ MonoBehaviour:
         projectilePrefab: {fileID: 7380293237107069630, guid: 08cd4a890ab3658418084283d4f79829, type: 3}
         projectileCount: 3
         spreadAngle: 35
-        projectileSpeed: 12
+        projectileSpeed: 8
         damageOverride: 0
         chargeClip: {fileID: 8300000, guid: 8fd56436582289841af65bd1f8f49b6d, type: 3}
     - rid: 201010
@@ -243,3 +250,22 @@ MonoBehaviour:
         blindDuration: 1.75
         intensity: 0.8
         warningClip: {fileID: 8300000, guid: 8fd56436582289841af65bd1f8f49b6d, type: 3}
+    - rid: 3990496420381327449
+      type: {class: PatrolAction, ns: , asm: Assembly-CSharp}
+      data:
+        enabled: 1
+        telegraphDuration: 0
+        telegraphColor: {r: 1, g: 0.85, b: 0.2, a: 1}
+        recoveryDuration: 0
+        recoveryColor: {r: 0.55, g: 0.55, b: 0.55, a: 1}
+        recoveryDamageMultiplier: 1
+        onStart:
+          m_PersistentCalls:
+            m_Calls: []
+        onEnd:
+          m_PersistentCalls:
+            m_Calls: []
+        passes: 2
+        speed: 5
+        pauseAtEdges: 0.3
+        damageOnContact: 1

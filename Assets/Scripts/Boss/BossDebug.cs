@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Conditional = System.Diagnostics.ConditionalAttribute;
 using System.Globalization;
 using UnityEngine;
 
 public static class BossDebug
 {
-    private const int MaximumLines = 200;
+    private const int MaximumLines = 600;
     private static readonly Queue<string> lines = new Queue<string>(MaximumLines);
     private static readonly Dictionary<string, int> actions = new Dictionary<string, int>();
     private static readonly Dictionary<int, float> phaseDurations = new Dictionary<int, float>();
@@ -26,12 +27,16 @@ public static class BossDebug
     private static int projectileDeathObstacle;
     private static int projectileDeathLifetime;
     private static int projectileDeathClear;
+    private static int projectileDeathOutOfArena;
     private static int projectileDeathUnknown;
     private static int projectileEarly;
     private static int projectileSkipped;
     private static int projectileAdjusted;
     private static int projectileBlocked;
     private static int outOfBounds;
+    private static int backstepBlocked;
+    private static float maxOver;
+    private static float timeOutside;
 
     private static bool active;
     private static bool summaryWritten;
@@ -62,12 +67,16 @@ public static class BossDebug
         projectileDeathObstacle = 0;
         projectileDeathLifetime = 0;
         projectileDeathClear = 0;
+        projectileDeathOutOfArena = 0;
         projectileDeathUnknown = 0;
         projectileEarly = 0;
         projectileSkipped = 0;
         projectileAdjusted = 0;
         projectileBlocked = 0;
         outOfBounds = 0;
+        backstepBlocked = 0;
+        maxOver = 0f;
+        timeOutside = 0f;
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
         if (BossProjectile.ActiveProjectileCount == 0)
             BossProjectile.ResetDebugIds();
@@ -106,7 +115,7 @@ public static class BossDebug
     }
 
     [Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]
-    public static void Decision(int phase, string leaf, string distanceBand, float distance, IList<string> candidates, IList<string> excluded, string chosen, bool adaptive, string traceSuffix = null)
+    public static void Decision(int phase, string leaf, string distanceBand, float distance, IList<string> candidates, IList<string> excluded, string chosen, bool adaptive, string traceSuffix, float bossX, float playerX, float room, float overLimit)
     {
         if (!IsActive)
             return;
@@ -119,6 +128,7 @@ public static class BossDebug
         string baseMsg = $"phase={phase} distBand={Clean(distanceBand)} dist={Format(distance)} leaf={Clean(leaf)} chosen={Clean(chosen)} candidates={Quote(Join(candidates))} excluded={Quote(Join(excluded))} adaptive={adaptive.ToString().ToLowerInvariant()}";
         if (!string.IsNullOrEmpty(traceSuffix))
             baseMsg += " " + traceSuffix;
+        baseMsg += $" bossX={Format(bossX)} playerX={(float.IsNaN(playerX) ? "none" : Format(playerX))} room={Format(room)} overLimit={Format(overLimit)}";
 
         Log("DECISION", baseMsg);
     }
@@ -215,15 +225,43 @@ public static class BossDebug
     }
 
     [Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]
-    public static void BossOutOfBounds(float x, float limit, float over, string action)
+    public static void BossOutOfBounds(float x, float limit, float over, string action, float playerX, bool touchingWall)
     {
         if (!IsActive)
             return;
 
         outOfBounds++;
-        Log("BOSS_OUT_OF_BOUNDS", $"x={Format(x)} limit={Format(limit)} over={Format(over)} action={Clean(action)}");
+        maxOver = Mathf.Max(maxOver, over);
+        Log("BOSS_OUT_OF_BOUNDS", $"x={Format(x)} limit={Format(limit)} over={Format(over)} action={Clean(action)} playerX={(float.IsNaN(playerX) ? "none" : Format(playerX))} touchingWall={(touchingWall ? 1 : 0)}");
     }
-    
+
+    [Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]
+    public static void ObserveOverLimit(float over)
+    {
+        if (IsActive)
+            maxOver = Mathf.Max(maxOver, over);
+    }
+
+    [Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]
+    public static void BossBackInside(float duration)
+    {
+        if (!IsActive)
+            return;
+
+        timeOutside += Mathf.Max(0f, duration);
+        Log("BOSS_BACK_INSIDE", $"duration={Format(duration)}");
+    }
+
+    [Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]
+    public static void BackstepBlocked(float planned, float moved)
+    {
+        if (!IsActive)
+            return;
+
+        backstepBlocked++;
+        Log("BACKSTEP_BLOCKED", $"planned={Format(planned)} moved={Format(moved)}");
+    }
+
     [Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]
     public static void ProjectileCreated()
     {
@@ -244,16 +282,18 @@ public static class BossDebug
             case "obstacle": projectileDeathObstacle++; break;
             case "clearAll": projectileDeathClear++; break;
             case "lifetime": projectileDeathLifetime++; break;
+            case "outOfArena": projectileDeathOutOfArena++; break;
             default:
                 cause = "unknown";
                 projectileDeathUnknown++;
                 break;
         }
 
-        if (age >= 1f)
+        if (age < 1f)
+            projectileEarly++;
+        else if (cause != "outOfArena")
             return;
 
-        projectileEarly++;
         Log("PROJECTILE_DEATH", $"id={id} age={Format(age)} cause={cause} detail={Quote(detail)} spawn={FormatVector(spawnPosition)} pos={FormatVector(position)} travel={Format(distanceTravelled)}");
     }
     private static string FormatVector(Vector2 value)
@@ -312,7 +352,7 @@ public static class BossDebug
     }
 
     [Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]
-    public static void Summary(string reason, float playerHealth)
+    public static void Summary(string reason, float playerHealth, float ongoingTimeOutside = 0f)
     {
         if (!IsActive || summaryWritten)
             return;
@@ -353,6 +393,7 @@ public static class BossDebug
         fields.Add($"projDeathPlayer={projectileDeathPlayer}");
         fields.Add($"projDeathObstacle={projectileDeathObstacle}");
         fields.Add($"projDeathLifetime={projectileDeathLifetime}");
+        fields.Add($"projDeathOutOfArena={projectileDeathOutOfArena}");
         fields.Add($"projDeathClear={projectileDeathClear}");
         fields.Add($"projDeathUnknown={projectileDeathUnknown}");
         fields.Add($"projEarly={projectileEarly}");
@@ -360,8 +401,12 @@ public static class BossDebug
         fields.Add($"projAdjusted={projectileAdjusted}");
         fields.Add($"projBlocked={projectileBlocked}");
         fields.Add($"outOfBounds={outOfBounds}");
+        fields.Add($"maxOver={Format(maxOver)}");
+        fields.Add($"timeOutside={Format(timeOutside + Mathf.Max(0f, ongoingTimeOutside))}");
+        fields.Add($"backstepBlocked={backstepBlocked}");
         Emit("[BOSSDBG][SUMMARY] " + string.Join(" ", fields), true);
         active = false;
+        PersistHistory();
     }
 
     [Conditional("UNITY_EDITOR")]
@@ -372,8 +417,17 @@ public static class BossDebug
 
         string[] buffered = lines.ToArray();
         int start = Mathf.Max(0, buffered.Length - Mathf.Min(count, MaximumLines));
-        for (int i = start; i < buffered.Length; i++)
-            Emit(buffered[i], false);
+        StackTraceLogType previous = Application.GetStackTraceLogType(LogType.Log);
+        Application.SetStackTraceLogType(LogType.Log, StackTraceLogType.None);
+        try
+        {
+            for (int i = start; i < buffered.Length; i++)
+                Emit(buffered[i], false);
+        }
+        finally
+        {
+            Application.SetStackTraceLogType(LogType.Log, previous);
+        }
     }
 
     public static string ActionName(BossAction action)
@@ -479,7 +533,40 @@ public static class BossDebug
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
         if (Enabled)
-            Debug.Log(line);
+        {
+            StackTraceLogType previous = Application.GetStackTraceLogType(LogType.Log);
+            Application.SetStackTraceLogType(LogType.Log, StackTraceLogType.None);
+            try
+            {
+                Debug.Log(line);
+            }
+            finally
+            {
+                Application.SetStackTraceLogType(LogType.Log, previous);
+            }
+        }
+#endif
+    }
+
+    private static void PersistHistory()
+    {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+        string directory = Path.GetFullPath(Path.Combine(Application.dataPath, "..", "Logs", "BossDebug"));
+        string file = Path.Combine(directory, "boss_" + DateTime.Now.ToString("yyyyMMdd_HHmmss", CultureInfo.InvariantCulture) + ".log");
+        try
+        {
+            Directory.CreateDirectory(directory);
+            File.WriteAllLines(file, lines.ToArray());
+            Debug.Log($"[BOSSDBG] Historial guardado en {file}");
+        }
+        catch (IOException exception)
+        {
+            Debug.LogError($"[BOSSDBG] No se pudo guardar el historial en {file}: {exception.Message}");
+        }
+        catch (UnauthorizedAccessException exception)
+        {
+            Debug.LogError($"[BOSSDBG] No se pudo guardar el historial en {file}: {exception.Message}");
+        }
 #endif
     }
 }

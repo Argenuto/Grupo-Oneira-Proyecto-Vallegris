@@ -53,6 +53,6 @@ public struct BossCandidateRecord
     public float BaseWeight;
     public float FinalWeight;
     public bool Excluded;
-    public string Reason; // "cooldown" | "repetición" | "conflicto" | "noReady" | "tope" | "weight" | "invalid" | ""
+    public string Reason; // "cooldown" | "repetición" | "conflicto" | "noReady" | "tope" | "sinEspacio" | "fueraDeAlcance" | "weight" | "invalid" | ""
 }
 #endif

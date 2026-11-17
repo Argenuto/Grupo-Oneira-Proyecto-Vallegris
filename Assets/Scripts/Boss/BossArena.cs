@@ -8,6 +8,7 @@ public class BossArena : MonoBehaviour
 
     public float LeftX => Mathf.Min(leftPoint.position.x, rightPoint.position.x);
     public float RightX => Mathf.Max(leftPoint.position.x, rightPoint.position.x);
+    public float FloorY => Mathf.Min(leftPoint.position.y, rightPoint.position.y);
 
     private void OnDrawGizmos()
     {

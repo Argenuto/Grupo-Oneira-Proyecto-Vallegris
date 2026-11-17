@@ -8,12 +8,17 @@ public class BossProjectile : DamageDealer
     private static int activeHazardCount;
 
     [SerializeField] private float lifetime = 6f;
+    [SerializeField, Min(0f)] private float outOfArenaMargin = 4f;
     [SerializeField] private LayerMask obstacleLayers;
     [SerializeField] private bool destroyOnHit = true;
 
     private Rigidbody2D rb;
     private BlindPayload blind;
     private bool registeredAsHazard;
+    private bool hasArenaBounds;
+    private float arenaLeftX;
+    private float arenaRightX;
+    private float arenaFloorY;
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
     private static int nextDebugId;
@@ -106,9 +111,39 @@ public class BossProjectile : DamageDealer
         rb = GetComponent<Rigidbody2D>();
         if (rb != null)
             rb.gravityScale = 0f;
+
+        BossArena arena = FindAnyObjectByType<BossArena>();
+        if (arena != null)
+        {
+            arenaLeftX = arena.LeftX;
+            arenaRightX = arena.RightX;
+            arenaFloorY = arena.FloorY;
+            hasArenaBounds = true;
+        }
     }
 
     private void Start() { Destroy(gameObject, lifetime); }
+
+    private void Update()
+    {
+        if (!hasArenaBounds)
+            return;
+
+        Vector2 position = rb != null ? rb.position : (Vector2)transform.position;
+        if (position.x < arenaLeftX - outOfArenaMargin ||
+            position.x > arenaRightX + outOfArenaMargin ||
+            position.y < arenaFloorY - outOfArenaMargin)
+            DestroyOutOfArena();
+    }
+
+    private void DestroyOutOfArena()
+    {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+        debugCause = "outOfArena";
+        debugDetail = $"bounds=({BossDebug.Format(arenaLeftX)},{BossDebug.Format(arenaRightX)}) floorY={BossDebug.Format(arenaFloorY)} margin={BossDebug.Format(outOfArenaMargin)}";
+#endif
+        Destroy(gameObject);
+    }
 
     public void Init(Vector2 direction, float speed, BlindPayload blindPayload, float damageOverride, bool arenaHazard = false)
     {

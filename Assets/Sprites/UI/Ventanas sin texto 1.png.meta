@@ -1,0 +1,1142 @@
+fileFormatVersion: 2
+guid: d0d8ce79c0cf26d42a331f9ec6d7b1ae
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 4885119046054182697
+    second: Ventanas sin texto 1_0
+  - first:
+      213: -2387669373409956485
+    second: Ventanas sin texto 1_1
+  - first:
+      213: -5895635703674349954
+    second: Ventanas sin texto 1_2
+  - first:
+      213: 2847254090355296169
+    second: Ventanas sin texto 1_3
+  - first:
+      213: -3446891627631575802
+    second: Ventanas sin texto 1_4
+  - first:
+      213: 7330031085325399833
+    second: Ventanas sin texto 1_5
+  - first:
+      213: -2162054467157470792
+    second: Ventanas sin texto 1_6
+  - first:
+      213: 436390949113149120
+    second: Ventanas sin texto 1_7
+  - first:
+      213: -1995388288847524917
+    second: Ventanas sin texto 1_8
+  - first:
+      213: 7748546461416038927
+    second: Ventanas sin texto 1_9
+  - first:
+      213: -5161286155893611105
+    second: Ventanas sin texto 1_10
+  - first:
+      213: 3580306355104828980
+    second: Ventanas sin texto 1_11
+  - first:
+      213: -3499562005765706074
+    second: Ventanas sin texto 1_12
+  - first:
+      213: 6610380771580926861
+    second: Ventanas sin texto 1_13
+  - first:
+      213: 6513497350561726489
+    second: Ventanas sin texto 1_14
+  - first:
+      213: -7545600110646592035
+    second: Ventanas sin texto 1_15
+  - first:
+      213: 544579599837708127
+    second: Ventanas sin texto 1_16
+  - first:
+      213: -1577843420931974641
+    second: Ventanas sin texto 1_17
+  - first:
+      213: -5054627769181209313
+    second: Ventanas sin texto 1_18
+  - first:
+      213: 2825182072219603125
+    second: Ventanas sin texto 1_19
+  - first:
+      213: -4053412695142859481
+    second: Ventanas sin texto 1_20
+  - first:
+      213: 4310869718470538609
+    second: Ventanas sin texto 1_21
+  - first:
+      213: 6881775990797853364
+    second: Ventanas sin texto 1_22
+  - first:
+      213: -8679537414283953922
+    second: Ventanas sin texto 1_23
+  - first:
+      213: -5601407228498770944
+    second: Ventanas sin texto 1_24
+  - first:
+      213: 4969666544174427887
+    second: Ventanas sin texto 1_25
+  - first:
+      213: -4542481110882813324
+    second: Ventanas sin texto 1_26
+  - first:
+      213: 8829909566839040565
+    second: Ventanas sin texto 1_27
+  - first:
+      213: -731764622553711938
+    second: Ventanas sin texto 1_28
+  - first:
+      213: 1812612163132286531
+    second: Ventanas sin texto 1_29
+  - first:
+      213: 9192564311381280283
+    second: Ventanas sin texto 1_30
+  - first:
+      213: 2387232382006932899
+    second: Ventanas sin texto 1_31
+  - first:
+      213: -8826848241233638597
+    second: Ventanas sin texto 1_32
+  - first:
+      213: -700950362445479152
+    second: Ventanas sin texto 1_33
+  - first:
+      213: 6095718710744420009
+    second: Ventanas sin texto 1_34
+  - first:
+      213: -7200540500380003487
+    second: Ventanas sin texto 1_35
+  - first:
+      213: 932999726207117033
+    second: Ventanas sin texto 1_36
+  - first:
+      213: 4186241973314956198
+    second: Ventanas sin texto 1_37
+  - first:
+      213: -7887964810707295808
+    second: Ventanas sin texto 1_38
+  - first:
+      213: 5872741812595730916
+    second: Ventanas sin texto 1_39
+  - first:
+      213: 2717483673506600336
+    second: Ventanas sin texto 1_40
+  - first:
+      213: 2821458781948065261
+    second: Ventanas sin texto 1_41
+  - first:
+      213: 9044900427967096140
+    second: Ventanas sin texto 1_42
+  - first:
+      213: -4545937051622691420
+    second: Ventanas sin texto 1_43
+  - first:
+      213: 2533524028922575266
+    second: Ventanas sin texto 1_44
+  - first:
+      213: 930609157557807063
+    second: Ventanas sin texto 1_45
+  - first:
+      213: -5856738639017427128
+    second: Ventanas sin texto 1_46
+  - first:
+      213: -7543158105738032384
+    second: Ventanas sin texto 1_47
+  - first:
+      213: 3482618689120145305
+    second: Ventanas sin texto 1_48
+  - first:
+      213: -4622523582116537378
+    second: Ventanas sin texto 1_49
+  - first:
+      213: 3662566572208907311
+    second: Ventanas sin texto 1_50
+  - first:
+      213: 4236376583637253780
+    second: Ventanas sin texto 1_51
+  - first:
+      213: -8809404723391433204
+    second: Ventanas sin texto 1_52
+  - first:
+      213: 9125335126703031459
+    second: Ventanas sin texto 1_53
+  - first:
+      213: 892477691481622164
+    second: Ventanas sin texto 1_54
+  - first:
+      213: 5588943045191131964
+    second: Ventanas sin texto 1_55
+  - first:
+      213: -3937006568505865166
+    second: Ventanas sin texto 1_56
+  - first:
+      213: -6576848087963088989
+    second: Ventanas sin texto 1_57
+  - first:
+      213: -9162486254018353271
+    second: Ventanas sin texto 1_58
+  - first:
+      213: 7039548171046580509
+    second: Ventanas sin texto 1_59
+  - first:
+      213: 1959228131330153647
+    second: Ventanas sin texto 1_60
+  - first:
+      213: -7996200847089564674
+    second: Ventanas sin texto 1_61
+  - first:
+      213: -8153290410821789871
+    second: Ventanas sin texto 1_62
+  - first:
+      213: 2754666884516211742
+    second: Ventanas sin texto 1_63
+  - first:
+      213: 4547014546819146079
+    second: Ventanas sin texto 1_64
+  - first:
+      213: -85673600044871213
+    second: Ventanas sin texto 1_65
+  - first:
+      213: 6738098027329058202
+    second: Ventanas sin texto 1_66
+  - first:
+      213: 1618668970317579372
+    second: Ventanas sin texto 1_67
+  - first:
+      213: 249068060566395107
+    second: Ventanas sin texto 1_68
+  - first:
+      213: -1497500490787121745
+    second: Ventanas sin texto 1_69
+  - first:
+      213: 1206711837026948474
+    second: Ventanas sin texto 1_70
+  - first:
+      213: 2313765284821920956
+    second: Ventanas sin texto 1_71
+  - first:
+      213: 2948805867921675550
+    second: Ventanas sin texto 1_72
+  - first:
+      213: 2604749967636722969
+    second: Ventanas sin texto 1_73
+  - first:
+      213: 7274744722635315781
+    second: Ventanas sin texto 1_74
+  - first:
+      213: 6475620657143231356
+    second: Ventanas sin texto 1_75
+  - first:
+      213: 9070400134650195416
+    second: Ventanas sin texto 1_76
+  - first:
+      213: -5781691268437148009
+    second: Ventanas sin texto 1_77
+  - first:
+      213: -5732171781515851758
+    second: Ventanas sin texto 1_78
+  - first:
+      213: -1853492581999317596
+    second: Ventanas sin texto 1_79
+  - first:
+      213: 6520400641354103892
+    second: Ventanas sin texto 1_80
+  - first:
+      213: 9020036590333801491
+    second: Ventanas sin texto 1_81
+  - first:
+      213: 2068879991942907317
+    second: Ventanas sin texto 1_82
+  - first:
+      213: 4107337116813904475
+    second: Ventanas sin texto 1_83
+  - first:
+      213: -4378223364767414702
+    second: Ventanas sin texto 1_84
+  - first:
+      213: 3482567669924752277
+    second: Ventanas sin texto 1_85
+  - first:
+      213: -6449191247159208012
+    second: Ventanas sin texto 1_86
+  - first:
+      213: 4780473256798011246
+    second: Ventanas sin texto 1_87
+  - first:
+      213: 7919026470007833206
+    second: Ventanas sin texto 1_88
+  - first:
+      213: -1956594814254515356
+    second: Ventanas sin texto 1_89
+  - first:
+      213: 9092643355391188178
+    second: Ventanas sin texto 1_90
+  - first:
+      213: -1035464393226730956
+    second: Ventanas sin texto 1_91
+  - first:
+      213: -3890323767205208368
+    second: Ventanas sin texto 1_92
+  - first:
+      213: -3543987798337879296
+    second: Ventanas sin texto 1_93
+  - first:
+      213: 7589286671324831415
+    second: Ventanas sin texto 1_94
+  - first:
+      213: -7706370295620206174
+    second: Ventanas sin texto 1_95
+  - first:
+      213: 8185508342270563735
+    second: Ventanas sin texto 1_96
+  - first:
+      213: 4755678248604031174
+    second: Ventanas sin texto 1_97
+  - first:
+      213: 2027704364425603787
+    second: Ventanas sin texto 1_98
+  - first:
+      213: 688501400958750447
+    second: Ventanas sin texto 1_99
+  - first:
+      213: 1851832765604201813
+    second: Ventanas sin texto 1_100
+  - first:
+      213: 2992775102780553940
+    second: Ventanas sin texto 1_101
+  - first:
+      213: 3604119533187248928
+    second: Ventanas sin texto 1_102
+  - first:
+      213: -8651356661926668204
+    second: Ventanas sin texto 1_103
+  - first:
+      213: 2867795313606995006
+    second: Ventanas sin texto 1_104
+  - first:
+      213: 1040145806868003011
+    second: Ventanas sin texto 1_105
+  - first:
+      213: -2953171455702822614
+    second: Ventanas sin texto 1_106
+  - first:
+      213: -5173723078107668559
+    second: Ventanas sin texto 1_107
+  - first:
+      213: 4338362153517599803
+    second: Ventanas sin texto 1_108
+  - first:
+      213: -727656177428652625
+    second: Ventanas sin texto 1_109
+  - first:
+      213: -7947452758337571273
+    second: Ventanas sin texto 1_110
+  - first:
+      213: 7003563354575857970
+    second: Ventanas sin texto 1_111
+  - first:
+      213: 369322524350133125
+    second: Ventanas sin texto 1_112
+  - first:
+      213: -2325198085558684735
+    second: Ventanas sin texto 1_113
+  - first:
+      213: -6599796554732245402
+    second: Ventanas sin texto 1_114
+  - first:
+      213: -9025133449674323035
+    second: Ventanas sin texto 1_115
+  - first:
+      213: -4836098474492248609
+    second: Ventanas sin texto 1_116
+  - first:
+      213: 305400846980424647
+    second: Ventanas sin texto 1_117
+  - first:
+      213: 1919198329794040424
+    second: Ventanas sin texto 1_118
+  - first:
+      213: 6986832193489084258
+    second: Ventanas sin texto 1_119
+  - first:
+      213: 1684399068649865325
+    second: Ventanas sin texto 1_120
+  - first:
+      213: -2914669017773633411
+    second: Ventanas sin texto 1_121
+  - first:
+      213: -8336891381754579710
+    second: Ventanas sin texto 1_122
+  - first:
+      213: 6043188162390507115
+    second: Ventanas sin texto 1_123
+  - first:
+      213: -5925408554818489180
+    second: Ventanas sin texto 1_124
+  - first:
+      213: 163093436185460141
+    second: Ventanas sin texto 1_125
+  - first:
+      213: -3192708736076953218
+    second: Ventanas sin texto 1_126
+  - first:
+      213: -5772336317280812235
+    second: Ventanas sin texto 1_127
+  - first:
+      213: 4931361289100997006
+    second: Ventanas sin texto 1_128
+  - first:
+      213: 76366740402070806
+    second: Ventanas sin texto 1_129
+  - first:
+      213: 7368207937718313615
+    second: Ventanas sin texto 1_130
+  - first:
+      213: 7008195143482385123
+    second: Ventanas sin texto 1_131
+  - first:
+      213: 5746629840170838856
+    second: Ventanas sin texto 1_132
+  - first:
+      213: 9068332431814106571
+    second: Ventanas sin texto 1_133
+  - first:
+      213: 8253945005005819585
+    second: Ventanas sin texto 1_134
+  - first:
+      213: -5800737299342097333
+    second: Ventanas sin texto 1_135
+  - first:
+      213: -3448386753828001134
+    second: Ventanas sin texto 1_136
+  - first:
+      213: 4743528016005139599
+    second: Ventanas sin texto 1_137
+  - first:
+      213: -5256971793341193722
+    second: Ventanas sin texto 1_138
+  - first:
+      213: -950954397892917965
+    second: Ventanas sin texto 1_139
+  - first:
+      213: 2084369636070615858
+    second: Ventanas sin texto 1_140
+  - first:
+      213: -5091992362118650139
+    second: Ventanas sin texto 1_141
+  - first:
+      213: 5212171140626865441
+    second: Ventanas sin texto 1_142
+  - first:
+      213: -6013358304864190704
+    second: Ventanas sin texto 1_143
+  - first:
+      213: -2174231858475801793
+    second: Ventanas sin texto 1_144
+  - first:
+      213: 6994029749895637278
+    second: Ventanas sin texto 1_145
+  - first:
+      213: 1078956231740129841
+    second: Ventanas sin texto 1_146
+  - first:
+      213: -7238954866495181751
+    second: Ventanas sin texto 1_147
+  - first:
+      213: 1559449580806241040
+    second: Ventanas sin texto 1_148
+  - first:
+      213: -4988219973325205584
+    second: Ventanas sin texto 1_149
+  - first:
+      213: -7639986206897636682
+    second: Ventanas sin texto 1_150
+  - first:
+      213: -3021361750715481631
+    second: Ventanas sin texto 1_151
+  - first:
+      213: 150786666804994631
+    second: Ventanas sin texto 1_152
+  - first:
+      213: 7325134359133064508
+    second: Ventanas sin texto 1_153
+  - first:
+      213: -7271253855290183145
+    second: Ventanas sin texto 1_154
+  - first:
+      213: 3321693576682350152
+    second: Ventanas sin texto 1_155
+  - first:
+      213: -2241693310371587135
+    second: Ventanas sin texto 1_156
+  - first:
+      213: 739601181475125336
+    second: Ventanas sin texto 1_157
+  - first:
+      213: -8554123569104164711
+    second: Ventanas sin texto 1_158
+  - first:
+      213: -1451652858893834513
+    second: Ventanas sin texto 1_159
+  - first:
+      213: 835036853688653873
+    second: Ventanas sin texto 1_160
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationMethod: 0
+  spriteTessellationDetail: -1
+  spriteGeometrySubdivision: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Ventanas sin texto 1_36
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 912
+        width: 1276
+        height: 857
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9e6ac18ce4ea2fc00800000000000000
+      internalID: 932999726207117033
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ventanas sin texto 1_37
+      rect:
+        serializedVersion: 2
+        x: 1557
+        y: 1310
+        width: 976
+        height: 446
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6aba44325e4881a30800000000000000
+      internalID: 4186241973314956198
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ventanas sin texto 1_38
+      rect:
+        serializedVersion: 2
+        x: 2583
+        y: 1189
+        width: 184
+        height: 184
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0c1a2010cc1588290800000000000000
+      internalID: -7887964810707295808
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ventanas sin texto 1_39
+      rect:
+        serializedVersion: 2
+        x: 2854
+        y: 1189
+        width: 184
+        height: 184
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4e92a5d309b208150800000000000000
+      internalID: 5872741812595730916
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ventanas sin texto 1_89
+      rect:
+        serializedVersion: 2
+        x: 1618
+        y: 234
+        width: 1069
+        height: 687
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 46bfcf60267c8d4e0800000000000000
+      internalID: -1956594814254515356
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ventanas sin texto 1_90
+      rect:
+        serializedVersion: 2
+        x: 2741
+        y: 814
+        width: 80
+        height: 81
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2dc5863f4fe8f2e70800000000000000
+      internalID: 9092643355391188178
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ventanas sin texto 1_91
+      rect:
+        serializedVersion: 2
+        x: 2868
+        y: 814
+        width: 80
+        height: 81
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 432c728de9a41a1f0800000000000000
+      internalID: -1035464393226730956
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ventanas sin texto 1_129
+      rect:
+        serializedVersion: 2
+        x: 2768
+        y: 349
+        width: 35
+        height: 404
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 615e152552f4f0100800000000000000
+      internalID: 76366740402070806
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ventanas sin texto 1_130
+      rect:
+        serializedVersion: 2
+        x: 2863
+        y: 618
+        width: 46
+        height: 125
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f82e9e6b412214660800000000000000
+      internalID: 7368207937718313615
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ventanas sin texto 1_131
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 529
+        width: 669
+        height: 178
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3e2a2eb1a5c124160800000000000000
+      internalID: 7008195143482385123
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ventanas sin texto 1_143
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 358
+        width: 645
+        height: 124
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 01fbc6b5b724c8ca0800000000000000
+      internalID: -6013358304864190704
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ventanas sin texto 1_144
+      rect:
+        serializedVersion: 2
+        x: 815
+        y: 471
+        width: 551
+        height: 123
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f336630f4a393d1e0800000000000000
+      internalID: -2174231858475801793
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ventanas sin texto 1_157
+      rect:
+        serializedVersion: 2
+        x: 799
+        y: 241
+        width: 583
+        height: 176
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 858b8412b57934a00800000000000000
+      internalID: 739601181475125336
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ventanas sin texto 1_158
+      rect:
+        serializedVersion: 2
+        x: 85
+        y: 73
+        width: 222
+        height: 159
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 998efb28fe5a94980800000000000000
+      internalID: -8554123569104164711
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ventanas sin texto 1_159
+      rect:
+        serializedVersion: 2
+        x: 353
+        y: 105
+        width: 191
+        height: 127
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fe6e3708a61badbe0800000000000000
+      internalID: -1451652858893834513
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ventanas sin texto 1_160
+      rect:
+        serializedVersion: 2
+        x: 1645
+        y: 116
+        width: 621
+        height: 59
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 138d87e1895a69b00800000000000000
+      internalID: 835036853688653873
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 397ef0ff9ef3a0642b3baebea3ce3d78
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Ventanas sin texto 1_0: 4885119046054182697
+      Ventanas sin texto 1_1: -2387669373409956485
+      Ventanas sin texto 1_10: -5161286155893611105
+      Ventanas sin texto 1_100: 1851832765604201813
+      Ventanas sin texto 1_101: 2992775102780553940
+      Ventanas sin texto 1_102: 3604119533187248928
+      Ventanas sin texto 1_103: -8651356661926668204
+      Ventanas sin texto 1_104: 2867795313606995006
+      Ventanas sin texto 1_105: 1040145806868003011
+      Ventanas sin texto 1_106: -2953171455702822614
+      Ventanas sin texto 1_107: -5173723078107668559
+      Ventanas sin texto 1_108: 4338362153517599803
+      Ventanas sin texto 1_109: -727656177428652625
+      Ventanas sin texto 1_11: 3580306355104828980
+      Ventanas sin texto 1_110: -7947452758337571273
+      Ventanas sin texto 1_111: 7003563354575857970
+      Ventanas sin texto 1_112: 369322524350133125
+      Ventanas sin texto 1_113: -2325198085558684735
+      Ventanas sin texto 1_114: -6599796554732245402
+      Ventanas sin texto 1_115: -9025133449674323035
+      Ventanas sin texto 1_116: -4836098474492248609
+      Ventanas sin texto 1_117: 305400846980424647
+      Ventanas sin texto 1_118: 1919198329794040424
+      Ventanas sin texto 1_119: 6986832193489084258
+      Ventanas sin texto 1_12: -3499562005765706074
+      Ventanas sin texto 1_120: 1684399068649865325
+      Ventanas sin texto 1_121: -2914669017773633411
+      Ventanas sin texto 1_122: -8336891381754579710
+      Ventanas sin texto 1_123: 6043188162390507115
+      Ventanas sin texto 1_124: -5925408554818489180
+      Ventanas sin texto 1_125: 163093436185460141
+      Ventanas sin texto 1_126: -3192708736076953218
+      Ventanas sin texto 1_127: -5772336317280812235
+      Ventanas sin texto 1_128: 4931361289100997006
+      Ventanas sin texto 1_129: 76366740402070806
+      Ventanas sin texto 1_13: 6610380771580926861
+      Ventanas sin texto 1_130: 7368207937718313615
+      Ventanas sin texto 1_131: 7008195143482385123
+      Ventanas sin texto 1_132: 5746629840170838856
+      Ventanas sin texto 1_133: 9068332431814106571
+      Ventanas sin texto 1_134: 8253945005005819585
+      Ventanas sin texto 1_135: -5800737299342097333
+      Ventanas sin texto 1_136: -3448386753828001134
+      Ventanas sin texto 1_137: 4743528016005139599
+      Ventanas sin texto 1_138: -5256971793341193722
+      Ventanas sin texto 1_139: -950954397892917965
+      Ventanas sin texto 1_14: 6513497350561726489
+      Ventanas sin texto 1_140: 2084369636070615858
+      Ventanas sin texto 1_141: -5091992362118650139
+      Ventanas sin texto 1_142: 5212171140626865441
+      Ventanas sin texto 1_143: -6013358304864190704
+      Ventanas sin texto 1_144: -2174231858475801793
+      Ventanas sin texto 1_145: 6994029749895637278
+      Ventanas sin texto 1_146: 1078956231740129841
+      Ventanas sin texto 1_147: -7238954866495181751
+      Ventanas sin texto 1_148: 1559449580806241040
+      Ventanas sin texto 1_149: -4988219973325205584
+      Ventanas sin texto 1_15: -7545600110646592035
+      Ventanas sin texto 1_150: -7639986206897636682
+      Ventanas sin texto 1_151: -3021361750715481631
+      Ventanas sin texto 1_152: 150786666804994631
+      Ventanas sin texto 1_153: 7325134359133064508
+      Ventanas sin texto 1_154: -7271253855290183145
+      Ventanas sin texto 1_155: 3321693576682350152
+      Ventanas sin texto 1_156: -2241693310371587135
+      Ventanas sin texto 1_157: 739601181475125336
+      Ventanas sin texto 1_158: -8554123569104164711
+      Ventanas sin texto 1_159: -1451652858893834513
+      Ventanas sin texto 1_16: 544579599837708127
+      Ventanas sin texto 1_160: 835036853688653873
+      Ventanas sin texto 1_161: 184485111
+      Ventanas sin texto 1_17: -1577843420931974641
+      Ventanas sin texto 1_18: -5054627769181209313
+      Ventanas sin texto 1_19: 2825182072219603125
+      Ventanas sin texto 1_2: -5895635703674349954
+      Ventanas sin texto 1_20: -4053412695142859481
+      Ventanas sin texto 1_21: 4310869718470538609
+      Ventanas sin texto 1_22: 6881775990797853364
+      Ventanas sin texto 1_23: -8679537414283953922
+      Ventanas sin texto 1_24: -5601407228498770944
+      Ventanas sin texto 1_25: 4969666544174427887
+      Ventanas sin texto 1_26: -4542481110882813324
+      Ventanas sin texto 1_27: 8829909566839040565
+      Ventanas sin texto 1_28: -731764622553711938
+      Ventanas sin texto 1_29: 1812612163132286531
+      Ventanas sin texto 1_3: 2847254090355296169
+      Ventanas sin texto 1_30: 9192564311381280283
+      Ventanas sin texto 1_31: 2387232382006932899
+      Ventanas sin texto 1_32: -8826848241233638597
+      Ventanas sin texto 1_33: -700950362445479152
+      Ventanas sin texto 1_34: 6095718710744420009
+      Ventanas sin texto 1_35: -7200540500380003487
+      Ventanas sin texto 1_36: 932999726207117033
+      Ventanas sin texto 1_37: 4186241973314956198
+      Ventanas sin texto 1_38: -7887964810707295808
+      Ventanas sin texto 1_39: 5872741812595730916
+      Ventanas sin texto 1_4: -3446891627631575802
+      Ventanas sin texto 1_40: 2717483673506600336
+      Ventanas sin texto 1_41: 2821458781948065261
+      Ventanas sin texto 1_42: 9044900427967096140
+      Ventanas sin texto 1_43: -4545937051622691420
+      Ventanas sin texto 1_44: 2533524028922575266
+      Ventanas sin texto 1_45: 930609157557807063
+      Ventanas sin texto 1_46: -5856738639017427128
+      Ventanas sin texto 1_47: -7543158105738032384
+      Ventanas sin texto 1_48: 3482618689120145305
+      Ventanas sin texto 1_49: -4622523582116537378
+      Ventanas sin texto 1_5: 7330031085325399833
+      Ventanas sin texto 1_50: 3662566572208907311
+      Ventanas sin texto 1_51: 4236376583637253780
+      Ventanas sin texto 1_52: -8809404723391433204
+      Ventanas sin texto 1_53: 9125335126703031459
+      Ventanas sin texto 1_54: 892477691481622164
+      Ventanas sin texto 1_55: 5588943045191131964
+      Ventanas sin texto 1_56: -3937006568505865166
+      Ventanas sin texto 1_57: -6576848087963088989
+      Ventanas sin texto 1_58: -9162486254018353271
+      Ventanas sin texto 1_59: 7039548171046580509
+      Ventanas sin texto 1_6: -2162054467157470792
+      Ventanas sin texto 1_60: 1959228131330153647
+      Ventanas sin texto 1_61: -7996200847089564674
+      Ventanas sin texto 1_62: -8153290410821789871
+      Ventanas sin texto 1_63: 2754666884516211742
+      Ventanas sin texto 1_64: 4547014546819146079
+      Ventanas sin texto 1_65: -85673600044871213
+      Ventanas sin texto 1_66: 6738098027329058202
+      Ventanas sin texto 1_67: 1618668970317579372
+      Ventanas sin texto 1_68: 249068060566395107
+      Ventanas sin texto 1_69: -1497500490787121745
+      Ventanas sin texto 1_7: 436390949113149120
+      Ventanas sin texto 1_70: 1206711837026948474
+      Ventanas sin texto 1_71: 2313765284821920956
+      Ventanas sin texto 1_72: 2948805867921675550
+      Ventanas sin texto 1_73: 2604749967636722969
+      Ventanas sin texto 1_74: 7274744722635315781
+      Ventanas sin texto 1_75: 6475620657143231356
+      Ventanas sin texto 1_76: 9070400134650195416
+      Ventanas sin texto 1_77: -5781691268437148009
+      Ventanas sin texto 1_78: -5732171781515851758
+      Ventanas sin texto 1_79: -1853492581999317596
+      Ventanas sin texto 1_8: -1995388288847524917
+      Ventanas sin texto 1_80: 6520400641354103892
+      Ventanas sin texto 1_81: 9020036590333801491
+      Ventanas sin texto 1_82: 2068879991942907317
+      Ventanas sin texto 1_83: 4107337116813904475
+      Ventanas sin texto 1_84: -4378223364767414702
+      Ventanas sin texto 1_85: 3482567669924752277
+      Ventanas sin texto 1_86: -6449191247159208012
+      Ventanas sin texto 1_87: 4780473256798011246
+      Ventanas sin texto 1_88: 7919026470007833206
+      Ventanas sin texto 1_89: -1956594814254515356
+      Ventanas sin texto 1_9: 7748546461416038927
+      Ventanas sin texto 1_90: 9092643355391188178
+      Ventanas sin texto 1_91: -1035464393226730956
+      Ventanas sin texto 1_92: -3890323767205208368
+      Ventanas sin texto 1_93: -3543987798337879296
+      Ventanas sin texto 1_94: 7589286671324831415
+      Ventanas sin texto 1_95: -7706370295620206174
+      Ventanas sin texto 1_96: 8185508342270563735
+      Ventanas sin texto 1_97: 4755678248604031174
+      Ventanas sin texto 1_98: 2027704364425603787
+      Ventanas sin texto 1_99: 688501400958750447
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
